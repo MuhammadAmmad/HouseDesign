@@ -37,6 +37,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Emgu.CV, Version=2.4.10.1939, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Emgu.CV.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.CV.UI, Version=2.4.10.1939, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Emgu.CV.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.Util, Version=2.4.10.1939, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Emgu.Util.dll</HintPath>
+    </Reference>
     <Reference Include="SharpGL">
       <HintPath>..\packages\SharpGLCore.2.3.0.1\lib\net40\SharpGL.dll</HintPath>
     </Reference>
@@ -82,6 +94,11 @@
     <Compile Include="Classes\Triangle.cs" />
     <Compile Include="Classes\UV.cs" />
     <Compile Include="Classes\WorldObject.cs" />
+    <Compile Include="ImageProcessing\HoughLines.cs" />
+    <Compile Include="ImageProcessing\HoughTableCalculator.cs" />
+    <Compile Include="ImageProcessing\ILineCrossable.cs" />
+    <Compile Include="ImageProcessing\LineSegmentator.cs" />
+    <Compile Include="ImageProcessing\Segment.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
