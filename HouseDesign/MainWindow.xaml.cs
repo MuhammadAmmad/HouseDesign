@@ -30,7 +30,7 @@ namespace HouseDesign
         {
             InitializeComponent();
             Importer importer = new Importer();
-            sceneObject = importer.Import(@"D:\Licenta\tinierChair.fbx");
+            sceneObject = importer.Import(@"D:\Licenta\tinierClassicChair.fbx");
         }
 
         /// <summary>
