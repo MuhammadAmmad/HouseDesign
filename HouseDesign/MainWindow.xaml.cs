@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using SharpGL.SceneGraph;
 using SharpGL;
 using HouseDesign.Classes;
+using HouseDesign.UserControls;
 
 namespace HouseDesign
 {
@@ -30,7 +31,7 @@ namespace HouseDesign
         {
             InitializeComponent();
             Importer importer = new Importer();
-            sceneObject = importer.Import(@"D:\Licenta\tinierClassicChair.fbx");
+            sceneObject = importer.Import(@"D:\Licenta\HouseDesign\HouseDesign\Exports\Appliances\Dishwashers\dishwasher1.fbx");
         }
 
         /// <summary>
@@ -48,6 +49,8 @@ namespace HouseDesign
 
             //  Load the identity matrix.
             gl.LoadIdentity();
+
+            
 
             //  Rotate around the Y axis.
             gl.Rotate(rotation, 0.0f, 1.0f, 0.0f);
@@ -71,7 +74,7 @@ namespace HouseDesign
             OpenGL gl = openGLControl.OpenGL;
 
             //  Set the clear color.
-            gl.ClearColor(0, 0, 0, 0);
+           gl.ClearColor(0, 0, 0, 0);
         }
 
         /// <summary>
@@ -85,7 +88,7 @@ namespace HouseDesign
 
             //  Get the OpenGL object.
             OpenGL gl = openGLControl.OpenGL;
-
+           
             //  Set the projection matrix.
             gl.MatrixMode(OpenGL.GL_PROJECTION);
 
@@ -106,5 +109,104 @@ namespace HouseDesign
         /// The current rotation.
         /// </summary>
         private float rotation = 0.0f;
+
+
+        private void menuItemFile_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void menuItemView_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void menuItemHelp_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void menuItemProject_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void menuItemScene_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void menuItemDesign_Click(object sender, RoutedEventArgs e)
+        {
+            addExtendedMenuItems();
+            groupBoxDesign.Visibility = Visibility.Visible;
+
+        }
+
+        private void menuItemNewProject_Click(object sender, RoutedEventArgs e)
+        {
+            groupBoxCurrentProject.Visibility = Visibility.Visible;
+        }
+
+        private void menuItemOpenProject_Click(object sender, RoutedEventArgs e)
+        {
+            groupBoxCurrentProject.Visibility = Visibility.Visible;
+        }
+
+        private void menuItemSaveProject_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void menuItemExit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void menuItemResetObjects_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void menuItemImportObject_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void menuItemImportHousePlan_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void menuItemLoadHousePlan_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void addExtendedMenuItems()
+        {
+            addDesignMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Assets\pillowTexture.jpg", "Appliances");
+            addDesignMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Assets\pillowTexture.jpg", "Cabinets");
+            addDesignMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Assets\pillowTexture.jpg", "Electronics");
+            addDesignMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Assets\pillowTexture.jpg", "Furniture");
+            addDesignMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Assets\pillowTexture.jpg", "Others");
+            addDesignMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Assets\pillowTexture.jpg", "Plumbing");
+        }
+
+        private void addDesignMenuItem(String imagePath, String itemName)
+        {
+            ExtendedMenuItem item = new ExtendedMenuItem(imagePath, itemName);
+            menuDesign.Items.Add(item);
+            item.MouseLeftButtonDown += menuItemDesign_MouseLeftButtonDown;
+        }
+
+        void menuItemDesign_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            GenericCategory wndDesign = new GenericCategory(((ExtendedMenuItem)sender).Name);
+            wndDesign.ShowDialog();
+        }
+
+        
+        
     }
 }

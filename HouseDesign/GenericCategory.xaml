@@ -1,0 +1,40 @@
+﻿<Window x:Class="HouseDesign.GenericCategory"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
+        Height="550" Width="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="450"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"></ColumnDefinition>
+                <ColumnDefinition Width="300"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <GroupBox Name="groupBoxFurnitureTree" Grid.Column="0">
+                <TreeView Name="treeViewCategory" SelectedItemChanged="treeViewCategory_SelectedItemChanged"></TreeView>
+            </GroupBox>
+            <GroupBox Name="groupBoxObj" Grid.Column="1" Visibility="Collapsed">
+                <StackPanel Orientation="Vertical" >
+                    <GroupBox Name="groupBoxCurrentObject" Header="Object" Height="200" Width="200">
+                        <sharpGL:OpenGLControl 
+                    Name="openGLControl" OpenGLDraw="openGLControl_OpenGLDraw" 
+                    OpenGLInitialized="openGLControl_OpenGLInitialized" Resized="openGLControl_Resized"
+                    DrawFPS="True" RenderContextType="FBO" FrameRate="20"/>
+                    </GroupBox>
+                    <Button Name="btnCustomizeObject" Content="Customize Object"  Click="btnCustomizeObject_Click" Width="100" HorizontalAlignment="Right" Margin="10"></Button>
+                    <GroupBox Name="groupBoxCustomizeCurrentObject" Header="Customize Object" Visibility="Collapsed" Width="150" HorizontalAlignment="Right">
+                        <ListView Name="listViewTextures"></ListView>
+                    </GroupBox>
+                </StackPanel>
+            </GroupBox>            
+        </Grid>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center" Height="30">
+            <Button Name="btnImportObject" Content="Import Object" Click="btnImportObject_Click" Margin="5"></Button>
+            <Button Name="btnAddToScene" Content="Add to scene" Click="btnAddToScene_Click" Margin="5"></Button>
+            <Button Name="btnCancel" Content="Cancel" Click="btnCancel_Click" Margin="5"></Button>
+        </StackPanel>
+    </Grid>
+</Window>

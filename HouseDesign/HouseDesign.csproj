@@ -80,6 +80,30 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\Category.cs" />
+    <Compile Include="GenericCategory.xaml.cs">
+      <DependentUpon>GenericCategory.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GenericFurniture.xaml.cs">
+      <DependentUpon>GenericFurniture.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ChooseTexture.xaml.cs">
+      <DependentUpon>ChooseTexture.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ExtendedMenuItem.xaml.cs">
+      <DependentUpon>ExtendedMenuItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ExtendedTreeViewItem.xaml.cs">
+      <DependentUpon>ExtendedTreeViewItem.xaml</DependentUpon>
+    </Compile>
+    <Page Include="GenericCategory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GenericFurniture.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -103,6 +127,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UserControls\ChooseTexture.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ExtendedMenuItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ExtendedTreeViewItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

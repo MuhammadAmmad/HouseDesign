@@ -17,6 +17,7 @@ namespace HouseDesign.Classes
         List<UV> uvs;
         operationUV nextUV;
         float u, v;
+        List<String> textures;
 
 
         public Importer()
@@ -24,6 +25,7 @@ namespace HouseDesign.Classes
             vertices = new List<Point3d>();
             triangles = new List<Triangle>();
             uvs = new List<UV>();
+            textures = new List<String>();
         }
 
         delegate void operation(float value);
@@ -31,7 +33,7 @@ namespace HouseDesign.Classes
         delegate void operationUV(float value);
         private void SetX(float value)
         {
-            x = value;
+            x = -value;
             nextSet = SetY;
         }
 
@@ -44,7 +46,10 @@ namespace HouseDesign.Classes
         private void SetZ(float value)
         {
             z = value;
-            vertices.Add(new Point3d(x, y, z));
+            x *= 0.05f;
+            y *= 0.05f;
+            z *= 0.05f;
+            vertices.Add(new Point3d(x, z, y));
             nextSet = SetX;
 
         }
@@ -91,6 +96,10 @@ namespace HouseDesign.Classes
                 while (!sr.EndOfStream)
                 {
                     String line = sr.ReadLine();
+                    if (line.Contains("; Object connections"))
+                    {
+                        break;
+                    }
                     if (line.Contains("Vertices:"))
                     {
                         nextSet = SetX;
@@ -160,7 +169,44 @@ namespace HouseDesign.Classes
 
                         }
                         while ((line = sr.ReadLine()).Contains("}") == false);
-                    break;
+                    }
+
+                    if(line.Contains("Materials: "))
+                    {
+                        line = sr.ReadLine();
+                        line = line.Split(':')[1];
+                        int count=0;
+                        do
+                        {
+                            String[] lineTriangles = line.Split(',');
+                            for (int i = 0; i < lineTriangles.Length; i++)
+                            {
+                                if(lineTriangles[i].Length>0)
+                                {
+                                    triangles[count++].TextureIndex = Convert.ToInt32(lineTriangles[i]);
+                                }
+                                
+
+                            }
+
+                        }
+                        while ((line = sr.ReadLine()).Contains("}") == false);
+
+                    }
+
+                    if (line.Contains("Texture::Map"))
+                    {
+                        line = sr.ReadLine();
+                        while (!line.Contains("FileName: "))
+                        {
+                            line = sr.ReadLine();
+                        }
+
+                        String texturePath = line.Substring(line.IndexOf(": ")+3);
+                        texturePath=texturePath.Remove(texturePath.Length - 1);
+                        textures.Add(texturePath);
+                        
+
                     }
                    
 
@@ -174,7 +220,7 @@ namespace HouseDesign.Classes
             //    Console.WriteLine(e.Message);
             //}
 
-            return new WorldObject(vertices, triangles, uvs);
+            return new WorldObject(vertices, triangles, uvs, textures);
 
         }
     }

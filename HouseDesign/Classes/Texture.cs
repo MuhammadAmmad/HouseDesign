@@ -8,7 +8,7 @@ using System.Text;
 
 namespace HouseDesign.Classes
 {
-    public static class Texture
+    public class Texture
     { 
         public static uint LoadTexture(string filename, OpenGL gl)
         {
