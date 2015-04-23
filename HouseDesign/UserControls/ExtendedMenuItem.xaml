@@ -7,7 +7,7 @@
              d:DesignHeight="50" d:DesignWidth="50">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="32"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Image Name="image" Source="/Assets/burgundt.jpg" Grid.Row="0"></Image>

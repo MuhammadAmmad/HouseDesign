@@ -25,8 +25,10 @@ namespace HouseDesign
     {
         private Category category{ get; set; }
 
-        WorldObject selectedObject;
-        public GenericCategory(String categoryName)
+        public WorldObject SelectedObject { get; set; }
+
+        private HouseDesign.Classes.Scene scene;
+        public GenericCategory(String categoryName, HouseDesign.Classes.Scene scene)
         {
             InitializeComponent();
             this.Title = categoryName;
@@ -35,7 +37,7 @@ namespace HouseDesign
             mainTreeViewItem.IsExpanded = true;
             treeViewCategory.Items.Add(mainTreeViewItem);
             PopulateTreeView(category, mainTreeViewItem);
-
+            this.scene = scene;
         }
 
         public void PopulateTreeView(Category mainCategory, TreeViewItem currentItem)
@@ -80,9 +82,9 @@ namespace HouseDesign
             //  Rotate around the Y axis.
             gl.Rotate(rotation, 0.0f, 1.0f, 0.0f);
 
-            if(selectedObject!=null)
+            if(SelectedObject!=null)
             {
-                selectedObject.Draw(gl);
+                SelectedObject.Draw(gl);
             }
            
 
@@ -157,7 +159,7 @@ namespace HouseDesign
 
         private void btnAddToScene_Click(object sender, RoutedEventArgs e)
         {
-
+            this.Close();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -175,7 +177,7 @@ namespace HouseDesign
         {
             listViewTextures.Items.Clear();
             int rank = 1;
-            foreach (String texture in selectedObject.GetTextures())
+            foreach (String texture in SelectedObject.GetTextures())
             {
                 ChooseTexture chooseTexture = new ChooseTexture(rank, texture);
                 chooseTexture.MouseLeftButtonDown += chooseTexture_MouseLeftButtonDown;
@@ -196,7 +198,7 @@ namespace HouseDesign
             {
                 string fullPath =System.IO.Path.GetFullPath(fdlg.FileName);
                 ChooseTexture currentTexture = sender as ChooseTexture;
-                selectedObject.SetTexture(currentTexture.Index-1, fullPath);
+                SelectedObject.SetTexture(currentTexture.Index-1, fullPath);
                 InitializeTextures();
                 
             }
@@ -211,11 +213,12 @@ namespace HouseDesign
                 {
                     String path = (selectedTreeViewItem.Header as ExtendedTreeViewItem).FullPath;
                     Importer importer = new Importer();
-                    selectedObject=importer.Import(path);
+                    SelectedObject=importer.Import(path);
                     groupBoxObj.Visibility = Visibility.Visible;
                     InitializeTextures();
                 }
             }
+
 
         }
     }

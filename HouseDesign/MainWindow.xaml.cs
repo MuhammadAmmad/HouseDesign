@@ -15,6 +15,7 @@ using SharpGL.SceneGraph;
 using SharpGL;
 using HouseDesign.Classes;
 using HouseDesign.UserControls;
+using System.Windows.Threading;
 
 namespace HouseDesign
 {
@@ -24,6 +25,7 @@ namespace HouseDesign
     public partial class MainWindow : Window
     {
         private WorldObject sceneObject;
+        private HouseDesign.Classes.Scene scene;
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
         /// </summary>
@@ -31,7 +33,54 @@ namespace HouseDesign
         {
             InitializeComponent();
             Importer importer = new Importer();
-            sceneObject = importer.Import(@"D:\Licenta\HouseDesign\HouseDesign\Exports\Appliances\Dishwashers\dishwasher1.fbx");
+            scene = new HouseDesign.Classes.Scene();
+            scene.MainCamera.Translate = new Point3d(80, 540, 560);
+            scene.MainCamera.Rotate = new Point3d(0, 180, 0);
+
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Tick += timer_Tick;
+            delta = 1000 / 60;
+            timer.Interval = new TimeSpan(0, 0, 0, 0, delta);
+            timer.Start();
+
+            //openGLControl.AddHandler(UIElement.MouseLeftButtonDownEvent, new RoutedEventHandler(), true);
+            
+            
+        }
+
+        private int delta;
+        private float speed = 200 * 0.05f;
+        void timer_Tick(object sender, EventArgs e)
+        {
+            if(Keyboard.IsKeyUp(Key.Up))
+            {
+                scene.MainCamera.Translate += scene.MainCamera.Forward * speed;
+            }
+            if (Keyboard.IsKeyUp(Key.Down))
+            {
+                scene.MainCamera.Translate += scene.MainCamera.Forward * -speed;
+            }
+            if (Keyboard.IsKeyUp(Key.Left))
+            {
+                scene.MainCamera.Rotate += new Point3d(speed,0 ,0);
+            }
+            if (Keyboard.IsKeyUp(Key.Right))
+            {
+                scene.MainCamera.Rotate +=  new Point3d(-speed,0, 0);
+
+            }
+
+            if (Keyboard.IsKeyUp(Key.A))
+            {
+                scene.MainCamera.Rotate += new Point3d(0, speed, 0);
+            }
+            if (Keyboard.IsKeyUp(Key.D))
+            {
+                scene.MainCamera.Rotate += new Point3d(0, -speed, 0);
+
+            }
+
+            position.Content = scene.MainCamera.Translate.X + " " + scene.MainCamera.Translate.Y + " " + scene.MainCamera.Translate.Z + scene.MainCamera.Rotate.Y;
         }
 
         /// <summary>
@@ -50,15 +99,7 @@ namespace HouseDesign
             //  Load the identity matrix.
             gl.LoadIdentity();
 
-            
-
-            //  Rotate around the Y axis.
-            gl.Rotate(rotation, 0.0f, 1.0f, 0.0f);
-
-            sceneObject.Draw(gl);
-
-            //  Nudge the rotation.
-            rotation += 3.0f;
+            scene.Render(gl);
         }
 
         /// <summary>
@@ -96,10 +137,7 @@ namespace HouseDesign
             gl.LoadIdentity();
 
             //  Create a perspective transformation.
-            gl.Perspective(60.0f, (double)Width / (double)Height, 0.01, 100.0);
-
-            //  Use the 'look at' helper function to position and aim the camera.
-            gl.LookAt(-5, 5, -5, 0, 0, 0, 0, 1, 0);
+            gl.Perspective(60.0f, (double)Width / (double)Height, 0.01, 1000.0);
 
             //  Set the modelview matrix.
             gl.MatrixMode(OpenGL.GL_MODELVIEW);
@@ -144,7 +182,17 @@ namespace HouseDesign
         }
 
         private void menuItemNewProject_Click(object sender, RoutedEventArgs e)
-        {
+        {            
+            NewProject project = new NewProject();
+            project.ShowDialog();
+            float height = project.GetHeight();
+            List<Wall> walls = project.currentHousePlan.GetWalls();
+
+            for(int i=0;i<walls.Count;i++)
+            {
+                scene.AddWall(new WallObject(walls[i], height));
+            }
+
             groupBoxCurrentProject.Visibility = Visibility.Visible;
         }
 
@@ -185,12 +233,12 @@ namespace HouseDesign
 
         private void addExtendedMenuItems()
         {
-            addDesignMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Assets\pillowTexture.jpg", "Appliances");
-            addDesignMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Assets\pillowTexture.jpg", "Cabinets");
-            addDesignMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Assets\pillowTexture.jpg", "Electronics");
-            addDesignMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Assets\pillowTexture.jpg", "Furniture");
+            addDesignMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Images\iconAppliances1.png", "Appliances");
+            addDesignMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Images\iconCabinets.png", "Cabinets");
+            addDesignMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Images\iconElectronics1.png", "Electronics");
+            addDesignMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Images\furniture.png", "Furniture");
             addDesignMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Assets\pillowTexture.jpg", "Others");
-            addDesignMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Assets\pillowTexture.jpg", "Plumbing");
+            addDesignMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Images\iconPlumbing1.png", "Plumbing");
         }
 
         private void addDesignMenuItem(String imagePath, String itemName)
@@ -202,11 +250,34 @@ namespace HouseDesign
 
         void menuItemDesign_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            GenericCategory wndDesign = new GenericCategory(((ExtendedMenuItem)sender).Name);
+            GenericCategory wndDesign = new GenericCategory(((ExtendedMenuItem)sender).Name, scene);
             wndDesign.ShowDialog();
+            if(scene.IsEmpty()==false)
+            {
+                groupBoxCurrentProject.Visibility = Visibility.Visible;
+                sceneObject = wndDesign.SelectedObject;
+            }
         }
 
-        
+        private void openGLControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            double height = openGLControl.ActualHeight;
+            double width = openGLControl.ActualWidth;
+            float d = Convert.ToSingle(height * Math.Sqrt(3) / 2);
+            Point3d position = new Point3d(Convert.ToSingle(e.GetPosition(openGLControl).X), Convert.ToSingle(e.GetPosition(openGLControl).Y), 0);
+            Point3d v = new Point3d(Convert.ToSingle(e.GetPosition(openGLControl).X - width / 2), Convert.ToSingle(e.GetPosition(openGLControl).Y - height / 2), 0);
+            Point3d dif = scene.MainCamera.Right * v.X + scene.MainCamera.Top * v.Y;
+            Point3d direction = scene.MainCamera.Forward * d - dif;
+            float alpha = -(scene.MainCamera.Translate.Y) / direction.Y;
+            Point3d destination = new Point3d(scene.MainCamera.Translate.X + direction.X , 0, scene.MainCamera.Translate.Z + direction.Z * alpha);
+            if(sceneObject!=null)
+            {
+                sceneObject.Translate = destination;
+                sceneObject.Rotate = new Point3d(0, 180, 0);
+                sceneObject.Scale = new Point3d(20, 20, 20);
+                scene.AddHouseObject(sceneObject);
+            }
+        }       
         
     }
 }
