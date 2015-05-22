@@ -18,6 +18,10 @@ namespace HouseDesign.Classes
         operationUV nextUV;
         float u, v;
         List<String> textures;
+        private float minX;
+        private float maxX;
+        private float minY;
+        private float maxY;
 
 
         public Importer()
@@ -49,6 +53,24 @@ namespace HouseDesign.Classes
             x *= 0.05f;
             y *= 0.05f;
             z *= 0.05f;
+            if(x> maxX)
+            {
+                maxX = x;
+            }
+            if(x<minX)
+            {
+                minX = x;
+            }
+
+            if(y> maxY)
+            {
+                maxY = y;
+            }
+
+            if(y< minY)
+            {
+                minY = y;
+            }
             vertices.Add(new Point3d(x, z, y));
             nextSet = SetX;
 
@@ -91,6 +113,11 @@ namespace HouseDesign.Classes
         {
             //try
             //{
+
+            minX = float.MaxValue;
+            maxX = float.MinValue;
+            minY = float.MaxValue;
+            maxY = float.MinValue;
             using (StreamReader sr = new StreamReader(fileName))
             {
                 while (!sr.EndOfStream)
@@ -220,7 +247,10 @@ namespace HouseDesign.Classes
             //    Console.WriteLine(e.Message);
             //}
 
-            return new WorldObject(vertices, triangles, uvs, textures);
+            float height = maxY - minY;
+            float width = maxX - minX;
+
+            return new WorldObject(vertices, triangles, uvs, textures, 20*width, 20*height);
 
         }
     }

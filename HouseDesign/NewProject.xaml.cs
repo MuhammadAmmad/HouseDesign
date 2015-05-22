@@ -26,9 +26,10 @@ namespace HouseDesign
         private List<HousePlan> housePlans;
         private float height;
         private String housePlansDirectory;
-        public NewProject()
+        public NewProject(String title)
         {
             InitializeComponent();
+            this.Title = title;
             housePlansDirectory = @"D:\Licenta\HouseDesign\HouseDesign\HousePlans";
             housePlans = new List<HousePlan>();
             InitializeHousePlans();

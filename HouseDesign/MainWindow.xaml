@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="House Design" Height="350" Width="525" 
-        xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF" MouseLeftButtonDown="openGLControl_MouseLeftButtonDown">
+        xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF" MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        MouseRightButtonDown="Window_MouseRightButtonDown" MouseDoubleClick="Window_MouseDoubleClick">
     <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -18,10 +19,15 @@
                     <MenuItem Name="menuItemExit" Header="Exit" Click="menuItemExit_Click"></MenuItem>
                 </MenuItem>                
                 <MenuItem Name="menuItemProject" Header="Project" Click="menuItemProject_Click">
-                    <MenuItem Name="menuItemLoadHousePlan" Header="Load House Plan" Click="menuItemLoadHousePlan_Click"></MenuItem>
+                    <MenuItem Name="menuItemResetHousePlan" Header="Reset House plan" Click="menuItemResetHousePlan_Click"></MenuItem>
+                    <MenuItem Name="menuItemLoadHousePlan" Header="Load House Plan" Click="menuItemLoadHousePlan_Click" Visibility="Collapsed"></MenuItem>
                     <MenuItem Name="menuItemResetObjects" Header="Reset Objects" Click="menuItemResetObjects_Click"></MenuItem>
                     <MenuItem Name="menuItemImportHousePlan" Header="Import House Plan" Click="menuItemImportHousePlan_Click"></MenuItem>
                     <MenuItem Name="menuItemImportObject" Header="Import Object" Click="menuItemImportObject_Click"></MenuItem>
+                </MenuItem>
+                <MenuItem Name="menutItemConfiguration" Header="Configuration" Click="menutItemConfiguration_Click">
+                    <MenuItem Name="menuItemEditConfiguration" Header="Edit Configuration" Click="menuItemEditConfiguration_Click"></MenuItem>
+                    <MenuItem Name="menuItemResetConfiguration" Header="Reset Configuration" Click="menuItemResetConfiguration_Click"></MenuItem>
                 </MenuItem>
                 <MenuItem Name="menuItemDesign" Header="Design" Click="menuItemDesign_Click"></MenuItem>
                 <MenuItem Name="menuItemScene" Header="Scene" Click="menuItemScene_Click"></MenuItem>
@@ -29,8 +35,8 @@
                 <MenuItem Name="menuItemHelp" Header="Help" Click="menuItemHelp_Click"></MenuItem>
            </Menu>
         </StackPanel>
-        <GroupBox Name="groupBoxDesign" Visibility="Collapsed" Height="65" Grid.Row="1">
-            <Menu Name="menuDesign"></Menu>
+        <GroupBox Name="groupBoxExtendedMenu" Visibility="Collapsed" Height="65" Grid.Row="1">
+            <Menu Name="menuExtended"></Menu>
         </GroupBox>
         
         <!-- The OpenGL control provides a OpenGL drawing surface. -->
@@ -39,10 +45,10 @@
             <sharpGL:OpenGLControl
             Name="openGLControl" OpenGLDraw="openGLControl_OpenGLDraw" 
             OpenGLInitialized="openGLControl_OpenGLInitialized" Resized="openGLControl_Resized"
-            DrawFPS="True" RenderContextType="FBO" FrameRate="20" MouseDown="openGLControl_MouseLeftButtonDown"/>
+            DrawFPS="True" RenderContextType="FBO" FrameRate="15" MouseDown="openGLControl_MouseLeftButtonDown"/>
         </GroupBox>
 
-        <Label Grid.Row="2" Name="position" Foreground="White"></Label>
+        <Label Grid.Row="2" Name="lblPosition" Foreground="White"></Label>
 
     </Grid>
 </Window>

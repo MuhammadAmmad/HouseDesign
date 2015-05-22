@@ -82,7 +82,10 @@
     </ApplicationDefinition>
     <Compile Include="Classes\Camera.cs" />
     <Compile Include="Classes\Category.cs" />
+    <Compile Include="Classes\CategoryMaterial.cs" />
+    <Compile Include="Classes\Configuration.cs" />
     <Compile Include="Classes\HousePlan.cs" />
+    <Compile Include="Classes\Material.cs" />
     <Compile Include="Classes\Scene.cs" />
     <Compile Include="Classes\Wall.cs" />
     <Compile Include="Classes\WallObject.cs" />
@@ -94,6 +97,9 @@
     </Compile>
     <Compile Include="NewProject.xaml.cs">
       <DependentUpon>NewProject.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SetupConfiguration.xaml.cs">
+      <DependentUpon>SetupConfiguration.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ChooseTexture.xaml.cs">
       <DependentUpon>ChooseTexture.xaml</DependentUpon>
@@ -139,6 +145,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="NewProject.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SetupConfiguration.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

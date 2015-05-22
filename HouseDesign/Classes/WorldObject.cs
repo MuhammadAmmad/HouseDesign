@@ -15,6 +15,8 @@ namespace HouseDesign.Classes
         public Point3d Rotate { get; set; }
         public Point3d Translate { get; set; }
         public Point3d Scale { get; set; }
+        public float Width { get; set; }
+        public float Height { get; set; }
 
 
         public Point3d Forward
@@ -52,9 +54,10 @@ namespace HouseDesign.Classes
             this.textures = new List<String>();
             Scale = new Point3d(1, 1, 1);
         }
-        public WorldObject(List<Point3d> vertices, List<Triangle> triangles, List<UV> uvs, List<String> textures):this()
+        public WorldObject(List<Point3d> vertices, List<Triangle> triangles, List<UV> uvs, List<String> textures, float width, float height):this()
         {
-            
+            this.Width = width;
+            this.Height = height;
             this.vertices.AddRange(vertices);
             
 

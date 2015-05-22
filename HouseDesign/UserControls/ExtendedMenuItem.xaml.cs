@@ -19,13 +19,18 @@ namespace HouseDesign.UserControls
     /// </summary>
     public partial class ExtendedMenuItem : UserControl
     {
+
         public String ImagePath { get; set; }
-        public String Name { get; set; }
+        public String Title { get; set; }
+        public ExtendedMenuItem()
+        {
+
+        }
         public ExtendedMenuItem(String imagePath, String name)
         {
             InitializeComponent();
             this.ImagePath = imagePath;
-            this.Name = name;
+            this.Title = name;
             InitializeImage();
             
         }
@@ -34,7 +39,7 @@ namespace HouseDesign.UserControls
         {
             this.image.Source = new BitmapImage((new Uri(ImagePath)));
             this.image.Tag = ImagePath;
-            this.name.Content = this.Name;
+            this.name.Content = this.Title;
 
         }
     }

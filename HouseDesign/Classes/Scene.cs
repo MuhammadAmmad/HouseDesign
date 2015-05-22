@@ -50,5 +50,15 @@ namespace HouseDesign.Classes
         {
             return this.houseObjects.Count + this.walls.Count==0;
         }
+
+        public void ClearHouseObjects()
+        {
+            houseObjects.Clear();
+        }
+
+        public void ClearWalls()
+        {
+            walls.Clear();
+        }
     }
 }

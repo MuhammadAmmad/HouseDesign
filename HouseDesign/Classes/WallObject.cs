@@ -17,6 +17,8 @@ namespace HouseDesign.Classes
             Point3d p3 = wall.P3;
             Point3d p4 = wall.P4;
 
+            this.height = height;
+
             vertices.Add(p1);
             vertices.Add(p2);
             vertices.Add(p3);
