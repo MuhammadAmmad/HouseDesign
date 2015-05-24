@@ -28,11 +28,10 @@ namespace HouseDesign
         public WorldObject SelectedObject { get; set; }
 
         private HouseDesign.Classes.Scene scene;
-        public GenericCategory(String categoryName, HouseDesign.Classes.Scene scene)
+        public GenericCategory(Category category, HouseDesign.Classes.Scene scene)
         {
             InitializeComponent();
-            this.Title = categoryName;
-            this.category = new Category(categoryName, "");
+            this.category = category;
             TreeViewItem mainTreeViewItem = new TreeViewItem();
             mainTreeViewItem.IsExpanded = true;
             treeViewCategory.Items.Add(mainTreeViewItem);
@@ -42,19 +41,18 @@ namespace HouseDesign
 
         public void PopulateTreeView(Category mainCategory, TreeViewItem currentItem)
         {
-            foreach(String obj in mainCategory.Files)
+            String defaultIconPath = @"D:\Licenta\HouseDesign\HouseDesign\Images\defaultObjectIcon.png";
+            foreach(FurnitureObject obj in mainCategory.Objects)
             {
-                String[] tokens = obj.Split('.');
-                String objectName = tokens[0].Split('\\').Last();
-                ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(@"D:\Licenta\HouseDesign\HouseDesign\Assets\pillowTexture.jpg", objectName, obj);
-                extendedItem.Tag = "object";
+                ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(obj.DefaultIconPath, obj.Name, obj.FullPath);
+                extendedItem.Tag = obj;
                 TreeViewItem item = new TreeViewItem();
                 item.Header = extendedItem;
                 currentItem.Items.Add(item);
             }
             foreach(Category c in mainCategory.SubCategories)
             {
-                ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(@"D:\Licenta\HouseDesign\HouseDesign\Assets\burgundt.jpg", c.Name, c.Path);
+                ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(c.Path, c.Name, c.Path);
                 extendedItem.Tag = "category";
                 TreeViewItem item = new TreeViewItem();
                 item.Header = extendedItem;
@@ -82,10 +80,10 @@ namespace HouseDesign
             //  Rotate around the Y axis.
             gl.Rotate(rotation, 0.0f, 1.0f, 0.0f);
 
-            if(SelectedObject!=null)
-            {
-                SelectedObject.Draw(gl);
-            }
+            //if(SelectedObject!=null)
+            //{
+            //    SelectedObject.Draw(gl);
+            //}
            
 
             //  Nudge the rotation.
@@ -209,11 +207,17 @@ namespace HouseDesign
             TreeViewItem selectedTreeViewItem=treeViewCategory.SelectedItem as TreeViewItem;
             if (treeViewCategory.Items.Count > 0 &&  selectedTreeViewItem!= null)
             {
-                if((selectedTreeViewItem.Header as ExtendedTreeViewItem).Tag=="object")
+                if((selectedTreeViewItem.Header as ExtendedTreeViewItem).Tag is FurnitureObject)
                 {
                     String path = (selectedTreeViewItem.Header as ExtendedTreeViewItem).FullPath;
                     Importer importer = new Importer();
                     SelectedObject=importer.Import(path);
+
+                    //if (SelectedObject != null)
+                    //{
+                    //    SelectedObject.Draw(gl);
+                    //}
+
                     groupBoxObj.Visibility = Visibility.Visible;
                     InitializeTextures();
                 }

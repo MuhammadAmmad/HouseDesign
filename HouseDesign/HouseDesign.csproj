@@ -84,9 +84,11 @@
     <Compile Include="Classes\Category.cs" />
     <Compile Include="Classes\CategoryMaterial.cs" />
     <Compile Include="Classes\Configuration.cs" />
+    <Compile Include="Classes\FurnitureObject.cs" />
     <Compile Include="Classes\HousePlan.cs" />
     <Compile Include="Classes\Material.cs" />
     <Compile Include="Classes\Scene.cs" />
+    <Compile Include="Classes\StoredObject.cs" />
     <Compile Include="Classes\Wall.cs" />
     <Compile Include="Classes\WallObject.cs" />
     <Compile Include="GenericCategory.xaml.cs">
@@ -101,6 +103,9 @@
     <Compile Include="SetupConfiguration.xaml.cs">
       <DependentUpon>SetupConfiguration.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\AddCategory.xaml.cs">
+      <DependentUpon>AddCategory.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ChooseTexture.xaml.cs">
       <DependentUpon>ChooseTexture.xaml</DependentUpon>
     </Compile>
@@ -112,6 +117,9 @@
     </Compile>
     <Compile Include="UserControls\HousePlanControl.xaml.cs">
       <DependentUpon>HousePlanControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ImportObject.xaml.cs">
+      <DependentUpon>ImportObject.xaml</DependentUpon>
     </Compile>
     <Page Include="GenericCategory.xaml">
       <SubType>Designer</SubType>
@@ -152,6 +160,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\AddCategory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\ChooseTexture.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -165,6 +177,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\HousePlanControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ImportObject.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -186,6 +202,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />

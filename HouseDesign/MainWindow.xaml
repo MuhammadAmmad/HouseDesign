@@ -44,7 +44,7 @@
         <GroupBox Name="groupBoxCurrentProject"  Visibility="Collapsed" Grid.Row="2" >
             <sharpGL:OpenGLControl
             Name="openGLControl" OpenGLDraw="openGLControl_OpenGLDraw" 
-            OpenGLInitialized="openGLControl_OpenGLInitialized" Resized="openGLControl_Resized"
+            OpenGLInitialized="openGLControl_OpenGLInitialized" Resized="openGLControl_Resized" 
             DrawFPS="True" RenderContextType="FBO" FrameRate="15" MouseDown="openGLControl_MouseLeftButtonDown"/>
         </GroupBox>
 

@@ -3,30 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Windows.Controls;
 
 namespace HouseDesign.Classes
 {
     [Serializable]
     public class Configuration
     {
-        private List<Category> categories;
-        private List<CategoryMaterial> materials;
+        public List<Category> Categories { get; set; }
+        public List<Material> Materials { get; set; }
         public bool IsEmpty { get; set; }
 
         public Configuration()
         {
-            categories = new List<Category>();
-            materials = new List<CategoryMaterial>();
+            Categories = new List<Category>();
+            Materials = new List<Material>();
         }
 
-        public List<Category> GetCategories()
+        public void Reset()
         {
-            return categories;
-        }
-
-        public List<CategoryMaterial> GetMaterials()
-        {
-            return materials;
+            Categories.Clear();
+            Materials.Clear();
         }
     }
 }

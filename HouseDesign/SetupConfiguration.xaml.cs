@@ -24,12 +24,20 @@ namespace HouseDesign
     public partial class SetupConfiguration : Window
     {
         private Configuration configuration;
+        private TreeViewItem selectedTreeViewItem;
+        private Configuration oldConfiguration;
+        public bool IsSavedConfiguration { get; set; }
+        private LastSelectedItemType selectedItemType;
         public SetupConfiguration(String title, Configuration conf)
         {
             InitializeComponent();
+            mainTabControl.Height = this.Height - 70;
             this.Title = title;
             this.configuration = conf;
+            IsSavedConfiguration = false;
             InitializeExtendedMenuItems();
+            InitializeTreeViewCategories();
+            InitializeTreeViewMaterials();
 
         }
 
@@ -56,91 +64,67 @@ namespace HouseDesign
             ExtendedMenuItem extendedMenuItemDelete = new ExtendedMenuItem("D:\\Licenta\\HouseDesign\\HouseDesign\\Images\\deleted.png", "Delete");
             menuShortcuts.Items.Add(extendedMenuItemDelete);
             extendedMenuItemDelete.MouseLeftButtonDown += extendedMenuItemDelete_MouseLeftButtonDown;
+
+            ExtendedMenuItem extendedMenuItemSaveConfiguration = new ExtendedMenuItem("D:\\Licenta\\HouseDesign\\HouseDesign\\Images\\save.png", "Save");
+            menuShortcuts.Items.Add(extendedMenuItemSaveConfiguration);
+            extendedMenuItemSaveConfiguration.MouseLeftButtonDown += extendedMenuItemSaveConfiguration_MouseLeftButtonDown;
         }
 
-        private void openGLControl_OpenGLDraw(object sender, OpenGLEventArgs args)
-        {
-            //  Get the OpenGL object.
-            OpenGL gl = openGLControl.OpenGL;
-
-            //  Clear the color and depth buffer.
-            gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
-
-
-            //  Load the identity matrix.
-            gl.LoadIdentity();
-
-
-
-            //  Rotate around the Y axis.
-            gl.Rotate(rotation, 0.0f, 1.0f, 0.0f);
-
-            //if (SelectedObject != null)
-            //{
-            //    SelectedObject.Draw(gl);
-            //}
-
-
-            //  Nudge the rotation.
-            rotation += 3.0f;
-        }
-
-        /// <summary>
-        /// Handles the OpenGLInitialized event of the openGLControl1 control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="args">The <see cref="SharpGL.SceneGraph.OpenGLEventArgs"/> instance containing the event data.</param>
-        private void openGLControl_OpenGLInitialized(object sender, OpenGLEventArgs args)
-        {
-            //  TODO: Initialise OpenGL here.
-
-            //  Get the OpenGL object.
-            OpenGL gl = openGLControl.OpenGL;
-
-            //  Set the clear color.
-            gl.ClearColor(1, 1, 1, 0);
-        }
-
-        /// <summary>
-        /// Handles the Resized event of the openGLControl1 control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="args">The <see cref="SharpGL.SceneGraph.OpenGLEventArgs"/> instance containing the event data.</param>
-        private void openGLControl_Resized(object sender, OpenGLEventArgs args)
-        {
-            //  TODO: Set the projection matrix here.
-
-            //  Get the OpenGL object.
-            OpenGL gl = openGLControl.OpenGL;
-
-            //  Set the projection matrix.
-            gl.MatrixMode(OpenGL.GL_PROJECTION);
-
-            //  Load the identity.
-            gl.LoadIdentity();
-
-            //  Create a perspective transformation.
-            gl.Perspective(60.0f, (double)Width / (double)Height, 0.01, 100.0);
-
-            //  Use the 'look at' helper function to position and aim the camera.
-            gl.LookAt(-5, 5, -5, 0, 0, 0, 0, 1, 0);
-
-            //  Set the modelview matrix.
-            gl.MatrixMode(OpenGL.GL_MODELVIEW);
-        }
-
-        /// <summary>
-        /// The current rotation.
-        /// </summary>
-        private float rotation = 0.0f;
+        
         private void extendedMenuItemNew_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            TabItem currentTabItem = (TabItem)mainTabControl.SelectedItem;
+            if (currentTabItem.Header.ToString() == "Categories")
+            {
+                AddCategory addCategory = new AddCategory("New Category", null);
+                addCategory.StatusUpdated += addCategory_StatusUpdated;
+                Grid grid = new Grid();
+                grid.Children.Add(addCategory);
+                groupBoxRightSide.Content = grid;
+            }
+            else
+            {
+                
+            }
+        }
+
+        private void extendedMenuItemSaveConfiguration_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            CheckSaveConfiguration();
+        }
+
+        void addCategory_StatusUpdated(object sender, EventArgs e)
+        {
+            Category currentCategory = (sender as AddCategory).currentCategory;
+            ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(currentCategory.Path, currentCategory.Name, "");            
+            TreeViewItem item = new TreeViewItem();
+            item.Tag = currentCategory;
+            item.Header = extendedItem;
+            if(selectedTreeViewItem==null)
+            {
+                treeViewCategories.Items.Add(item);
+            }
+            else
+            {
+                selectedTreeViewItem.Items.Add(item);
+            }
 
         }
 
         private void extendedMenuItemEdit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            TabItem currentTabItem = (TabItem)mainTabControl.SelectedItem;
+            if (currentTabItem.Header.ToString() == "Categories")
+            {
+                AddCategory addCategory = new AddCategory("Edit Category", null);
+                Grid grid = new Grid();
+                grid.Children.Add(addCategory);
+                groupBoxRightSide.Content = grid;
+            }
+            else
+            {
 
+            }
         }
 
         private void extendedMenuItemCut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -163,11 +147,40 @@ namespace HouseDesign
             TabItem currentTabItem = (TabItem)mainTabControl.SelectedItem;
             if(currentTabItem.Header.ToString()=="Categories")
             {
-                groupBoxPreviewObject.Visibility = Visibility.Visible;
+                if(selectedItemType==LastSelectedItemType.Category)
+                {
+                    ImportObject importObject = new ImportObject("Import Object");
+                    importObject.StatusUpdated += importObject_StatusUpdated;
+                    Grid grid = new Grid();
+                    grid.Children.Add(importObject);
+                    groupBoxRightSide.Content = grid;
+                }
+                else
+                {
+                    MessageBox.Show("Select a category!");
+                    return;
+                }
+                
             }
             else
             {
-                groupBoxPreviewMaterial.Visibility = Visibility.Visible;
+            }
+        }
+
+        void importObject_StatusUpdated(object sender, EventArgs e)
+        {
+            FurnitureObject importedObject = (sender as ImportObject).GetImportedObject();
+
+            ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(importedObject.DefaultIconPath, importedObject.Name, importedObject.FullPath);
+            TreeViewItem item = new TreeViewItem();
+            item.Tag = importedObject;
+            item.Header = extendedItem;
+            if (selectedTreeViewItem != null)
+            {
+                selectedTreeViewItem.Items.Add(item);
+                Category currentCategory = selectedTreeViewItem.Tag as Category;
+                currentCategory.Objects.Add(importedObject);
+                SaveCategories();
             }
         }
 
@@ -178,7 +191,7 @@ namespace HouseDesign
 
         private void treeViewCategories_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-
+            //selectedTreeViewItem =e.OriginalSource as TreeViewItem;
         }
 
         private void btnAddObject_Click(object sender, RoutedEventArgs e)
@@ -196,5 +209,142 @@ namespace HouseDesign
 
         }
 
+        private void treeViewCategories_Selected(object sender, RoutedEventArgs e)
+        {
+            selectedTreeViewItem = e.OriginalSource as TreeViewItem;
+            if(selectedTreeViewItem.Tag is Category)
+            {
+                selectedItemType = LastSelectedItemType.Category;
+            }
+            else
+            {
+                if(selectedTreeViewItem.Tag is FurnitureObject)
+                {
+                    selectedItemType = LastSelectedItemType.FurnitureObject;
+                }
+                else
+                {
+                    if(selectedTreeViewItem.Tag is CategoryMaterial)
+                    {
+                        selectedItemType = LastSelectedItemType.CategoryMaterial;
+                    }
+                }
+            }
+        }        
+
+        private void treeViewMaterials_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+
+        }
+
+        public Configuration GetConfiguration()
+        {
+            return this.configuration;
+        }
+
+        public void InitializeTreeViewCategories()
+        {
+            treeViewCategories.Items.Clear();
+            List<Category> categories = configuration.Categories;
+            for(int i=0;i<categories.Count;i++)
+            {
+                ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(categories[i].Path, categories[i].Name, "");                
+                TreeViewItem item=new TreeViewItem();
+                item.Tag = categories[i];
+                item.Header=extendedItem;
+                InitializeTreeViewItemCategories(item);
+                treeViewCategories.Items.Add(item);
+            }
+        }
+
+        public void InitializeTreeViewItemCategories(TreeViewItem item)
+        {
+            String defaultIconPath = @"D:\Licenta\HouseDesign\HouseDesign\Images\defaultObjectIcon.png";
+            Category currentCategory = item.Tag as Category;
+
+            for(int i=0;i<currentCategory.SubCategories.Count;i++)
+            {
+                ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(currentCategory.SubCategories[i].Path, currentCategory.SubCategories[i].Name, "");
+                TreeViewItem successorItem = new TreeViewItem();
+                successorItem.Tag = currentCategory.SubCategories[i];
+                successorItem.Header = extendedItem;
+                InitializeTreeViewItemCategories(successorItem);
+                item.Items.Add(successorItem);
+            }
+
+            for (int i = 0; i < currentCategory.Objects.Count; i++)
+            {
+                FurnitureObject currentObject = currentCategory.Objects[i];
+                ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(currentObject.DefaultIconPath, currentObject.Name, currentObject.FullPath);
+                TreeViewItem objectItem = new TreeViewItem();
+                objectItem.Tag = currentObject;
+                objectItem.Header = extendedItem;
+                item.Items.Add(objectItem);
+            }
+        }
+
+        public void SaveCategories()
+        {
+            configuration.Categories.Clear();
+            for (int i = 0; i < treeViewCategories.Items.Count; i++)
+            {
+                TreeViewItem currentItem = treeViewCategories.Items[i] as TreeViewItem;
+                Category currentCategory = currentItem.Tag as Category;
+                if(currentCategory!=null)
+                {
+                    SaveCategoryItem(currentCategory, currentItem);
+                    configuration.Categories.Add(currentCategory);
+                }                
+
+            }
+        }
+
+        public void SaveCategoryItem(Category category, TreeViewItem item)
+        {
+            category.SubCategories.Clear();
+            for(int i=0;i<item.Items.Count;i++)
+            {
+                TreeViewItem successorItem = item.Items[i] as TreeViewItem;
+                Category successorCategory = successorItem.Tag as Category;
+                if(successorCategory!=null)
+                {
+                    SaveCategoryItem(successorCategory, successorItem);
+                    category.SubCategories.Add(successorCategory);
+                }                
+            }
+        }
+
+        public void InitializeTreeViewMaterials()
+        {
+
+        }
+
+        public void CheckSaveConfiguration()
+        {
+            MessageBoxResult result = MessageBox.Show("Do you really want to save the configuration?", "Save configuration", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+            {
+                SaveCategories();
+                IsSavedConfiguration = true;
+            }
+            else
+            {
+                IsSavedConfiguration = false;
+            }
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            CheckSaveConfiguration();
+        }
+
+        public enum LastSelectedItemType
+        {
+            NoSelection,
+            Category,
+            FurnitureObject,
+            CategoryMaterial,
+            Material
+        };
     }
 }

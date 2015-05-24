@@ -55,6 +55,7 @@ namespace HouseDesign
 
             configurationFileName = "configuration.config";
             configuration = new Configuration();
+            DeserializeConfiguration();
             
         }
 
@@ -336,12 +337,12 @@ namespace HouseDesign
                 case "Design":
                     {
                         menuExtended.Items.Clear();
-                        addExtendedMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Images\iconAppliances1.png", "Appliances");
-                        addExtendedMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Images\iconCabinets.png", "Cabinets");
-                        addExtendedMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Images\iconElectronics1.png", "Electronics");
-                        addExtendedMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Images\furniture.png", "Furniture");
-                        addExtendedMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Assets\pillowTexture.jpg", "Others");
-                        addExtendedMenuItem(@"D:\Licenta\HouseDesign\HouseDesign\Images\iconPlumbing1.png", "Plumbing");
+
+                        for (int i = 0; i < configuration.Categories.Count;i++ )
+                        {
+                            Category currentCategory = configuration.Categories[i];
+                            addExtendedMenuItem(currentCategory);
+                        }
                         break;
                     }
                     
@@ -349,16 +350,18 @@ namespace HouseDesign
             
         }
 
-        private void addExtendedMenuItem(String imagePath, String itemName)
+        private void addExtendedMenuItem(Category category)
         {
-            ExtendedMenuItem item = new ExtendedMenuItem(imagePath, itemName);
+            ExtendedMenuItem item = new ExtendedMenuItem(category.Path, category.Name);
+            item.Tag = category;
             menuExtended.Items.Add(item);
             item.MouseLeftButtonDown += menuItemDesign_MouseLeftButtonDown;
         }
 
         void menuItemDesign_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            GenericCategory wndDesign = new GenericCategory(((ExtendedMenuItem)sender).Name, scene);
+            Category currentCategory = ((ExtendedMenuItem)sender).Tag as Category;
+            GenericCategory wndDesign = new GenericCategory(currentCategory, scene);
             wndDesign.ShowDialog();
             if(scene.IsEmpty()==false)
             {
@@ -432,11 +435,17 @@ namespace HouseDesign
         {
             SetupConfiguration setupConfiguration = new SetupConfiguration("Edit Configuration", configuration);
             setupConfiguration.ShowDialog();
+            if(setupConfiguration.IsSavedConfiguration==true)
+            {
+                this.configuration = setupConfiguration.GetConfiguration();
+                SerializeConfiguration();
+            }
         }
 
         private void menuItemResetConfiguration_Click(object sender, RoutedEventArgs e)
         {
-
+            configuration.Reset();
+            SerializeConfiguration();
         }
 
               

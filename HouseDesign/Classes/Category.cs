@@ -7,49 +7,24 @@ using System.Windows;
 
 namespace HouseDesign.Classes
 {
+    [Serializable]
     public class Category
     {
         public String Name { get; set; }
         public List<Category> SubCategories { get; set; }
-        public List<String> Files { get; set; }
+        public List<FurnitureObject> Objects { get; set; }
         public String Path { get; set; }
+        public String Description { get; set; }
+        public double TradeAllowance { get; set; }
 
-        public Category(String name, String path)
+        public Category(String name, String path, String description, double tradeAllowance)
         {
             this.Name = name;
-            if(path.Length==0)
-            {
-                this.Path = @"D:\Licenta\HouseDesign\HouseDesign\Exports\" + Name;
-            }
-            else
-            {
-                this.Path = path;
-            }           
+            this.Path = path;
+            this.Description = description;
+            this.TradeAllowance = tradeAllowance;
             SubCategories = new List<Category>();
-            Files = new List<String>();
-            InitializeCategory(this);
-        }
-
-        public void InitializeCategory(Category mainCategory)
-        {            
-            try
-            {
-                foreach (String file in Directory.GetFiles(mainCategory.Path))
-                {                    
-                    mainCategory.Files.Add(file);
-                }
-                foreach (String directory in Directory.GetDirectories(mainCategory.Path))
-                {
-                    String[] tokens = directory.Split('.');
-                    String actualDrectoryName = tokens[0].Split('\\').Last();
-                    Category category = new Category(actualDrectoryName, directory);
-                    mainCategory.SubCategories.Add(category);
-                }
-            }
-            catch (System.Exception excpt)
-            {
-                MessageBox.Show(excpt.Message);
-            }
+            Objects = new List<FurnitureObject>();
         }
     }
 }
