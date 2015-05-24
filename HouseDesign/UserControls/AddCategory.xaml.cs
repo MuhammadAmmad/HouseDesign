@@ -1,4 +1,5 @@
 ﻿using HouseDesign.Classes;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,28 +29,30 @@ namespace HouseDesign.UserControls
                                                                                    ".png"
                                                                                 };
         private List<Image> icons;
-        public Category currentCategory { get; set; }
+        public Category<FurnitureObject> currentCategory { get; set; }
 
         public event EventHandler StatusUpdated;
 
         private Image defaultIcon;
-        public AddCategory(String title, Category category)
+
+        private Image customIcon;
+        public AddCategory(String title, Category<FurnitureObject> category)
         {
             InitializeComponent();
             mainGroupBox.Header = title;            
             InitializeIcons();
-            InitializeDefaultIcon(@"D:\Licenta\HouseDesign\HouseDesign\Images\defaultIcon.png");
+            InitializeIcon(ref defaultIcon, @"D:\Licenta\HouseDesign\HouseDesign\Images\defaultIcon.png");
             if (category != null)
             {
                 InitializeCategory(category);
             }
         }
 
-        private void InitializeDefaultIcon(String path)
+        private void InitializeIcon(ref Image icon, String path)
         {
-            defaultIcon = new Image();
-            defaultIcon.Source = new BitmapImage((new Uri(path)));
-            defaultIcon.Tag = path;
+            icon = new Image();
+            icon.Source = new BitmapImage((new Uri(path)));
+            icon.Tag = path;
         }
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
@@ -59,16 +62,24 @@ namespace HouseDesign.UserControls
                 return;
             }
             Image icon;
-            if(listViewIcons.SelectedItem!=null)
+            if(customIcon!=null)
             {
-                icon = listViewIcons.SelectedItem as Image;
+                icon = customIcon;
             }
             else
             {
-                icon = defaultIcon;
+                if (listViewIcons.SelectedItem != null)
+                {
+                    icon = listViewIcons.SelectedItem as Image;
+                }
+                else
+                {
+                    icon = defaultIcon;
+                }
             }
-            
-            currentCategory = new Category(textBoxName.Text, icon.Tag.ToString(), textBoxDescription.Text, Convert.ToDouble(textBoxTradeAllowance.Text));
+
+
+            currentCategory = new Category<FurnitureObject>(textBoxName.Text, icon.Tag.ToString(), textBoxDescription.Text, Convert.ToDouble(textBoxTradeAllowance.Text));
             ClearAllFields();
             if (this.StatusUpdated != null)
             {
@@ -87,6 +98,7 @@ namespace HouseDesign.UserControls
             textBoxDescription.Text = "";
             textBoxTradeAllowance.Text = "";
             listViewIcons.SelectedItem = null;
+            customIcon = null;
         }
 
         private void InitializeIcons()
@@ -119,21 +131,28 @@ namespace HouseDesign.UserControls
 
         }
 
-        private void InitializeCategory(Category category)
+        private void InitializeCategory(Category<FurnitureObject> category)
         {
             textBoxName.Text = category.Name;
             textBoxDescription.Text = category.Description;
             textBoxTradeAllowance.Text=category.TradeAllowance.ToString();
             String iconPath = category.Path;
+        }
 
-            //foreach (Image icon in icons)
-            //{
-            //    if (icon.Tag.ToString() == iconPath)
-            //    {
-            //        listViewIcons.SelectedItem = icon;
-            //        break;
-            //    }
-            //}
+        private void btnLoadIcon_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Title = "Load icon";
+            dlg.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\Icons";
+            dlg.Filter = "Image files (*.png;*.jpeg;*.jpg;*.bmp)|*.png;*.jpeg;*.jpg;*.bmp";
+            dlg.FilterIndex = 2;
+            dlg.RestoreDirectory = true;
+            if (dlg.ShowDialog() == true)
+            {
+                string fullPath = System.IO.Path.GetFullPath(dlg.FileName);
+                InitializeIcon(ref customIcon, fullPath);
+
+            }
         }
     }
 }

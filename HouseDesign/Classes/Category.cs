@@ -8,11 +8,11 @@ using System.Windows;
 namespace HouseDesign.Classes
 {
     [Serializable]
-    public class Category
+    public class Category<T> where T:StoredObject
     {
         public String Name { get; set; }
-        public List<Category> SubCategories { get; set; }
-        public List<FurnitureObject> Objects { get; set; }
+        public List<Category<T>> SubCategories { get; set; }
+        public List<T> StoredObjects { get; set; }
         public String Path { get; set; }
         public String Description { get; set; }
         public double TradeAllowance { get; set; }
@@ -23,8 +23,8 @@ namespace HouseDesign.Classes
             this.Path = path;
             this.Description = description;
             this.TradeAllowance = tradeAllowance;
-            SubCategories = new List<Category>();
-            Objects = new List<FurnitureObject>();
+            SubCategories = new List<Category<T>>();
+            StoredObjects = new List<T>();
         }
     }
 }

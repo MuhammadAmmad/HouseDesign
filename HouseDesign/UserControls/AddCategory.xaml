@@ -30,6 +30,7 @@
                     <Label>%</Label>
                 </StackPanel>
                 <Label Grid.Row="3" Grid.Column="0" Margin="5">Icon:</Label>
+                <Button Name="btnLoadIcon" Grid.Row="3" Grid.Column="1" Content="Load Icon" Margin="5" Click="btnLoadIcon_Click"></Button>
                 <ListView Name="listViewIcons" Grid.Row="4" Grid.ColumnSpan="2" Height="100" Margin="5" SelectionChanged="listViewIcons_SelectionChanged">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>

@@ -55,8 +55,32 @@ namespace HouseDesign
 
             configurationFileName = "configuration.config";
             configuration = new Configuration();
-            DeserializeConfiguration();
+            if(IsEmptyConfiguration()==0)
+            {
+                DeserializeConfiguration();
+            }
             
+            
+        }
+
+        public int IsEmptyConfiguration()
+        {
+            if (!File.Exists(configurationFileName))
+            {
+                MessageBox.Show("The configuration file does not exist!");
+                return -1;
+            }
+            else
+            {
+                if (new FileInfo(configurationFileName).Length == 0)
+                {
+                    return 1;
+
+                }
+
+            }
+
+            return 0;
         }
 
         private int delta;
@@ -340,7 +364,7 @@ namespace HouseDesign
 
                         for (int i = 0; i < configuration.Categories.Count;i++ )
                         {
-                            Category currentCategory = configuration.Categories[i];
+                            Category<FurnitureObject> currentCategory = configuration.Categories[i];
                             addExtendedMenuItem(currentCategory);
                         }
                         break;
@@ -350,7 +374,7 @@ namespace HouseDesign
             
         }
 
-        private void addExtendedMenuItem(Category category)
+        private void addExtendedMenuItem(Category<FurnitureObject> category)
         {
             ExtendedMenuItem item = new ExtendedMenuItem(category.Path, category.Name);
             item.Tag = category;
@@ -360,7 +384,7 @@ namespace HouseDesign
 
         void menuItemDesign_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Category currentCategory = ((ExtendedMenuItem)sender).Tag as Category;
+            Category<FurnitureObject> currentCategory = ((ExtendedMenuItem)sender).Tag as Category<FurnitureObject>;
             GenericCategory wndDesign = new GenericCategory(currentCategory, scene);
             wndDesign.ShowDialog();
             if(scene.IsEmpty()==false)

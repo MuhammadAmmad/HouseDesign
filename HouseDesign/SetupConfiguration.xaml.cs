@@ -95,7 +95,7 @@ namespace HouseDesign
 
         void addCategory_StatusUpdated(object sender, EventArgs e)
         {
-            Category currentCategory = (sender as AddCategory).currentCategory;
+            Category<FurnitureObject> currentCategory = (sender as AddCategory).currentCategory;
             ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(currentCategory.Path, currentCategory.Name, "");            
             TreeViewItem item = new TreeViewItem();
             item.Tag = currentCategory;
@@ -178,8 +178,8 @@ namespace HouseDesign
             if (selectedTreeViewItem != null)
             {
                 selectedTreeViewItem.Items.Add(item);
-                Category currentCategory = selectedTreeViewItem.Tag as Category;
-                currentCategory.Objects.Add(importedObject);
+                Category<FurnitureObject> currentCategory = selectedTreeViewItem.Tag as Category<FurnitureObject>;
+                currentCategory.StoredObjects.Add(importedObject);
                 SaveCategories();
             }
         }
@@ -212,7 +212,7 @@ namespace HouseDesign
         private void treeViewCategories_Selected(object sender, RoutedEventArgs e)
         {
             selectedTreeViewItem = e.OriginalSource as TreeViewItem;
-            if(selectedTreeViewItem.Tag is Category)
+            if (selectedTreeViewItem.Tag is Category<FurnitureObject>)
             {
                 selectedItemType = LastSelectedItemType.Category;
             }
@@ -224,7 +224,7 @@ namespace HouseDesign
                 }
                 else
                 {
-                    if(selectedTreeViewItem.Tag is CategoryMaterial)
+                    if(selectedTreeViewItem.Tag is Category<Material>)
                     {
                         selectedItemType = LastSelectedItemType.CategoryMaterial;
                     }
@@ -245,7 +245,7 @@ namespace HouseDesign
         public void InitializeTreeViewCategories()
         {
             treeViewCategories.Items.Clear();
-            List<Category> categories = configuration.Categories;
+            List<Category<FurnitureObject>> categories = configuration.Categories;
             for(int i=0;i<categories.Count;i++)
             {
                 ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(categories[i].Path, categories[i].Name, "");                
@@ -260,7 +260,7 @@ namespace HouseDesign
         public void InitializeTreeViewItemCategories(TreeViewItem item)
         {
             String defaultIconPath = @"D:\Licenta\HouseDesign\HouseDesign\Images\defaultObjectIcon.png";
-            Category currentCategory = item.Tag as Category;
+            Category<FurnitureObject> currentCategory = item.Tag as Category<FurnitureObject>;
 
             for(int i=0;i<currentCategory.SubCategories.Count;i++)
             {
@@ -272,9 +272,9 @@ namespace HouseDesign
                 item.Items.Add(successorItem);
             }
 
-            for (int i = 0; i < currentCategory.Objects.Count; i++)
+            for (int i = 0; i < currentCategory.StoredObjects.Count; i++)
             {
-                FurnitureObject currentObject = currentCategory.Objects[i];
+                FurnitureObject currentObject = currentCategory.StoredObjects[i];
                 ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(currentObject.DefaultIconPath, currentObject.Name, currentObject.FullPath);
                 TreeViewItem objectItem = new TreeViewItem();
                 objectItem.Tag = currentObject;
@@ -289,7 +289,7 @@ namespace HouseDesign
             for (int i = 0; i < treeViewCategories.Items.Count; i++)
             {
                 TreeViewItem currentItem = treeViewCategories.Items[i] as TreeViewItem;
-                Category currentCategory = currentItem.Tag as Category;
+                Category<FurnitureObject> currentCategory = currentItem.Tag as Category<FurnitureObject>;
                 if(currentCategory!=null)
                 {
                     SaveCategoryItem(currentCategory, currentItem);
@@ -299,13 +299,13 @@ namespace HouseDesign
             }
         }
 
-        public void SaveCategoryItem(Category category, TreeViewItem item)
+        public void SaveCategoryItem(Category<FurnitureObject> category, TreeViewItem item)
         {
             category.SubCategories.Clear();
             for(int i=0;i<item.Items.Count;i++)
             {
                 TreeViewItem successorItem = item.Items[i] as TreeViewItem;
-                Category successorCategory = successorItem.Tag as Category;
+                Category<FurnitureObject> successorCategory = successorItem.Tag as Category<FurnitureObject>;
                 if(successorCategory!=null)
                 {
                     SaveCategoryItem(successorCategory, successorItem);

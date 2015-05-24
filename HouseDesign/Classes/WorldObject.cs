@@ -115,6 +115,7 @@ namespace HouseDesign.Classes
                 }
                 gl.End();
             }
+            gl.DeleteTextures((int)tex[0], tex);
                 
         }
 

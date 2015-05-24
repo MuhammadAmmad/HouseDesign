@@ -23,12 +23,12 @@ namespace HouseDesign
     /// </summary>
     public partial class GenericCategory : Window
     {
-        private Category category{ get; set; }
+        private Category<FurnitureObject> category{ get; set; }
 
         public WorldObject SelectedObject { get; set; }
 
         private HouseDesign.Classes.Scene scene;
-        public GenericCategory(Category category, HouseDesign.Classes.Scene scene)
+        public GenericCategory(Category<FurnitureObject> category, HouseDesign.Classes.Scene scene)
         {
             InitializeComponent();
             this.category = category;
@@ -39,10 +39,10 @@ namespace HouseDesign
             this.scene = scene;
         }
 
-        public void PopulateTreeView(Category mainCategory, TreeViewItem currentItem)
+        public void PopulateTreeView(Category<FurnitureObject> mainCategory, TreeViewItem currentItem)
         {
             String defaultIconPath = @"D:\Licenta\HouseDesign\HouseDesign\Images\defaultObjectIcon.png";
-            foreach(FurnitureObject obj in mainCategory.Objects)
+            foreach(FurnitureObject obj in mainCategory.StoredObjects)
             {
                 ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(obj.DefaultIconPath, obj.Name, obj.FullPath);
                 extendedItem.Tag = obj;
@@ -50,7 +50,7 @@ namespace HouseDesign
                 item.Header = extendedItem;
                 currentItem.Items.Add(item);
             }
-            foreach(Category c in mainCategory.SubCategories)
+            foreach (Category<FurnitureObject> c in mainCategory.SubCategories)
             {
                 ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(c.Path, c.Name, c.Path);
                 extendedItem.Tag = "category";
@@ -66,7 +66,8 @@ namespace HouseDesign
         private void openGLControl_OpenGLDraw(object sender, OpenGLEventArgs args)
         {
             //  Get the OpenGL object.
-            OpenGL gl = openGLControl.OpenGL;
+            //OpenGL gl = openGLControl.OpenGL;
+            OpenGL gl = args.OpenGL as OpenGL;
 
             //  Clear the color and depth buffer.
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
@@ -80,10 +81,10 @@ namespace HouseDesign
             //  Rotate around the Y axis.
             gl.Rotate(rotation, 0.0f, 1.0f, 0.0f);
 
-            //if(SelectedObject!=null)
-            //{
-            //    SelectedObject.Draw(gl);
-            //}
+            if (SelectedObject != null)
+            {
+                SelectedObject.Draw(gl);
+            }
            
 
             //  Nudge the rotation.
@@ -100,7 +101,9 @@ namespace HouseDesign
             //  TODO: Initialise OpenGL here.
 
             //  Get the OpenGL object.
-            OpenGL gl = openGLControl.OpenGL;
+            //OpenGL gl = openGLControl.OpenGL;
+            OpenGL gl = args.OpenGL as OpenGL;
+            
 
             //  Set the clear color.
             gl.ClearColor(1, 1, 1, 0);
@@ -116,7 +119,8 @@ namespace HouseDesign
             //  TODO: Set the projection matrix here.
 
             //  Get the OpenGL object.
-            OpenGL gl = openGLControl.OpenGL;
+            //OpenGL gl = openGLControl.OpenGL;
+            OpenGL gl = args.OpenGL as OpenGL;
 
             //  Set the projection matrix.
             gl.MatrixMode(OpenGL.GL_PROJECTION);
@@ -213,10 +217,7 @@ namespace HouseDesign
                     Importer importer = new Importer();
                     SelectedObject=importer.Import(path);
 
-                    //if (SelectedObject != null)
-                    //{
-                    //    SelectedObject.Draw(gl);
-                    //}
+                    
 
                     groupBoxObj.Visibility = Visibility.Visible;
                     InitializeTextures();
@@ -225,5 +226,6 @@ namespace HouseDesign
 
 
         }
+
     }
 }

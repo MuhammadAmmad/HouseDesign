@@ -10,14 +10,14 @@ namespace HouseDesign.Classes
     [Serializable]
     public class Configuration
     {
-        public List<Category> Categories { get; set; }
-        public List<Material> Materials { get; set; }
+        public List<Category<FurnitureObject>> Categories { get; set; }
+        public List<Category<Material>> Materials { get; set; }
         public bool IsEmpty { get; set; }
 
         public Configuration()
         {
-            Categories = new List<Category>();
-            Materials = new List<Material>();
+            Categories = new List<Category<FurnitureObject>>();
+            Materials = new List<Category<Material>>();
         }
 
         public void Reset()
