@@ -13,7 +13,7 @@ namespace HouseDesign.Classes
         public Material( String name, String imagePath, Decimal price)
         {
             this.Name = name;
-            this.IconPath = imagePath;
+            this.FullPath = imagePath;
             this.Price = price;
 
         }

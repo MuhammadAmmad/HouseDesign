@@ -28,17 +28,48 @@ namespace HouseDesign.UserControls
         private WorldObject currentObject;
 
         private FurnitureObject importedObject;
-        public ImportObject(String title)
+        public bool IsEdited { get; set; }
+        public ImportObject(String title, FurnitureObject currentObject, bool isReadOnly, bool isEdited)
         {
             InitializeComponent();
             mainGroupBox.Header = title;
-            importedObject = new FurnitureObject();
+            this.IsEdited = isEdited;
+            if(isReadOnly)
+            {
+                textBoxName.IsReadOnly = true;
+                textBoxDescription.IsReadOnly = true;
+                textBoxInitialPrice.IsReadOnly = true;
+                btnCancel.IsEnabled = false;
+                btnLoadObject.IsEnabled = false;
+                btnOK.IsEnabled = false;
+                groupBoxPreviewObject.Visibility = Visibility.Collapsed;
+            }
+            if(currentObject!=null)
+            {
+                this.importedObject = currentObject;
+                InitializeCurrentObject();
+            }
+            else
+            {
+                importedObject = new FurnitureObject();
+            }            
+        }
+
+        public void InitializeCurrentObject()
+        {
+            textBoxName.Text = importedObject.Name;
+            textBoxDescription.Text = importedObject.Description;
+            textBoxInitialPrice.Text = importedObject.InitialPrice.ToString();
+            Importer importer = new Importer();
+            currentObject = importer.Import(importedObject.FullPath);
+            //currentObject.InitializeTextures(openGLControl.OpenGL);
         }
 
         private void openGLControl_OpenGLDraw(object sender, OpenGLEventArgs args)
         {
             //  Get the OpenGL object.
-            OpenGL gl = openGLControl.OpenGL;
+            //OpenGL gl = openGLControl.OpenGL;
+            OpenGL gl = args.OpenGL as OpenGL;
 
             //  Clear the color and depth buffer.
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
@@ -72,10 +103,12 @@ namespace HouseDesign.UserControls
             //  TODO: Initialise OpenGL here.
 
             //  Get the OpenGL object.
-            OpenGL gl = openGLControl.OpenGL;
+            //OpenGL gl = openGLControl.OpenGL;
+            OpenGL gl = args.OpenGL as OpenGL;
 
             //  Set the clear color.
             gl.ClearColor(1, 1, 1, 0);
+            gl.Enable(OpenGL.GL_TEXTURE_2D);
         }
 
         /// <summary>
@@ -88,7 +121,8 @@ namespace HouseDesign.UserControls
             //  TODO: Set the projection matrix here.
 
             //  Get the OpenGL object.
-            OpenGL gl = openGLControl.OpenGL;
+            //OpenGL gl = openGLControl.OpenGL;
+            OpenGL gl = args.OpenGL as OpenGL;
 
             //  Set the projection matrix.
             gl.MatrixMode(OpenGL.GL_PROJECTION);
@@ -124,6 +158,7 @@ namespace HouseDesign.UserControls
                 importedObject.FullPath = fdlg.FileName;
                 Importer importer = new Importer();
                 currentObject = importer.Import(importedObject.FullPath);
+               // currentObject.InitializeTextures(openGLControl.OpenGL);
                 groupBoxPreviewObject.Visibility = Visibility.Visible;
 
             }

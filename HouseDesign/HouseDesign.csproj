@@ -80,9 +80,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\BoundingBox.cs" />
     <Compile Include="Classes\Camera.cs" />
     <Compile Include="Classes\Category.cs" />
-    <Compile Include="Classes\CategoryMaterial.cs" />
     <Compile Include="Classes\Configuration.cs" />
     <Compile Include="Classes\FurnitureObject.cs" />
     <Compile Include="Classes\HousePlan.cs" />
@@ -93,9 +93,6 @@
     <Compile Include="Classes\WallObject.cs" />
     <Compile Include="GenericCategory.xaml.cs">
       <DependentUpon>GenericCategory.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="GenericFurniture.xaml.cs">
-      <DependentUpon>GenericFurniture.xaml</DependentUpon>
     </Compile>
     <Compile Include="NewProject.xaml.cs">
       <DependentUpon>NewProject.xaml</DependentUpon>
@@ -122,10 +119,6 @@
       <DependentUpon>ImportObject.xaml</DependentUpon>
     </Compile>
     <Page Include="GenericCategory.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="GenericFurniture.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -217,6 +210,9 @@
     <Resource Include="Assets\cubeTexture.png" />
     <Resource Include="Assets\download.jpg" />
     <Resource Include="Assets\red.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\background.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

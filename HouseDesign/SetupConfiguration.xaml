@@ -12,14 +12,15 @@
             <Menu Name="menuShortcuts" Grid.Row="0">
 
             </Menu>
-        <TabControl Grid.Row="1" Name="mainTabControl" Margin="5">
+        <TabControl Grid.Row="1" Name="mainTabControl" Margin="5" SelectionChanged="mainTabControl_SelectionChanged">
             <TabItem Header="Categories">
                 <Grid >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <TreeView Name="treeViewCategories" SelectedItemChanged="treeViewCategories_SelectedItemChanged" Grid.Column="0" TreeViewItem.Selected="treeViewCategories_Selected">
+                    <TreeView Name="treeViewCategories" SelectedItemChanged="treeViewCategories_SelectedItemChanged" Grid.Column="0" 
+                              TreeViewItem.Selected="treeViewCategories_Selected" MouseLeftButtonDown="treeView_MouseLeftButtonDown">
                     </TreeView>
                     <GroupBox Name="groupBoxRightSide" Grid.Column="1">
                         <GroupBox Name="groupBoxPreviewObject" Visibility="Collapsed" Header="Preview Object">
@@ -48,7 +49,7 @@
                         <ColumnDefinition></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <TreeView Name="treeViewMaterials" SelectedItemChanged="treeViewMaterials_SelectedItemChanged"  Grid.Column="0" >
+                    <TreeView Name="treeViewMaterials" SelectedItemChanged="treeViewMaterials_SelectedItemChanged" MouseLeftButtonDown="treeView_MouseLeftButtonDown"  Grid.Column="0">
                     </TreeView>
                     <GroupBox Name="groupBoxPreviewMaterial" Visibility="Collapsed" Header="Preview Material" Grid.Column="1">
                         <Grid >

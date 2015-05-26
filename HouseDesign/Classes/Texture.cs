@@ -25,8 +25,9 @@ namespace HouseDesign.Classes
             gl.TexImage2D(OpenGL.GL_TEXTURE_2D, 0, OpenGL.GL_RGBA, bmp_data.Width, bmp_data.Height, 0,
                 OpenGL.GL_BGRA_EXT, OpenGL.GL_UNSIGNED_BYTE, bmp_data.Scan0);
 
+
             bmp.UnlockBits(bmp_data);
-            bmp.Dispose();
+            //bmp.Dispose();
 
             gl.TexParameter(OpenGL.GL_TEXTURE_2D, OpenGL.GL_TEXTURE_MIN_FILTER, (int)OpenGL.GL_LINEAR);
             gl.TexParameter(OpenGL.GL_TEXTURE_2D, OpenGL.GL_TEXTURE_MAG_FILTER, (int)OpenGL.GL_LINEAR);

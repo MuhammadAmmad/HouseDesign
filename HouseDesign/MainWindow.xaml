@@ -40,13 +40,17 @@
         </GroupBox>
         
         <!-- The OpenGL control provides a OpenGL drawing surface. -->
-
-        <GroupBox Name="groupBoxCurrentProject"  Visibility="Collapsed" Grid.Row="2" >
-            <sharpGL:OpenGLControl
+        <Grid Grid.Row="2">
+            <Grid.Background>
+                <ImageBrush ImageSource="Assets/background.jpg"/>
+            </Grid.Background>
+            <GroupBox Name="groupBoxCurrentProject"  Visibility="Collapsed" >
+                <sharpGL:OpenGLControl
             Name="openGLControl" OpenGLDraw="openGLControl_OpenGLDraw" 
             OpenGLInitialized="openGLControl_OpenGLInitialized" Resized="openGLControl_Resized" 
             DrawFPS="True" RenderContextType="FBO" FrameRate="15" MouseDown="openGLControl_MouseLeftButtonDown"/>
-        </GroupBox>
+            </GroupBox>
+        </Grid>        
 
         <Label Grid.Row="2" Name="lblPosition" Foreground="White"></Label>
 

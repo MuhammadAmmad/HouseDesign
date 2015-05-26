@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF">
+             xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
+             d:Height="500">
     <Grid>
         <GroupBox Name="mainGroupBox">
             <Grid>
@@ -26,7 +27,7 @@
                 <TextBox Name="textBoxDescription"  Grid.Row="1" Grid.Column="1" Width="150" Height="100" Margin="5"></TextBox>
                 <Label Grid.Row="2" Grid.Column="0" Margin="5">Object:</Label>
                 <Button Name="btnLoadObject" Grid.Row="2" Grid.Column="1" Click="btnLoadObject_Click" Width="50" Margin="5">Load</Button>
-                <GroupBox Name="groupBoxPreviewObject" Grid.Row="3" Grid.ColumnSpan="2" Width="200" Height="200" Margin="5" Visibility="Collapsed">
+                <GroupBox Name="groupBoxPreviewObject" Grid.Row="3" Grid.ColumnSpan="2" Width="200" Height="200" Margin="5">
                     <sharpGL:OpenGLControl 
                         Name="openGLControl" OpenGLDraw="openGLControl_OpenGLDraw" 
                         OpenGLInitialized="openGLControl_OpenGLInitialized" Resized="openGLControl_Resized"

@@ -18,6 +18,8 @@ namespace HouseDesign.Classes
         public float Width { get; set; }
         public float Height { get; set; }
 
+        private OpenGL currentGL;
+
 
         public Point3d Forward
         {
@@ -54,10 +56,8 @@ namespace HouseDesign.Classes
             this.textures = new List<String>();
             Scale = new Point3d(1, 1, 1);
         }
-        public WorldObject(List<Point3d> vertices, List<Triangle> triangles, List<UV> uvs, List<String> textures, float width, float height):this()
+        public WorldObject(List<Point3d> vertices, List<Triangle> triangles, List<UV> uvs, List<String> textures):this()
         {
-            this.Width = width;
-            this.Height = height;
             this.vertices.AddRange(vertices);
             
 
@@ -74,11 +74,101 @@ namespace HouseDesign.Classes
             this.uvs.AddRange(uvs);
             
             this.textures.AddRange(textures);
-
+            InitializeBoundingBox();
         }
 
-        uint[] tex;
+        uint[] tex = null;
 
+        public void InitializeBoundingBox()
+        {
+            float minX = float.MaxValue;
+            float maxX = float.MinValue;
+            float minY = float.MaxValue;
+            float maxY = float.MinValue;
+            float minZ = float.MaxValue;
+            float maxZ = float.MinValue;
+
+            for(int i=0;i<vertices.Count;i++)
+            {
+                CheckValues(ref minX, vertices[i], Criteria.less, Axis.OX);
+                CheckValues(ref maxX, vertices[i], Criteria.greater, Axis.OX);
+                CheckValues(ref minY, vertices[i], Criteria.less, Axis.OY);
+                CheckValues(ref maxY, vertices[i], Criteria.greater, Axis.OY);
+                CheckValues(ref minZ, vertices[i], Criteria.less, Axis.OZ);
+                CheckValues(ref maxZ, vertices[i], Criteria.greater, Axis.OZ);
+            }
+        }
+
+        public void CheckValues(ref float currentValue, Point3d currentVertex, Criteria criteria, Axis axis)
+        {
+            if(axis==Axis.OX)
+            {
+                if(criteria==Criteria.less)
+                {
+                    if(currentVertex.X<currentValue)
+                    {
+                        currentValue = currentVertex.X;
+                    }
+                }
+                else
+                {
+                    if (currentVertex.X > currentValue)
+                    {
+                        currentValue = currentVertex.X;
+                    }
+                }
+            }
+            else
+            {
+                if(axis==Axis.OY)
+                {
+                    if (criteria == Criteria.less)
+                    {
+                        if (currentVertex.Y < currentValue)
+                        {
+                            currentValue = currentVertex.Y;
+                        }
+                    }
+                    else
+                    {
+                        if (currentVertex.Y > currentValue)
+                        {
+                            currentValue = currentVertex.Y;
+                        }
+                    }
+                }
+                else
+                {
+                    if (criteria == Criteria.less)
+                    {
+                        if (currentVertex.Z < currentValue)
+                        {
+                            currentValue = currentVertex.Z;
+                        }
+                    }
+                    else
+                    {
+                        if (currentVertex.Z > currentValue)
+                        {
+                            currentValue = currentVertex.Z;
+                        }
+                    }
+                }
+            }
+        }
+        public void InitializeTextures(OpenGL gl)
+        {
+            if(tex!=null)
+            {
+                currentGL.DeleteTextures(textures.Count, tex);
+            }
+            currentGL = gl;
+            tex = new uint[textures.Count];
+            for(int i=0;i<textures.Count;i++)
+            {
+                tex[i] = Texture.LoadTexture(textures[i], currentGL);
+            }
+        }
 
         public void Draw(OpenGL gl)
         {
@@ -88,16 +178,19 @@ namespace HouseDesign.Classes
         }
         protected virtual void DrawObject(OpenGL gl)
         {
+            if(gl!=currentGL)
+            {
+                InitializeTextures(gl);
+            }
             for (int j = 0; j < textures.Count;j++ )
             {
                 //if (tex == null)
                 //{
-                    tex = new uint[1];
-                    tex[0] = Texture.LoadTexture(textures[j], gl);
+                    
                 //}
 
-                gl.Enable(OpenGL.GL_TEXTURE_2D);
-                gl.BindTexture(OpenGL.GL_TEXTURE_2D, tex[0]);
+
+                gl.BindTexture(OpenGL.GL_TEXTURE_2D, tex[j]);
 
 
 
@@ -115,7 +208,7 @@ namespace HouseDesign.Classes
                 }
                 gl.End();
             }
-            gl.DeleteTextures((int)tex[0], tex);
+            //gl.DeleteTextures((int)tex[0], tex);
                 
         }
 
@@ -150,6 +243,19 @@ namespace HouseDesign.Classes
 
             gl.Translate(-Translate.X, -Translate.Y, -Translate.Z);
         }
+
+        public enum Criteria
+        {
+            less,
+            greater
+        };
+
+        public enum Axis
+        {
+            OX,
+            OY,
+            OZ
+        };
 
     }
 }

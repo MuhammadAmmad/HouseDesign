@@ -113,8 +113,9 @@ namespace HouseDesign.Classes
         {
             //try
             //{
-
-            minX = float.MaxValue;
+            if (fileName != null)
+            {
+                 minX = float.MaxValue;
             maxX = float.MinValue;
             minY = float.MaxValue;
             maxY = float.MinValue;
@@ -250,7 +251,10 @@ namespace HouseDesign.Classes
             float height = maxY - minY;
             float width = maxX - minX;
 
-            return new WorldObject(vertices, triangles, uvs, textures, 20*width, 20*height);
+            return new WorldObject(vertices, triangles, uvs, textures);
+            }
+
+            return null;
 
         }
     }

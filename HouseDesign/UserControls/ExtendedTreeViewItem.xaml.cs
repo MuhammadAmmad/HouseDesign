@@ -20,16 +20,16 @@ namespace HouseDesign.UserControls
     public partial class ExtendedTreeViewItem : UserControl
     {        
         public String IconPath { get; set; }
-        public String Name { get; set; }
+        public String HeaderName { get; set; }
         public String FullPath { get; set; }
         public ExtendedTreeViewItem(String iconPath, String name, String fullPath)
         {
             InitializeComponent();
             this.IconPath = iconPath;
-            this.Name = name;
+            this.HeaderName = name;
             this.FullPath = fullPath;
             icon.Source = new BitmapImage(new Uri(this.IconPath));
-            lblName.Content = Name;
+            lblName.Content = HeaderName;
             
         }
     }

@@ -36,15 +36,28 @@ namespace HouseDesign.UserControls
         private Image defaultIcon;
 
         private Image customIcon;
-        public AddCategory(String title, Category<FurnitureObject> category)
+        public bool IsEdited { get; set; }
+        public AddCategory(String title, Category<FurnitureObject> category, bool isReadOnly, bool isEdited)
         {
             InitializeComponent();
             mainGroupBox.Header = title;            
             InitializeIcons();
             InitializeIcon(ref defaultIcon, @"D:\Licenta\HouseDesign\HouseDesign\Images\defaultIcon.png");
+            IsEdited = isEdited;
             if (category != null)
             {
                 InitializeCategory(category);
+            }
+
+            if(isReadOnly)
+            {
+                textBoxName.IsReadOnly = true;
+                textBoxDescription.IsReadOnly = true;
+                textBoxTradeAllowance.IsReadOnly = true;
+                btnLoadIcon.IsEnabled = false;
+                btnCancel.IsEnabled = false;
+                btnOK.IsEnabled = false;
+                listViewIcons.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -62,22 +75,23 @@ namespace HouseDesign.UserControls
                 return;
             }
             Image icon;
-            if(customIcon!=null)
+            
+            if (listViewIcons.SelectedItem != null)
             {
-                icon = customIcon;
+                icon = listViewIcons.SelectedItem as Image;
             }
             else
             {
-                if (listViewIcons.SelectedItem != null)
+                if(customIcon!=null)
                 {
-                    icon = listViewIcons.SelectedItem as Image;
+                    icon = customIcon;
                 }
                 else
                 {
                     icon = defaultIcon;
                 }
+                
             }
-
 
             currentCategory = new Category<FurnitureObject>(textBoxName.Text, icon.Tag.ToString(), textBoxDescription.Text, Convert.ToDouble(textBoxTradeAllowance.Text));
             ClearAllFields();
@@ -136,7 +150,7 @@ namespace HouseDesign.UserControls
             textBoxName.Text = category.Name;
             textBoxDescription.Text = category.Description;
             textBoxTradeAllowance.Text=category.TradeAllowance.ToString();
-            String iconPath = category.Path;
+            InitializeIcon(ref customIcon, category.Path);
         }
 
         private void btnLoadIcon_Click(object sender, RoutedEventArgs e)

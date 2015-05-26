@@ -21,7 +21,7 @@ namespace HouseDesign
     /// <summary>
     /// Interaction logic for GenericCategory.xaml
     /// </summary>
-    public partial class GenericCategory : Window
+    public partial class GenericCategory : Window, IDisposable
     {
         private Category<FurnitureObject> category{ get; set; }
 
@@ -41,7 +41,6 @@ namespace HouseDesign
 
         public void PopulateTreeView(Category<FurnitureObject> mainCategory, TreeViewItem currentItem)
         {
-            String defaultIconPath = @"D:\Licenta\HouseDesign\HouseDesign\Images\defaultObjectIcon.png";
             foreach(FurnitureObject obj in mainCategory.StoredObjects)
             {
                 ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(obj.DefaultIconPath, obj.Name, obj.FullPath);
@@ -107,6 +106,8 @@ namespace HouseDesign
 
             //  Set the clear color.
             gl.ClearColor(1, 1, 1, 0);
+
+            gl.Enable(OpenGL.GL_TEXTURE_2D);
         }
 
         /// <summary>
@@ -216,16 +217,26 @@ namespace HouseDesign
                     String path = (selectedTreeViewItem.Header as ExtendedTreeViewItem).FullPath;
                     Importer importer = new Importer();
                     SelectedObject=importer.Import(path);
-
-                    
-
-                    groupBoxObj.Visibility = Visibility.Visible;
-                    InitializeTextures();
+                    //SelectedObject.InitializeTextures(openGLControl.OpenGL);
+                    if(SelectedObject!=null)
+                    {
+                        groupBoxObj.Visibility = Visibility.Visible;
+                        InitializeTextures();
+                    }                    
                 }
             }
 
 
         }
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+        }
+
+
+        public void Dispose()
+        {
+            SelectedObject = null;
+        }
     }
 }

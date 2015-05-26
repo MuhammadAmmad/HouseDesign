@@ -37,7 +37,9 @@ namespace HouseDesign.Classes
                         Point3d p3 = new Point3d(Convert.ToSingle(point3[0]), Convert.ToSingle(point3[1]), Convert.ToSingle(point3[2]));
                         String[] point4 = points[3].Split(',');
                         Point3d p4 = new Point3d(Convert.ToSingle(point4[0]), Convert.ToSingle(point4[1]), Convert.ToSingle(point4[2]));
-                        walls.Add(new Wall(p1, p2, p3, p4));
+                        Wall wall = new Wall(p1, p2, p3, p4);
+                        walls.Add(wall);
+                        
                     }
 
                 }

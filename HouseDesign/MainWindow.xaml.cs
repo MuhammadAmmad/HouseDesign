@@ -179,7 +179,8 @@ namespace HouseDesign
         private void openGLControl_OpenGLDraw(object sender, OpenGLEventArgs args)
         {
             //  Get the OpenGL object.
-            OpenGL gl = openGLControl.OpenGL;
+            //OpenGL gl = openGLControl.OpenGL;
+            OpenGL gl = args.OpenGL as OpenGL;
 
             //  Clear the color and depth buffer.
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
@@ -200,10 +201,12 @@ namespace HouseDesign
             //  TODO: Initialise OpenGL here.
 
             //  Get the OpenGL object.
-            OpenGL gl = openGLControl.OpenGL;
+            //OpenGL gl = openGLControl.OpenGL;
+            OpenGL gl = args.OpenGL as OpenGL;
 
             //  Set the clear color.
            gl.ClearColor(0, 0, 0, 0);
+           gl.Enable(OpenGL.GL_TEXTURE_2D);
         }
 
         /// <summary>
@@ -216,7 +219,8 @@ namespace HouseDesign
             //  TODO: Set the projection matrix here.
 
             //  Get the OpenGL object.
-            OpenGL gl = openGLControl.OpenGL;
+            //OpenGL gl = openGLControl.OpenGL;
+            OpenGL gl = args.OpenGL as OpenGL;
            
             //  Set the projection matrix.
             gl.MatrixMode(OpenGL.GL_PROJECTION);
@@ -273,7 +277,9 @@ namespace HouseDesign
 
             for(int i=0;i<walls.Count;i++)
             {
-                scene.AddWall(new WallObject(walls[i], height));
+                WallObject wall = new WallObject(walls[i], height);
+               // wall.InitializeTextures(openGLControl.OpenGL);
+                scene.AddWall(wall);
             }
 
             groupBoxCurrentProject.Visibility = Visibility.Visible;
@@ -310,7 +316,9 @@ namespace HouseDesign
 
                         for (int i = 0; i < walls.Count; i++)
                         {
-                            scene.AddWall(new WallObject(walls[i], height));
+                            WallObject wall = new WallObject(walls[i], height);
+                            //wall.InitializeTextures(openGLControl.OpenGL);
+                            scene.AddWall(wall);
                         }
 
                         break;
@@ -392,6 +400,7 @@ namespace HouseDesign
                 groupBoxCurrentProject.Visibility = Visibility.Visible;
                 sceneObject = wndDesign.SelectedObject;
             }
+            wndDesign.Dispose();
         }
 
         private void openGLControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -463,6 +472,7 @@ namespace HouseDesign
             {
                 this.configuration = setupConfiguration.GetConfiguration();
                 SerializeConfiguration();
+                addExtendedMenuItems("Design");
             }
         }
 
@@ -470,6 +480,7 @@ namespace HouseDesign
         {
             configuration.Reset();
             SerializeConfiguration();
+            addExtendedMenuItems("Design");
         }
 
               

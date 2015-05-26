@@ -9,6 +9,6 @@ namespace HouseDesign.Classes
     public abstract class StoredObject
     {
         public String Name { get; set; }
-        public String IconPath { get; set; }
+        public String FullPath { get; set; }
     }
 }
