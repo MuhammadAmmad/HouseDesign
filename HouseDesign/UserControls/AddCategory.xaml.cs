@@ -37,11 +37,11 @@ namespace HouseDesign.UserControls
 
         private Image customIcon;
         public bool IsEdited { get; set; }
-        public AddCategory(String title, Category<FurnitureObject> category, bool isReadOnly, bool isEdited)
+        public AddCategory(String title, Category<FurnitureObject> category, bool isReadOnly, bool isEdited, String iconsDirectoryPath)
         {
             InitializeComponent();
             mainGroupBox.Header = title;            
-            InitializeIcons();
+            InitializeIcons(iconsDirectoryPath);
             InitializeIcon(ref defaultIcon, @"D:\Licenta\HouseDesign\HouseDesign\Images\defaultIcon.png");
             IsEdited = isEdited;
             if (category != null)
@@ -115,11 +115,10 @@ namespace HouseDesign.UserControls
             customIcon = null;
         }
 
-        private void InitializeIcons()
+        private void InitializeIcons(String iconsDirectoryPath)
         {
             icons = new List<Image>();
-            string iconsDirectory = @"D:\Licenta\HouseDesign\HouseDesign\Icons";
-            string[] images = System.IO.Directory.GetFiles(iconsDirectory);
+            string[] images = System.IO.Directory.GetFiles(iconsDirectoryPath);
             images = images.Where(F => imageExtensions.Contains(System.IO.Path.GetExtension(F))).ToArray();
 
             foreach (string currentImage in images)

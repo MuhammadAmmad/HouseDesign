@@ -82,7 +82,7 @@ namespace HouseDesign
             TabItem currentTabItem = (TabItem)mainTabControl.SelectedItem;
             if (currentTabItem.Header.ToString() == "Categories")
             {
-                AddCategory addCategory = new AddCategory("New Category", null, false, false);
+                AddCategory addCategory = new AddCategory("New Category", null, false, false, @"D:\Licenta\HouseDesign\HouseDesign\Icons\IconsCategory");
                 addCategory.StatusUpdated += addCategory_StatusUpdated;
                 Grid grid = new Grid();
                 grid.Children.Add(addCategory);
@@ -90,7 +90,7 @@ namespace HouseDesign
             }
             else
             {
-                AddCategory addCategory = new AddCategory("New Category", null, false, false);
+                AddCategory addCategory = new AddCategory("New Category", null, false, false, @"D:\Licenta\HouseDesign\HouseDesign\Icons\IconsMaterialCategory");
                 addCategory.StatusUpdated += addCategory_StatusUpdated;
                 Grid grid = new Grid();
                 grid.Children.Add(addCategory);
@@ -141,7 +141,7 @@ namespace HouseDesign
             if (selectedItemType==LastSelectedItemType.Category)
             {
                 Category<FurnitureObject> currentCategory = selectedTreeViewItem.Tag as Category<FurnitureObject>;
-                AddCategory addCategory = new AddCategory("Edit Category", currentCategory, false, true);
+                AddCategory addCategory = new AddCategory("Edit Category", currentCategory, false, true, @"D:\Licenta\HouseDesign\HouseDesign\Icons\IconsCategory");
                 addCategory.StatusUpdated += addCategory_StatusUpdated;
                 Grid grid = new Grid();
                 grid.Children.Add(addCategory);
@@ -226,7 +226,8 @@ namespace HouseDesign
                     {
                         selectedTreeViewItem.Items.Add(lastSelectedTreeViewItem);
                     }
-                    isCopying = false;
+                    //isCopying = false;
+                    canPaste=false;
                     SaveCategories();
                 }
                 else
@@ -365,7 +366,7 @@ namespace HouseDesign
             {
                 selectedItemType = LastSelectedItemType.Category;
                 Category<FurnitureObject> currentCategory = selectedTreeViewItem.Tag as Category<FurnitureObject>;
-                AddCategory addCategory = new AddCategory(currentCategory.Name, currentCategory, true, false);
+                AddCategory addCategory = new AddCategory(currentCategory.Name, currentCategory, true, false, @"D:\Licenta\HouseDesign\HouseDesign\Icons\IconsCategory");
                 Grid grid = new Grid();
                 grid.Children.Add(addCategory);
                 groupBoxRightSide.Content = grid;
