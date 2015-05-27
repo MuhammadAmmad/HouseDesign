@@ -192,7 +192,7 @@ namespace HouseDesign.UserControls
 
         private void ClearAllFields()
         {
-            groupBoxPreviewObject.Visibility = Visibility.Visible;
+            groupBoxPreviewObject.Visibility = Visibility.Collapsed;
             textBoxDescription.Clear();
             textBoxInitialPrice.Clear();
             textBoxName.Clear();

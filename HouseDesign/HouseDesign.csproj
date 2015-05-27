@@ -103,6 +103,9 @@
     <Compile Include="UserControls\AddCategory.xaml.cs">
       <DependentUpon>AddCategory.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\AddMaterialCategory.xaml.cs">
+      <DependentUpon>AddMaterialCategory.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ChooseTexture.xaml.cs">
       <DependentUpon>ChooseTexture.xaml</DependentUpon>
     </Compile>
@@ -114,6 +117,9 @@
     </Compile>
     <Compile Include="UserControls\HousePlanControl.xaml.cs">
       <DependentUpon>HousePlanControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ImportMaterial.xaml.cs">
+      <DependentUpon>ImportMaterial.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ImportObject.xaml.cs">
       <DependentUpon>ImportObject.xaml</DependentUpon>
@@ -157,6 +163,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\AddMaterialCategory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\ChooseTexture.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -170,6 +180,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\HousePlanControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ImportMaterial.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

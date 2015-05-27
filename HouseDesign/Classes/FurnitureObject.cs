@@ -7,9 +7,8 @@ namespace HouseDesign.Classes
 {
     [Serializable]
     public class FurnitureObject:StoredObject
-    {
-        public String Description { get; set; }
-        public String DefaultIconPath { get; set; }
+    {     
+        
         public Decimal InitialPrice { get; set; }
 
         public FurnitureObject()

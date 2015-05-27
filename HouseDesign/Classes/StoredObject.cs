@@ -10,5 +10,8 @@ namespace HouseDesign.Classes
     {
         public String Name { get; set; }
         public String FullPath { get; set; }
+        public String DefaultIconPath { get; set; }
+
+        public String Description { get; set; }
     }
 }

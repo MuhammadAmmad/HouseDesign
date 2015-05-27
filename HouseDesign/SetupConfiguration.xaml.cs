@@ -28,6 +28,7 @@ namespace HouseDesign
         private TreeViewItem lastSelectedTreeViewItem;
         public bool IsSavedConfiguration { get; set; }
         private LastSelectedItemType selectedItemType;
+        private LastSelectedItemType lastSelectedItemType;
         private bool canPaste;
         private bool isCopying;
         private TreeViewItem copiedItem;
@@ -90,11 +91,42 @@ namespace HouseDesign
             }
             else
             {
-                AddCategory addCategory = new AddCategory("New Category", null, false, false, @"D:\Licenta\HouseDesign\HouseDesign\Icons\IconsMaterialCategory");
-                addCategory.StatusUpdated += addCategory_StatusUpdated;
+                AddMaterialCategory addMaterialCategory = new AddMaterialCategory("New Material Category", null, false, false, @"D:\Licenta\HouseDesign\HouseDesign\Icons\IconsMaterialCategory");
+                addMaterialCategory.StatusUpdated += addMaterialCategory_StatusUpdated;
                 Grid grid = new Grid();
-                grid.Children.Add(addCategory);
-                groupBoxRightSide.Content = grid;
+                grid.Children.Add(addMaterialCategory);
+                groupBoxPreviewMaterial.Content = grid;
+            }
+        }
+
+        void addMaterialCategory_StatusUpdated(object sender, EventArgs e)
+        {
+            Category<Material> currentCategory = (sender as AddMaterialCategory).CurrentCategory;
+            if ((sender as AddMaterialCategory).IsEdited == true)
+            {
+                if (selectedTreeViewItem != null)
+                {
+                    selectedTreeViewItem.Tag = currentCategory;
+                    SaveMaterials();
+                    InitializeTreeViewMaterials();
+                    groupBoxRightSide.Content = null;
+                }
+            }
+            else
+            {
+                ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(currentCategory.Path, currentCategory.Name, "");
+                TreeViewItem item = new TreeViewItem();
+                item.Tag = currentCategory;
+                item.Header = extendedItem;
+                if (selectedTreeViewItem == null)
+                {
+                    treeViewMaterials.Items.Add(item);
+                }
+                else
+                {
+                    selectedTreeViewItem.Items.Add(item);
+                    selectedTreeViewItem.IsExpanded = true;
+                }
             }
         }
 
@@ -105,7 +137,7 @@ namespace HouseDesign
 
         void addCategory_StatusUpdated(object sender, EventArgs e)
         {
-            Category<FurnitureObject> currentCategory = (sender as AddCategory).currentCategory;
+            Category<FurnitureObject> currentCategory = (sender as AddCategory).CurrentCategory;
             if((sender as AddCategory).IsEdited==true)
             {
                 if(selectedTreeViewItem!=null)
@@ -209,17 +241,22 @@ namespace HouseDesign
         {
             if(canPaste)
             {
+                if(selectedItemType!=lastSelectedItemType)
+                {
+                    MessageBox.Show("Check the type of the paste Category!");
+                    return;
+                }
                 if(selectedItemType==LastSelectedItemType.Category || selectedItemType==LastSelectedItemType.CategoryMaterial)
                 {
                     
                     if(isCopying)
                     {
                         TreeViewItem item = GetTreeViewItemCopy(lastSelectedTreeViewItem);
-                        for (int i = 0; i < lastSelectedTreeViewItem.Items.Count; i++)
-                        {
-                            TreeViewItem successorItem = GetTreeViewItemCopy(lastSelectedTreeViewItem.Items[i] as TreeViewItem);
-                            item.Items.Add(successorItem);
-                        }
+                        //for (int i = 0; i < lastSelectedTreeViewItem.Items.Count; i++)
+                        //{
+                        //    TreeViewItem successorItem = GetTreeViewItemCopy(lastSelectedTreeViewItem.Items[i] as TreeViewItem);
+                        //    item.Items.Add(successorItem);
+                        //}
                             selectedTreeViewItem.Items.Add(item);
                     }
                     else
@@ -229,13 +266,12 @@ namespace HouseDesign
                     //isCopying = false;
                     canPaste=false;
                     SaveCategories();
+                    SaveMaterials();
                 }
                 else
                 {
                     MessageBox.Show("Select a category!");
-                }
-
-                
+                }                
             }
             else
             {
@@ -249,7 +285,12 @@ namespace HouseDesign
             copy.Tag = item.Tag;
             ExtendedTreeViewItem f = item.Header as ExtendedTreeViewItem;
             copy.Header = new ExtendedTreeViewItem(f.IconPath, f.HeaderName, f.FullPath);
-            return copy;
+            for (int i = 0; i < item.Items.Count;i++ )
+            {
+                TreeViewItem currentSuccessor = GetTreeViewItemCopy(item.Items[i] as TreeViewItem);
+                copy.Items.Add(currentSuccessor);
+            }
+                return copy;
 
         }
 
@@ -275,9 +316,50 @@ namespace HouseDesign
             }
             else
             {
+                if (selectedItemType == LastSelectedItemType.CategoryMaterial)
+                {
+                    ImportMaterial importMaterial = new ImportMaterial("Import Material", null, false, false);
+                    importMaterial.StatusUpdated += importMaterial_StatusUpdated;
+                    Grid grid = new Grid();
+                    grid.Children.Add(importMaterial);
+                    groupBoxPreviewMaterial.Content = grid;
+                }
+                else
+                {
+                    MessageBox.Show("Select a category!");
+                    return;
+                }
             }
         }
-
+        void importMaterial_StatusUpdated(object sender, EventArgs e)
+        {
+            Material importedMaterial = (sender as ImportMaterial).GetImportedMaterial();
+            if ((sender as ImportMaterial).IsEdited)
+            {
+                selectedTreeViewItem.Tag = importedMaterial;
+                SaveMaterials();
+                InitializeTreeViewMaterials();
+                TreeViewItem parent = selectedTreeViewItem.Parent as TreeViewItem;
+                if (parent != null)
+                {
+                    parent.IsExpanded = true;
+                }
+            }
+            else
+            {
+                ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(importedMaterial.FullPath, importedMaterial.Name, importedMaterial.FullPath);
+                TreeViewItem item = new TreeViewItem();
+                item.Tag = importedMaterial;
+                item.Header = extendedItem;
+                if (selectedTreeViewItem != null)
+                {
+                    selectedTreeViewItem.Items.Add(item);
+                    Category<Material> currentCategory = selectedTreeViewItem.Tag as Category<Material>;
+                    currentCategory.StoredObjects.Add(importedMaterial);
+                    SaveMaterials();
+                }
+            } 
+        }
         void importObject_StatusUpdated(object sender, EventArgs e)
         {
             FurnitureObject importedObject = (sender as ImportObject).GetImportedObject();
@@ -305,10 +387,8 @@ namespace HouseDesign
                     currentCategory.StoredObjects.Add(importedObject);
                     SaveCategories();
                 }
-            }
-            
+            }           
         }
-
         private void extendedMenuItemDelete_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if(selectedTreeViewItem!=null)
@@ -316,8 +396,7 @@ namespace HouseDesign
                 TreeViewItem parent = selectedTreeViewItem.Parent as TreeViewItem;
                 if(parent==null)
                 {
-                     TabItem currentTabItem = (TabItem)mainTabControl.SelectedItem;
-                     if (currentTabItem.Header.ToString() == "Categories")
+                     if (selectedItemType==LastSelectedItemType.Category || selectedItemType==LastSelectedItemType.FurnitureObject)
                      {
                          treeViewCategories.Items.Remove(selectedTreeViewItem);
                      }
@@ -331,6 +410,7 @@ namespace HouseDesign
                     parent.Items.Remove(selectedTreeViewItem);
                 }                
                 SaveCategories();
+                SaveMaterials();
             }
             else
             {
@@ -340,27 +420,11 @@ namespace HouseDesign
 
         private void treeViewCategories_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            //selectedTreeViewItem =e.OriginalSource as TreeViewItem;
         }
-
-        private void btnAddObject_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnAddMaterial_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void treeViewCategories_Selected(object sender, RoutedEventArgs e)
         {
             lastSelectedTreeViewItem = selectedTreeViewItem;
+            lastSelectedItemType = selectedItemType;
             selectedTreeViewItem = e.OriginalSource as TreeViewItem;
             if (selectedTreeViewItem.Tag is Category<FurnitureObject>)
             {
@@ -378,32 +442,55 @@ namespace HouseDesign
                 {
                     selectedItemType = LastSelectedItemType.FurnitureObject;
                     FurnitureObject currentObject = selectedTreeViewItem.Tag as FurnitureObject;
-                    ImportObject importObject = new ImportObject("Import Object", currentObject, true, false);
+                    ImportObject importObject = new ImportObject("Object", currentObject, true, false);
                     importObject.StatusUpdated += importObject_StatusUpdated;
                     Grid grid = new Grid();
                     grid.Children.Add(importObject);
                     groupBoxRightSide.Content = grid;
                 }
-                else
+            }
+        }
+        private void treeViewMaterials_Selected(object sender, RoutedEventArgs e)
+        {
+            if(selectedItemType==LastSelectedItemType.CategoryMaterial || selectedItemType==LastSelectedItemType.Material)
+            {
+                lastSelectedTreeViewItem = selectedTreeViewItem;
+                lastSelectedItemType = selectedItemType;
+            }
+            
+            selectedTreeViewItem = e.OriginalSource as TreeViewItem;
+            if (selectedTreeViewItem.Tag is Category<Material>)
+            {
+                selectedItemType = LastSelectedItemType.CategoryMaterial;
+                Category<Material> currentCategory = selectedTreeViewItem.Tag as Category<Material>;
+                AddMaterialCategory addCategory = new AddMaterialCategory(currentCategory.Name, currentCategory, true, false, @"D:\Licenta\HouseDesign\HouseDesign\Icons\IconsMaterialCategory");
+                Grid grid = new Grid();
+                grid.Children.Add(addCategory);
+                groupBoxPreviewMaterial.Content = grid;
+
+            }
+            else
+            {
+                if (selectedTreeViewItem.Tag is Material)
                 {
-                    if(selectedTreeViewItem.Tag is Category<Material>)
-                    {
-                        selectedItemType = LastSelectedItemType.CategoryMaterial;
-                    }
+                    selectedItemType = LastSelectedItemType.Material;
+                    Material material = selectedTreeViewItem.Tag as Material;
+                    ImportMaterial importMaterial = new ImportMaterial("Material", material, true, false);
+                    importMaterial.StatusUpdated += importMaterial_StatusUpdated;
+                    Grid grid = new Grid();
+                    grid.Children.Add(importMaterial);
+                    groupBoxPreviewMaterial.Content = grid;
                 }
             }
-        }        
-
+        }
         private void treeViewMaterials_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
 
         }
-
         public Configuration GetConfiguration()
         {
             return this.configuration;
         }
-
         public void InitializeTreeViewCategories()
         {
             treeViewCategories.Items.Clear();
@@ -418,7 +505,6 @@ namespace HouseDesign
                 treeViewCategories.Items.Add(item);
             }
         }
-
         public void InitializeTreeViewItemCategories(TreeViewItem item)
         {
             Category<FurnitureObject> currentCategory = item.Tag as Category<FurnitureObject>;
@@ -443,7 +529,44 @@ namespace HouseDesign
                 item.Items.Add(objectItem);
             }
         }
+        public void InitializeTreeViewMaterials()
+        {
+            treeViewMaterials.Items.Clear();
+            List<Category<Material>> categories = configuration.Materials;
+            for (int i = 0; i < categories.Count; i++)
+            {
+                ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(categories[i].Path, categories[i].Name, "");
+                TreeViewItem item = new TreeViewItem();
+                item.Tag = categories[i];
+                item.Header = extendedItem;
+                InitializeTreeViewItemMaterials(item);
+                treeViewMaterials.Items.Add(item);
+            }
+        }
+        public void InitializeTreeViewItemMaterials(TreeViewItem item)
+        {
+            Category<Material> currentCategory = item.Tag as Category<Material>;
 
+            for (int i = 0; i < currentCategory.SubCategories.Count; i++)
+            {
+                ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(currentCategory.SubCategories[i].Path, currentCategory.SubCategories[i].Name, "");
+                TreeViewItem successorItem = new TreeViewItem();
+                successorItem.Tag = currentCategory.SubCategories[i];
+                successorItem.Header = extendedItem;
+                InitializeTreeViewItemMaterials(successorItem);
+                item.Items.Add(successorItem);
+            }
+
+            for (int i = 0; i < currentCategory.StoredObjects.Count; i++)
+            {
+                Material material = currentCategory.StoredObjects[i];
+                ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(material.FullPath, material.Name, material.FullPath);
+                TreeViewItem objectItem = new TreeViewItem();
+                objectItem.Tag = material;
+                objectItem.Header = extendedItem;
+                item.Items.Add(objectItem);
+            }
+        }
         public void SaveCategories()
         {
             configuration.Categories.Clear();
@@ -455,19 +578,55 @@ namespace HouseDesign
                 {
                     SaveCategoryItem(currentCategory, currentItem);
                     configuration.Categories.Add(currentCategory);
-                }                
+                }  
+            }           
+        }
+        public void SaveMaterials()
+        {
+            configuration.Materials.Clear();
+            for (int i = 0; i < treeViewMaterials.Items.Count; i++)
+            {
+                TreeViewItem currentItem = treeViewMaterials.Items[i] as TreeViewItem;
+                Category<Material> currentCategory = currentItem.Tag as Category<Material>;
+                if (currentCategory != null)
+                {
+                    SaveMaterialItem(currentCategory, currentItem);
+                    configuration.Materials.Add(currentCategory);
+                }
 
+            }
+        }
+
+        public void SaveMaterialItem(Category<Material> materialCategory, TreeViewItem item)
+        {
+            materialCategory.SubCategories.Clear();
+            materialCategory.StoredObjects.Clear();
+            for (int i = 0; i < item.Items.Count; i++)
+            {
+                TreeViewItem successorItem = item.Items[i] as TreeViewItem;
+                Category<Material> successorCategory = successorItem.Tag as Category<Material>;
+                if (successorCategory != null)
+                {
+                    SaveMaterialItem(successorCategory, successorItem);
+                    materialCategory.SubCategories.Add(successorCategory);
+                }
+                else
+                {
+                    Material material = successorItem.Tag as Material;
+                    if (material != null)
+                    {
+                        materialCategory.StoredObjects.Add(material);
+                    }
+                }
+                
+                   
             }
         }
 
         public void SaveCategoryItem(Category<FurnitureObject> category, TreeViewItem item)
         {
-            String x = (item.Header as ExtendedTreeViewItem).HeaderName;
-            if(x=="Desk Chair")
-            {
-
-            }
             category.SubCategories.Clear();
+            category.StoredObjects.Clear();
             for(int i=0;i<item.Items.Count;i++)
             {
                 TreeViewItem successorItem = item.Items[i] as TreeViewItem;
@@ -476,13 +635,16 @@ namespace HouseDesign
                 {
                     SaveCategoryItem(successorCategory, successorItem);
                     category.SubCategories.Add(successorCategory);
-                }                
+                }
+                else
+                {
+                    FurnitureObject furnitureObject=successorItem.Tag as FurnitureObject;
+                    if(furnitureObject!=null)
+                    {
+                        category.StoredObjects.Add(furnitureObject);
+                    }
+                }
             }
-        }
-
-        public void InitializeTreeViewMaterials()
-        {
-
         }
 
         public void CheckSaveConfiguration()
@@ -491,6 +653,7 @@ namespace HouseDesign
             if (result == MessageBoxResult.Yes)
             {
                 SaveCategories();
+                SaveMaterials();
                 IsSavedConfiguration = true;
             }
             else
@@ -517,13 +680,11 @@ namespace HouseDesign
         {
             if(e.Source is TabControl)
             {
-                //selectedTreeViewItem = null;
+                selectedTreeViewItem = null;
                 UnselectTreeViewItem(treeViewMaterials);
                 UnselectTreeViewItem(treeViewCategories);
-            }
-            
-        }
-        
+            }            
+        }        
         private void UnselectTreeViewItem(TreeView pTreeView)
         {
             if (pTreeView.SelectedItem == null)
@@ -552,5 +713,7 @@ namespace HouseDesign
             ////selectedTreeViewItem = null;
             //treeView.Focus();
         }
+
+        
     }
 }

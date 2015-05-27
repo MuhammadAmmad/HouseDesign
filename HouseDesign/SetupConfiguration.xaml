@@ -23,21 +23,6 @@
                               TreeViewItem.Selected="treeViewCategories_Selected" MouseLeftButtonDown="treeView_MouseLeftButtonDown">
                     </TreeView>
                     <GroupBox Name="groupBoxRightSide" Grid.Column="1">
-                        <GroupBox Name="groupBoxPreviewObject" Visibility="Collapsed" Header="Preview Object">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"></RowDefinition>
-                                    <RowDefinition Height="50"></RowDefinition>
-                                </Grid.RowDefinitions>
-                                <GroupBox Grid.Row="0">
-                                    
-                                </GroupBox>
-                                <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
-                                    <Button Name="btnAddObject" Content="Add Object" Click="btnAddObject_Click" Margin="5"></Button>
-                                    <Button Name="btnCancel" Content="Cancel" Click="btnCancel_Click" Margin="5"></Button>
-                                </StackPanel>
-                            </Grid>
-                        </GroupBox>
                     </GroupBox>
                               
 
@@ -49,22 +34,10 @@
                         <ColumnDefinition></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <TreeView Name="treeViewMaterials" SelectedItemChanged="treeViewMaterials_SelectedItemChanged" MouseLeftButtonDown="treeView_MouseLeftButtonDown"  Grid.Column="0">
+                    <TreeView Name="treeViewMaterials" SelectedItemChanged="treeViewMaterials_SelectedItemChanged" MouseLeftButtonDown="treeView_MouseLeftButtonDown"  Grid.Column="0" TreeViewItem.Selected="treeViewMaterials_Selected">
                     </TreeView>
-                    <GroupBox Name="groupBoxPreviewMaterial" Visibility="Collapsed" Header="Preview Material" Grid.Column="1">
-                        <Grid >
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"></RowDefinition>
-                                <RowDefinition Height="50"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <GroupBox  Grid.Row="0">
-                                <Image Name="imgPreviewMaterial" Height="100" Width="100"></Image>
-                            </GroupBox>
-                            <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                                <Button Name="btnAddMaterial" Content="Add Material" Click="btnAddMaterial_Click" Margin="5"></Button>
-                                <Button Content="Cancel" Click="btnCancel_Click" Margin="5"></Button>
-                            </StackPanel>
-                        </Grid>
+                    <GroupBox Name="groupBoxPreviewMaterial" Grid.Column="1">
+                        
                     </GroupBox>               
 
                 </Grid>

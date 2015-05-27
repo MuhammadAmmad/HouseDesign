@@ -17,9 +17,9 @@ using System.Windows.Shapes;
 namespace HouseDesign.UserControls
 {
     /// <summary>
-    /// Interaction logic for AddCategory.xaml
+    /// Interaction logic for AddMaterialCategory.xaml
     /// </summary>
-    public partial class AddCategory : UserControl
+    public partial class AddMaterialCategory : UserControl
     {
         private static readonly List<string> imageExtensions = new List<string> {
                                                                                    ".jpg",
@@ -29,7 +29,7 @@ namespace HouseDesign.UserControls
                                                                                    ".png"
                                                                                 };
         private List<Image> icons;
-        public Category<FurnitureObject> CurrentCategory { get; set; }
+        public Category<Material> CurrentCategory { get; set; }
 
         public event EventHandler StatusUpdated;
 
@@ -37,7 +37,7 @@ namespace HouseDesign.UserControls
 
         private Image customIcon;
         public bool IsEdited { get; set; }
-        public AddCategory(String title, Category<FurnitureObject> category, bool isReadOnly, bool isEdited, String iconsDirectoryPath)
+        public AddMaterialCategory(String title, Category<Material> category, bool isReadOnly, bool isEdited, String iconsDirectoryPath)
         {
             InitializeComponent();
             mainGroupBox.Header = title;            
@@ -93,7 +93,7 @@ namespace HouseDesign.UserControls
                 
             }
 
-            CurrentCategory = new Category<FurnitureObject>(textBoxName.Text, icon.Tag.ToString(), textBoxDescription.Text, Convert.ToDouble(textBoxTradeAllowance.Text));
+            CurrentCategory = new Category<Material>(textBoxName.Text, icon.Tag.ToString(), textBoxDescription.Text, Convert.ToDouble(textBoxTradeAllowance.Text));
             ClearAllFields();
             if (this.StatusUpdated != null)
             {
@@ -144,7 +144,7 @@ namespace HouseDesign.UserControls
 
         }
 
-        private void InitializeCategory(Category<FurnitureObject> category)
+        private void InitializeCategory(Category<Material> category)
         {
             textBoxName.Text = category.Name;
             textBoxDescription.Text = category.Description;

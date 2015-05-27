@@ -9,12 +9,18 @@ namespace HouseDesign.Classes
     public class Material:StoredObject
     {       
         public Decimal Price { get; set; }
+        public String Description { get; set; } 
 
-        public Material( String name, String imagePath, Decimal price)
+        public Material()
+        {
+        }
+
+        public Material( String name, String imagePath, Decimal price):this()
         {
             this.Name = name;
             this.FullPath = imagePath;
             this.Price = price;
+            DefaultIconPath = FullPath;
 
         }
     }

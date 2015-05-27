@@ -23,12 +23,12 @@ namespace HouseDesign
     /// </summary>
     public partial class GenericCategory : Window, IDisposable
     {
-        private Category<FurnitureObject> category{ get; set; }
-
+        private Category<FurnitureObject> category;
+        private List<Category<Material>> materials;
         public WorldObject SelectedObject { get; set; }
 
         private HouseDesign.Classes.Scene scene;
-        public GenericCategory(Category<FurnitureObject> category, HouseDesign.Classes.Scene scene)
+        public GenericCategory(Category<FurnitureObject> category,  HouseDesign.Classes.Scene scene)
         {
             InitializeComponent();
             this.category = category;
