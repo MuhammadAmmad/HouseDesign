@@ -393,7 +393,7 @@ namespace HouseDesign
         void menuItemDesign_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Category<FurnitureObject> currentCategory = ((ExtendedMenuItem)sender).Tag as Category<FurnitureObject>;
-            GenericCategory wndDesign = new GenericCategory(currentCategory, scene);
+            GenericCategory wndDesign = new GenericCategory(currentCategory, scene, configuration.Materials);
             wndDesign.ShowDialog();
             if(scene.IsEmpty()==false)
             {

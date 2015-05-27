@@ -15,17 +15,18 @@ using System.Windows.Shapes;
 namespace HouseDesign.UserControls
 {
     /// <summary>
-    /// Interaction logic for ChooseTexture.xaml
+    /// Interaction logic for CustomizeHeader.xaml
     /// </summary>
-    public partial class ChooseTexture : UserControl
+    public partial class CustomizeHeader : UserControl
     {
-        public int Index { get; set; }
-        public ChooseTexture(int index, String iconPath)
+        public CustomizeHeader(String firstColumn, String secondColumn, String thridColumn, String fourthColumn, String fifthColumn)
         {
             InitializeComponent();
-            this.Index = index;
-            lblTextureName.Content = "Texture" + index;
-            iconTexture.Source = new BitmapImage(new Uri(iconPath));
+            lblFirstColumn.Content = firstColumn;
+            lblSecondColumn.Content = secondColumn;
+            lblThirdColumn.Content = thridColumn;
+            lblFourthColumn.Content = fourthColumn;
+            lblFifthColumn.Content = fifthColumn;
         }
     }
 }

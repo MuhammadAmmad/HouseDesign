@@ -20,7 +20,7 @@ namespace HouseDesign.Classes
 
         private OpenGL currentGL;
 
-
+        public Decimal Price { get; set; }
         public Point3d Forward
         {
             get
@@ -217,9 +217,10 @@ namespace HouseDesign.Classes
             return this.textures;
         }
 
-        public void SetTexture(int index, String newTexturePath)
+        public void SetTexture(int index, String newTexturePath, OpenGL gl)
         {
             this.textures[index] = newTexturePath;
+            InitializeTextures(gl);
         }
 
         protected void ModifyPerspective(OpenGL gl)
@@ -242,6 +243,26 @@ namespace HouseDesign.Classes
             gl.Rotate(-Rotate.Y, 0, 1, 0);
 
             gl.Translate(-Translate.X, -Translate.Y, -Translate.Z);
+        }
+
+        public double GetArea(Point3d a, Point3d b, Point3d c)
+        {
+            double area = Math.Abs((a.X*(b.Y-c.Y)+b.X*(c.Y-a.Y)+c.X*(a.Y-b.Y))/2);
+
+            return area;
+        }
+
+        public double getTotalAreaPerTexture(int textureIndex)
+        {
+            double area = 0;
+            for(int i=0;i<triangles[textureIndex].Count;i++)
+            {
+                Point3d a = vertices[triangles[textureIndex][i].vertex1];
+                Point3d b = vertices[triangles[textureIndex][i].vertex2];
+                Point3d c = vertices[triangles[textureIndex][i].vertex3];
+                area += GetArea(a, b, c);
+            }
+            return area;
         }
 
         public enum Criteria

@@ -28,10 +28,11 @@ namespace HouseDesign
         public WorldObject SelectedObject { get; set; }
 
         private HouseDesign.Classes.Scene scene;
-        public GenericCategory(Category<FurnitureObject> category,  HouseDesign.Classes.Scene scene)
+        public GenericCategory(Category<FurnitureObject> category,  HouseDesign.Classes.Scene scene, List<Category<Material>> materials)
         {
             InitializeComponent();
             this.category = category;
+            this.materials = materials;
             TreeViewItem mainTreeViewItem = new TreeViewItem();
             mainTreeViewItem.IsExpanded = true;
             treeViewCategory.Items.Add(mainTreeViewItem);
@@ -144,22 +145,6 @@ namespace HouseDesign
         /// </summary>
         private float rotation = 0.0f;
 
-
-        private void btnImportObject_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog fdlg = new OpenFileDialog();
-            fdlg.Title = "Import object";
-            fdlg.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\Exports";
-            fdlg.Filter = "FBX files (*.fbx;)|*.fbx;";
-            fdlg.FilterIndex = 2;
-            fdlg.RestoreDirectory = true;
-            if (fdlg.ShowDialog() == true)
-            {
-                //To be implemented
-
-            }
-        }
-
         private void btnAddToScene_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
@@ -173,40 +158,39 @@ namespace HouseDesign
         private void btnCustomizeObject_Click(object sender, RoutedEventArgs e)
         {
             groupBoxCustomizeCurrentObject.Visibility = Visibility.Visible;
-            InitializeTextures();           
+            InitializeMaterials();           
         }
 
-        public void InitializeTextures()
+        public void InitializeMaterials()
         {
-            listViewTextures.Items.Clear();
-            int rank = 1;
+            listViewMaterials.Items.Clear();
+            listViewMaterials.Items.Add(new CustomizeHeader("NAME", "IMAGE", "PRICE/m2", "SURFACE", "TOTAL"));
+            int i = 0;
             foreach (String texture in SelectedObject.GetTextures())
             {
-                ChooseTexture chooseTexture = new ChooseTexture(rank, texture);
-                chooseTexture.MouseLeftButtonDown += chooseTexture_MouseLeftButtonDown;
-                listViewTextures.Items.Add(chooseTexture);
-                rank++;
+                double surfaceNeeded = SelectedObject.getTotalAreaPerTexture(i);
+                CustomizeMaterial customizeMaterial = new CustomizeMaterial(i, "Material " + i, texture, 100, surfaceNeeded);
+                customizeMaterial.MouseLeftButtonDown += customizeMaterial_MouseLeftButtonDown;
+                listViewMaterials.Items.Add(customizeMaterial);
+                i++;
             }
         }
 
-        void chooseTexture_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        void customizeMaterial_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            OpenFileDialog fdlg = new OpenFileDialog();
-            fdlg.Title = "Choose texture";
-            fdlg.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\Assets";
-            fdlg.Filter = "Image files (*.png;*.jpeg;*.jpg;*.bmp)|*.png;*.jpeg;*.jpg;*.bmp";
-            fdlg.FilterIndex = 2;
-            fdlg.RestoreDirectory = true;
-            if (fdlg.ShowDialog() == true)
-            {
-                string fullPath =System.IO.Path.GetFullPath(fdlg.FileName);
-                ChooseTexture currentTexture = sender as ChooseTexture;
-                SelectedObject.SetTexture(currentTexture.Index-1, fullPath);
-                InitializeTextures();
-                
-            }
+            int index = (sender as CustomizeMaterial).Index;
+            GenericMaterial genericMaterial = new GenericMaterial(materials, index);
+            genericMaterial.StatusUpdated += genericMaterial_StatusUpdated;
+            genericMaterial.ShowDialog();
         }
 
+        void genericMaterial_StatusUpdated(object sender, EventArgs e)
+        {            
+            GenericMaterial g = (sender as GenericMaterial);
+            Material currentMaterial = g.GetCurrentMaterial();
+            SelectedObject.SetTexture(g.Index, currentMaterial.FullPath, openGLControl.OpenGL);
+            InitializeMaterials();
+        }
         private void treeViewCategory_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             TreeViewItem selectedTreeViewItem=treeViewCategory.SelectedItem as TreeViewItem;
@@ -221,19 +205,15 @@ namespace HouseDesign
                     if(SelectedObject!=null)
                     {
                         groupBoxObj.Visibility = Visibility.Visible;
-                        InitializeTextures();
+                        InitializeMaterials();
                     }                    
                 }
             }
-
-
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
         }
-
-
         public void Dispose()
         {
             SelectedObject = null;

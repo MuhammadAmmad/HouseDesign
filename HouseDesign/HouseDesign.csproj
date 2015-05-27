@@ -94,6 +94,9 @@
     <Compile Include="GenericCategory.xaml.cs">
       <DependentUpon>GenericCategory.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GenericMaterial.xaml.cs">
+      <DependentUpon>GenericMaterial.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NewProject.xaml.cs">
       <DependentUpon>NewProject.xaml</DependentUpon>
     </Compile>
@@ -106,8 +109,11 @@
     <Compile Include="UserControls\AddMaterialCategory.xaml.cs">
       <DependentUpon>AddMaterialCategory.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ChooseTexture.xaml.cs">
-      <DependentUpon>ChooseTexture.xaml</DependentUpon>
+    <Compile Include="UserControls\CustomizeHeader.xaml.cs">
+      <DependentUpon>CustomizeHeader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\CustomizeMaterial.xaml.cs">
+      <DependentUpon>CustomizeMaterial.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ExtendedMenuItem.xaml.cs">
       <DependentUpon>ExtendedMenuItem.xaml</DependentUpon>
@@ -125,6 +131,10 @@
       <DependentUpon>ImportObject.xaml</DependentUpon>
     </Compile>
     <Page Include="GenericCategory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GenericMaterial.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -167,7 +177,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ChooseTexture.xaml">
+    <Page Include="UserControls\CustomizeHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\CustomizeMaterial.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
