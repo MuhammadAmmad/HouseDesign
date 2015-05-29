@@ -3,35 +3,38 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" >
+             mc:Ignorable="d" Height="400" Width="300">
     <Grid>
         <GroupBox Name="mainGroupBox">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="2*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Row="0" Grid.Column="0" Margin="5">Name:</Label>
-                <TextBox Name="textBoxName" Grid.Row="0" Grid.Column="1" Width="150" Margin="5"></TextBox>
-                <Label  Grid.Row="1" Grid.Column="0" Margin="5">Description:</Label>
-                <TextBox Name="textBoxDescription"  Grid.Row="1" Grid.Column="1" Width="150" Height="100" Margin="5"></TextBox>
-                <Label Grid.Row="2" Grid.Column="0" Margin="5">Material:</Label>
-                <Button Name="btnLoadMaterial" Grid.Row="2" Grid.Column="1" Click="btnLoadMaterial_Click" Width="50" Margin="5">Load</Button>
-                <GroupBox Name="groupBoxPreviewMaterial" Grid.Row="3" Grid.ColumnSpan="2" Margin="5" Visibility="Collapsed" HorizontalAlignment="Center">
+                <Label Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center">Name:</Label>
+                <TextBox Name="textBoxName" Grid.Row="0" Grid.Column="1" Margin="5" Height="30"></TextBox>
+                <Label  Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center">Description:</Label>
+                <TextBox Name="textBoxDescription"  Grid.Row="1" Grid.Column="1" Height="60" Margin="5"></TextBox>
+                <Label Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center">Material:</Label>
+                <Button Name="btnLoadMaterial" Grid.Row="2" Grid.Column="1" Click="btnLoadMaterial_Click" Width="50" Height="20" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">Load</Button>
+                <GroupBox Name="groupBoxPreviewMaterial" Header="Preview Material" Grid.Row="3" Grid.ColumnSpan="2" Margin="5" Visibility="Collapsed" HorizontalAlignment="Center">
                 </GroupBox>
-                <Label Grid.Row="4" Grid.Column="0" Margin="5">Price/m^2:</Label>
-                <TextBox Name="textBoxPrice" Grid.Row="4" Grid.Column="1" Width="150" Margin="5"></TextBox>
+                <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock FontSize="12" Margin="0,2,0,0">Price/m</TextBlock>
+                    <TextBlock FontSize="9" Margin="0,0,0,0">2</TextBlock>
+                </StackPanel>
+                <TextBox Name="textBoxPrice" Grid.Row="4" Grid.Column="1" Height="30" Margin="5"></TextBox>
                 <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="5">
-                    <Button Name="btnOK" Click="btnOK_Click" Margin="5">OK</Button>
-                    <Button Name="btnCancel" Click="btnCancel_Click"  Margin="5">Cancel</Button>
+                    <Button Name="btnOK" Click="btnOK_Click" Margin="5" Height="20">OK</Button>
+                    <Button Name="btnCancel" Click="btnCancel_Click"  Margin="5" Height="20">Cancel</Button>
                 </StackPanel>
             </Grid>
         </GroupBox>

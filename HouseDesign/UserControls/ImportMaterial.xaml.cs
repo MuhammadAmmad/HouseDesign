@@ -65,8 +65,8 @@ namespace HouseDesign.UserControls
             Image imgMaterial = new Image();
             imgMaterial.Source = new BitmapImage((new Uri(imagePath)));
             imgMaterial.Tag = imagePath;
-            imgMaterial.Width = 75;
-            imgMaterial.Height = 75;
+            imgMaterial.Width = 100;
+            imgMaterial.Height = 100;
             Grid grid = new Grid();
             grid.Children.Add(imgMaterial);
             groupBoxPreviewMaterial.Content = grid;

@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="House Design" Height="350" Width="525" 
         xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF" MouseLeftButtonDown="Window_MouseLeftButtonDown"
-        MouseRightButtonDown="Window_MouseRightButtonDown" MouseDoubleClick="Window_MouseDoubleClick">
+        MouseWheel="Window_MouseWheel"
+        MouseDown="Window_MouseDown"
+        MouseRightButtonDown="Window_MouseRightButtonDown" MouseDoubleClick="Window_MouseDoubleClick" MouseUp="Window_MouseUp" MouseMove="Window_MouseMove">
     <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>

@@ -32,6 +32,7 @@ namespace HouseDesign
         private bool isZoomedIn = false;
         private String configurationFileName;
         private Configuration configuration;
+        private WorldObject currentObject;
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
         /// </summary>
@@ -229,7 +230,7 @@ namespace HouseDesign
             gl.LoadIdentity();
 
             //  Create a perspective transformation.
-            gl.Perspective(60.0f, (double)Width / (double)Height, 0.01, 1000.0);
+            gl.Perspective(60.0f, (double)openGLControl.ActualWidth / (double)openGLControl.ActualHeight, 0.01, 10000.0);
 
             //  Set the modelview matrix.
             gl.MatrixMode(OpenGL.GL_MODELVIEW);
@@ -410,22 +411,17 @@ namespace HouseDesign
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            
+            Point3d direction=GetClickDirection(e.GetPosition(openGLControl));
+            currentObject= scene.GetCollisionObject(scene.MainCamera.Translate, direction);
         }
 
         private void Window_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if(isZoomedIn==false)
             {
-                double height = openGLControl.ActualHeight;
-                double width = openGLControl.ActualWidth;
-                float d = Convert.ToSingle(height * Math.Sqrt(3) / 2);
-                Point3d position = new Point3d(Convert.ToSingle(e.GetPosition(openGLControl).X), Convert.ToSingle(e.GetPosition(openGLControl).Y), 0);
-                Point3d v = new Point3d(Convert.ToSingle(e.GetPosition(openGLControl).X - width / 2), Convert.ToSingle(e.GetPosition(openGLControl).Y - height / 2), 0);
-                Point3d dif = scene.MainCamera.Right * v.X + scene.MainCamera.Top * v.Y;
-                Point3d direction = scene.MainCamera.Forward * d - dif;
+                Point3d direction = GetClickDirection(e.GetPosition(openGLControl));
                 float alpha = -(scene.MainCamera.Translate.Y) / direction.Y;
-                Point3d destination = new Point3d(scene.MainCamera.Translate.X + direction.X, 0, scene.MainCamera.Translate.Z + direction.Z * alpha);
+                Point3d destination = new Point3d(scene.MainCamera.Translate.X + direction.X*alpha, 0, scene.MainCamera.Translate.Z + direction.Z * alpha);
                 scene.MainCamera.Translate = destination;
                 scene.MainCamera.Rotate = new Point3d(0, 180, 0);
                 isZoomedIn = true;
@@ -439,17 +435,29 @@ namespace HouseDesign
             
         }
 
-        private void Window_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        private Point3d GetClickDirection(Point clickPoint)
         {
             double height = openGLControl.ActualHeight;
             double width = openGLControl.ActualWidth;
             float d = Convert.ToSingle(height * Math.Sqrt(3) / 2);
-            Point3d position = new Point3d(Convert.ToSingle(e.GetPosition(openGLControl).X), Convert.ToSingle(e.GetPosition(openGLControl).Y), 0);
-            Point3d v = new Point3d(Convert.ToSingle(e.GetPosition(openGLControl).X - width / 2), Convert.ToSingle(e.GetPosition(openGLControl).Y - height / 2), 0);
+            Point3d position = new Point3d(Convert.ToSingle(clickPoint.X), Convert.ToSingle(clickPoint.Y), 0);
+            Point3d v = new Point3d(Convert.ToSingle(clickPoint.X - width / 2), Convert.ToSingle(clickPoint.Y - height / 2), 0);
             Point3d dif = scene.MainCamera.Right * v.X + scene.MainCamera.Top * v.Y;
             Point3d direction = scene.MainCamera.Forward * d - dif;
+            return direction;
+        }
+
+        private Point3d GetFloorClickPoint(Point clickPoint)
+        {
+            Point3d direction = GetClickDirection(clickPoint);
             float alpha = -(scene.MainCamera.Translate.Y) / direction.Y;
-            Point3d destination = new Point3d(scene.MainCamera.Translate.X + direction.X, 0, scene.MainCamera.Translate.Z + direction.Z * alpha);
+            Point3d destination = new Point3d(scene.MainCamera.Translate.X + direction.X * alpha, 0, scene.MainCamera.Translate.Z + direction.Z * alpha);
+
+            return destination;
+        }
+        private void Window_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Point3d destination = GetFloorClickPoint(e.GetPosition(openGLControl));
             if (sceneObject != null)
             {
                 sceneObject.Translate = destination;
@@ -483,7 +491,56 @@ namespace HouseDesign
             addExtendedMenuItems("Design");
         }
 
-              
+        private void Window_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            currentObject=null;
+        }
+
+        Point oldMousePosition;
+        Point3d rotateAroudPosition;
+
+        private void Window_MouseMove(object sender, MouseEventArgs e)
+        {
+            Point currentMousePosition = e.GetPosition(openGLControl);
+            Point3d destination = GetFloorClickPoint(e.GetPosition(openGLControl));
+            if(currentObject!=null)
+            {
+                currentObject.Translate = destination;
+            }
+
+            Point difference = new Point(currentMousePosition.X-oldMousePosition.X,currentMousePosition.Y-oldMousePosition.Y);
+            float angle = Convert.ToSingle(Math.Sqrt(difference.X*difference.X+difference.Y*difference.Y))*0.01f;
+            if(difference.X > 0 )
+            {
+                angle = -angle;
+            }
+            if(e.MiddleButton == MouseButtonState.Pressed)
+            {
+                scene.MainCamera.RotateAroundPoint(new Point3d(0,0,0), angle);
+            }
+            oldMousePosition = currentMousePosition;
+        }
+
+        private void Window_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            float zoom ;
+            Point3d center = GetFloorClickPoint(e.GetPosition(openGLControl));
+
+            if (e.Delta > 0)
+            {
+                zoom = 0.8f;
+            }
+            else
+            {
+                zoom = 1.2f;
+            }
+            scene.MainCamera.Translate = (scene.MainCamera.Translate-center) * zoom+center;
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            rotateAroudPosition = GetFloorClickPoint(e.GetPosition(openGLControl));
+        }              
         
     }
 }

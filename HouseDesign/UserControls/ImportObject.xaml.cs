@@ -42,7 +42,7 @@ namespace HouseDesign.UserControls
                 btnCancel.IsEnabled = false;
                 btnLoadObject.IsEnabled = false;
                 btnOK.IsEnabled = false;
-                groupBoxPreviewObject.Visibility = Visibility.Collapsed;
+                groupBoxPreviewObject.Visibility = Visibility.Visible;
             }
             if(currentObject!=null)
             {
@@ -131,7 +131,7 @@ namespace HouseDesign.UserControls
             gl.LoadIdentity();
 
             //  Create a perspective transformation.
-            gl.Perspective(60.0f, (double)Width / (double)Height, 0.01, 100.0);
+            gl.Perspective(60.0f, (double)openGLControl.ActualWidth / (double)openGLControl.ActualHeight, 0.01, 100.0);
 
             //  Use the 'look at' helper function to position and aim the camera.
             gl.LookAt(-5, 5, -5, 0, 0, 0, 0, 1, 0);

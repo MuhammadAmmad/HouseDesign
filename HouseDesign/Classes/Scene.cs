@@ -60,5 +60,18 @@ namespace HouseDesign.Classes
         {
             walls.Clear();
         }
+
+        public WorldObject GetCollisionObject(Point3d point, Point3d direction)
+        {
+            for(int i=0;i<houseObjects.Count;i++)
+            {
+                if(houseObjects[i].CheckCollision(point, direction))
+                {
+                    return houseObjects[i];
+                }
+            }
+
+            return null;
+        }
     }
 }

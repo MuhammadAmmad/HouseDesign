@@ -26,5 +26,29 @@ namespace HouseDesign.Classes
 
             gl.Translate(-Translate.X, -Translate.Y, -Translate.Z);
         }
+
+        public void RotateAroundPoint(Point3d p, float angle)
+        {
+            float oldX = Translate.X;
+            float oldZ = Translate.Z;
+            oldX = oldX - p.X;
+            oldZ = oldZ - p.Z;
+            Translate = new Point3d(Convert.ToSingle(oldX * Math.Cos(angle) - oldZ * Math.Sin(angle))+p.X, Translate.Y, 
+                Convert.ToSingle(oldX * Math.Sin(angle) + oldZ * Math.Cos(angle))+p.Z);
+
+            Point3d forward = new Point3d(p.X - Translate.X, 0, p.Z - Translate.Z);
+            Point3d oz = new Point3d(0, 0, 1);
+            float yangle = Point3d.GetAngleBetween2Vectors(forward, oz);
+            if(forward.X < 0 )
+            {
+                yangle = Convert.ToSingle(Math.PI*2-yangle);
+            }
+            Rotate = new Point3d(Rotate.X,ConvertToDegrees(yangle),Rotate.Z);
+        }
+
+        public float ConvertToDegrees(float radians)
+        {
+            return Convert.ToSingle(180 * radians / Math.PI);
+        }
     }
 }

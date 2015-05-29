@@ -61,10 +61,10 @@ namespace HouseDesign
 
             for (int i = 0; i < materialCategory.StoredObjects.Count; i++)
             {
-                Material currentMaterial = materialCategory.StoredObjects[i];
+                Material material = materialCategory.StoredObjects[i];
                 TreeViewItem successorItem = new TreeViewItem();
-                ExtendedTreeViewItem extendedSuccessor = new ExtendedTreeViewItem(currentMaterial.FullPath, currentMaterial.Name, currentMaterial.FullPath);
-                successorItem.Tag = currentMaterial;
+                ExtendedTreeViewItem extendedSuccessor = new ExtendedTreeViewItem(material.FullPath, material.Name, material.FullPath);
+                successorItem.Tag = material;
                 successorItem.Header = extendedSuccessor;
                 item.Items.Add(successorItem);
             }

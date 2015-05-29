@@ -9,8 +9,6 @@ namespace HouseDesign.Classes
     public class Material:StoredObject
     {       
         public Decimal Price { get; set; }
-        public String Description { get; set; } 
-
         public Material()
         {
         }

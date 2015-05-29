@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HouseDesign.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -77,8 +78,10 @@ namespace HouseDesign.UserControls
             DependencyProperty.Register("TotalPrice", typeof(Decimal), typeof(CustomizeMaterial));
 
         public int Index { get; set; }
+
+        private Material currentMaterial;
         
-        public CustomizeMaterial(int index, String name, String imagePath, Decimal initialPrice, double surfaceNeeded)
+        public CustomizeMaterial(int index, Material material, double surfaceNeeded)
         {
             InitializeComponent();
             this.Index = index;
@@ -86,12 +89,29 @@ namespace HouseDesign.UserControls
             //this.ImagePath = imagePath;
             //this.InitialPrice = initialPrice;
             //this.SurfaceNeeded = surfaceNeeded;
+            if(material!=null)
+            {
+                currentMaterial = material;
+                InitializeCurrentMaterial(currentMaterial, surfaceNeeded);
+            }          
+        }
 
-            lblMaterialName.Content = name;
-            textBlockInitialPrice.Text = string.Format("{0:0.000}", initialPrice);
+        public void InitializeCurrentMaterial(Material currentMaterial, double surfaceNeeded)
+        {
+            lblMaterialName.Content = currentMaterial.Name;
+            textBlockInitialPrice.Text = string.Format("{0:0.000}", currentMaterial.Price);
             textBlockSurfaceNeeded.Text = string.Format("{0:0.000}", surfaceNeeded);
-            textBlockTotalPrice.Text = string.Format("{0:0.000}",(Convert.ToDouble(initialPrice) * surfaceNeeded));
-            imgMaterial.Source = new BitmapImage(new Uri(imagePath));
+            textBlockTotalPrice.Text = string.Format("{0:0.000}", (Convert.ToDouble(currentMaterial.Price) * surfaceNeeded));
+            imgMaterial.Source = new BitmapImage(new Uri(currentMaterial.FullPath));
+        }
+        public Material GetCurrentMaterial()
+        {
+            return currentMaterial;
+        }
+
+        public void SetCurrentMaterial(Material material)
+        {
+            currentMaterial = material;
         }
     }
 }

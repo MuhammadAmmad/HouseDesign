@@ -25,14 +25,17 @@ namespace HouseDesign
     {
         private Category<FurnitureObject> category;
         private List<Category<Material>> materials;
+        private List<Material> selectedObjectMaterials;
         public WorldObject SelectedObject { get; set; }
 
         private HouseDesign.Classes.Scene scene;
+        private Decimal selectedObjectInitialPrice;
         public GenericCategory(Category<FurnitureObject> category,  HouseDesign.Classes.Scene scene, List<Category<Material>> materials)
         {
             InitializeComponent();
             this.category = category;
             this.materials = materials;
+            selectedObjectMaterials = new List<Material>();
             TreeViewItem mainTreeViewItem = new TreeViewItem();
             mainTreeViewItem.IsExpanded = true;
             treeViewCategory.Items.Add(mainTreeViewItem);
@@ -131,7 +134,7 @@ namespace HouseDesign
             gl.LoadIdentity();
 
             //  Create a perspective transformation.
-            gl.Perspective(60.0f, (double)Width / (double)Height, 0.01, 100.0);
+            gl.Perspective(60.0f, (double)openGLControl.ActualWidth / (double)openGLControl.ActualHeight, 0.01, 100.0);
 
             //  Use the 'look at' helper function to position and aim the camera.
             gl.LookAt(-5, 5, -5, 0, 0, 0, 0, 1, 0);
@@ -147,6 +150,7 @@ namespace HouseDesign
 
         private void btnAddToScene_Click(object sender, RoutedEventArgs e)
         {
+            SelectedObject.Price = Convert.ToDecimal(textBlockTotalPrice.Text);
             this.Close();
         }
 
@@ -164,24 +168,29 @@ namespace HouseDesign
         public void InitializeMaterials()
         {
             listViewMaterials.Items.Clear();
-            listViewMaterials.Items.Add(new CustomizeHeader("NAME", "IMAGE", "PRICE/m2", "SURFACE", "TOTAL"));
-            int i = 0;
-            foreach (String texture in SelectedObject.GetTextures())
+            listViewMaterials.Items.Add(new CustomizeHeader("NAME", "IMAGE", "PRICE/M²", "SURFACE", "TOTAL"));
+            for(int i=0;i<selectedObjectMaterials.Count;i++)
             {
                 double surfaceNeeded = SelectedObject.getTotalAreaPerTexture(i);
-                CustomizeMaterial customizeMaterial = new CustomizeMaterial(i, "Material " + i, texture, 100, surfaceNeeded);
+                CustomizeMaterial customizeMaterial = new CustomizeMaterial(i, selectedObjectMaterials[i], surfaceNeeded);
                 customizeMaterial.MouseLeftButtonDown += customizeMaterial_MouseLeftButtonDown;
                 listViewMaterials.Items.Add(customizeMaterial);
-                i++;
             }
         }
 
         void customizeMaterial_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             int index = (sender as CustomizeMaterial).Index;
+            Material oldMaterial = (sender as CustomizeMaterial).GetCurrentMaterial();
             GenericMaterial genericMaterial = new GenericMaterial(materials, index);
             genericMaterial.StatusUpdated += genericMaterial_StatusUpdated;
             genericMaterial.ShowDialog();
+            Material currentMaterial = genericMaterial.GetCurrentMaterial();
+            selectedObjectMaterials.Remove(oldMaterial);
+            selectedObjectMaterials.Add(currentMaterial);
+            //oldMaterial = currentMaterial;
+            InitializeMaterials();
+            InitializePrices();
         }
 
         void genericMaterial_StatusUpdated(object sender, EventArgs e)
@@ -189,7 +198,8 @@ namespace HouseDesign
             GenericMaterial g = (sender as GenericMaterial);
             Material currentMaterial = g.GetCurrentMaterial();
             SelectedObject.SetTexture(g.Index, currentMaterial.FullPath, openGLControl.OpenGL);
-            InitializeMaterials();
+            //InitializeMaterials();
+            //InitializePrices();
         }
         private void treeViewCategory_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
@@ -204,11 +214,74 @@ namespace HouseDesign
                     //SelectedObject.InitializeTextures(openGLControl.OpenGL);
                     if(SelectedObject!=null)
                     {
+                        InitializeSelectedObjectMaterials();
                         groupBoxObj.Visibility = Visibility.Visible;
+                        groupBoxPrices.Visibility = Visibility.Visible;
                         InitializeMaterials();
+                        selectedObjectInitialPrice=((selectedTreeViewItem.Header as ExtendedTreeViewItem).Tag as FurnitureObject).InitialPrice;
+                        InitializePrices();
                     }                    
                 }
+                else
+                {
+                    groupBoxPrices.Visibility = Visibility.Collapsed;
+                }
             }
+        }
+
+        public void InitializePrices()
+        {
+            textBlockInitialPrice.Text = string.Format("{0:0.000}", selectedObjectInitialPrice);
+            Decimal materialsPrice = GetMaterialsPrice();
+            textBlockMaterialsPrice.Text = string.Format("{0:0.000}", materialsPrice);
+            textBlockTotalPrice.Text = string.Format("{0:0.000}", (materialsPrice + selectedObjectInitialPrice));
+        }
+
+        private Decimal GetMaterialsPrice()
+        {
+            Decimal sum = 0;
+            for(int i=0;i<selectedObjectMaterials.Count;i++)
+            {
+                double surfaceNeeded = SelectedObject.getTotalAreaPerTexture(i);
+                sum += Convert.ToDecimal(surfaceNeeded) * selectedObjectMaterials[i].Price;
+            }
+
+            return sum;
+        }
+        private void InitializeSelectedObjectMaterials()
+        {
+            List<String> textures=SelectedObject.GetTextures();
+            for(int i=0;i<textures.Count;i++)
+            {
+                Material material = new Material();
+                material = GetMaterialByImagePath(materials, textures[i]);
+                if(material!=null)
+                {
+                    selectedObjectMaterials.Add(material);
+                }
+                else
+                {
+                    MessageBox.Show("The material does not exist!");
+                }
+            }
+        }
+
+        private Material GetMaterialByImagePath(List<Category<Material>> materials, String imagePath)
+        {
+            for(int i=0;i<materials.Count;i++)
+            {
+                for(int j=0;j<materials[i].StoredObjects.Count;j++)
+                {
+                    Material material = materials[i].StoredObjects[j];
+                    if(material.FullPath==imagePath)
+                    {
+                        return material;
+                    }
+                }
+                GetMaterialByImagePath(materials[i].SubCategories, imagePath);
+            }
+
+            return null;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
