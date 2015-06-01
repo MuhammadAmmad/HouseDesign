@@ -50,27 +50,28 @@ namespace HouseDesign.Classes
         private void SetZ(float value)
         {
             z = value;
-            x *= 0.05f;
-            y *= 0.05f;
-            z *= 0.05f;
-            if(x> maxX)
+            if (x > maxX)
             {
                 maxX = x;
             }
-            if(x<minX)
+            if (x < minX)
             {
                 minX = x;
             }
 
-            if(y> maxY)
+            if (y > maxY)
             {
                 maxY = y;
             }
 
-            if(y< minY)
+            if (y < minY)
             {
                 minY = y;
             }
+            x *= 0.05f;
+            y *= 0.05f;
+            z *= 0.05f;
+            
             vertices.Add(new Point3d(x, z, y));
             nextSet = SetX;
 

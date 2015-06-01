@@ -7,20 +7,26 @@ using System.Windows;
 
 namespace HouseDesign.Classes
 {
+    [Serializable]
     public class WorldObject
     {
         public delegate void Point3DEventHandler(object sender, EventArgs e);        
 
         public event Point3DEventHandler Translating;
         public event Point3DEventHandler Scaling;
+        public event Point3DEventHandler Rotating;
         protected List<Point3d> vertices;
         protected List<List<Triangle>> triangles;
         protected List<UV> uvs;
         protected List<String> textures;
-        public Point3d Rotate { get; set; }
 
         private Point3d translate;
         private Point3d scale;
+        private Point3d rotate;
+
+        private float height;
+        private float width;
+        private float length;
         public Point3d Translate 
         { 
             get
@@ -51,8 +57,52 @@ namespace HouseDesign.Classes
                 }               
             }
         }
-        public float Width { get; set; }
-        public float Height { get; set; }
+
+        public Point3d Rotate{ 
+            get 
+            {
+                return rotate;
+            } 
+            set 
+            {
+                rotate = value;
+                if(Rotating!=null)
+                {
+                    Rotating(this, new EventArgs());
+                }
+            } 
+        }
+        public float Width
+        {
+            get
+            {
+                return width;
+            }
+            set
+            {
+                width = value;
+            }
+        }
+        public float Height { 
+            get 
+            {
+                return height;
+            } 
+            set 
+            {
+                height = value;
+            } 
+        }
+        public float Length { 
+            get 
+            {
+                return length;
+            } 
+            set
+            {
+                length = value;
+            }
+        }
 
         private OpenGL currentGL;
 
@@ -112,12 +162,12 @@ namespace HouseDesign.Classes
             this.uvs.AddRange(uvs);
             
             this.textures.AddRange(textures);
-            InitializeBoundingBox();
+            InitializeBoundingBoxAndDimensions();
         }
 
         uint[] tex = null;
 
-        public void InitializeBoundingBox()
+        public void InitializeBoundingBoxAndDimensions()
         {
             float minX = float.MaxValue;
             float maxX = float.MinValue;
@@ -137,6 +187,9 @@ namespace HouseDesign.Classes
             }
 
             boundingBox = new BoundingBox(minX, maxX, minY, maxY, minZ, maxZ, this);
+            height = maxY - minY;
+            length = maxZ - minZ;
+            width = maxX - minX;
         }
 
         public void CheckValues(ref float currentValue, Point3d currentVertex, Criteria criteria, Axis axis)
@@ -390,7 +443,7 @@ namespace HouseDesign.Classes
             return area;
         }
 
-        public bool CheckCollision(Point3d point, Point3d direction)
+        public bool CheckCollision(Point3d point, Point3d direction, bool isObjectCollision)
         {
             if(direction.X==0)
             {
@@ -402,27 +455,33 @@ namespace HouseDesign.Classes
             }
             Point3d[] vertices = boundingBox.ActualPoints;
             Point3d result;
-            if (CheckParticularCollision(point, direction, vertices[0], vertices[4] - vertices[0], vertices[1] - vertices[0], out result))
+            if (CheckParticularCollision(point, direction, vertices[0], vertices[4] - vertices[0], vertices[1] - vertices[0],
+                out result, isObjectCollision))
             {
                 return true;
             }
-            if (CheckParticularCollision(point, direction, vertices[1], vertices[5] - vertices[1], vertices[2] - vertices[1], out result))
+            if (CheckParticularCollision(point, direction, vertices[1], vertices[5] - vertices[1], vertices[2] - vertices[1], 
+                out result, isObjectCollision))
             {
                 return true;
             }
-            if (CheckParticularCollision(point, direction, vertices[2], vertices[6] - vertices[2], vertices[3] - vertices[2], out result))
+            if (CheckParticularCollision(point, direction, vertices[2], vertices[6] - vertices[2], vertices[3] - vertices[2],
+                out result, isObjectCollision))
             {
                 return true;
             }
-            if (CheckParticularCollision(point, direction, vertices[3], vertices[7] - vertices[3], vertices[0] - vertices[3], out result))
+            if (CheckParticularCollision(point, direction, vertices[3], vertices[7] - vertices[3], vertices[0] - vertices[3],
+                out result, isObjectCollision))
             {
                 return true;
             }
-            if (CheckParticularCollision(point, direction, vertices[7], vertices[4] - vertices[7], vertices[6] - vertices[7], out result))
+            if (CheckParticularCollision(point, direction, vertices[7], vertices[4] - vertices[7], vertices[6] - vertices[7],
+                out result, isObjectCollision))
             {
                 return true;
             }
-            if (CheckParticularCollision(point, direction, vertices[3], vertices[0] - vertices[3], vertices[2] - vertices[3], out result))
+            if (CheckParticularCollision(point, direction, vertices[3], vertices[0] - vertices[3], vertices[2] - vertices[3],
+                out result, isObjectCollision))
             {
                 return true;
             }
@@ -432,7 +491,7 @@ namespace HouseDesign.Classes
             return false;
         }
 
-        private bool CheckParticularCollision(Point3d p1, Point3d v1, Point3d p2, Point3d v2, Point3d v3, out Point3d result)
+        private bool CheckParticularCollision(Point3d p1, Point3d v1, Point3d p2, Point3d v2, Point3d v3, out Point3d result, bool isObjectCollision)
         {
             float[,] system=new float[3,4];
             system[0, 0] = v1.X;
@@ -459,15 +518,79 @@ namespace HouseDesign.Classes
 
             float t3 = (aLID * aFEB - aHED * aJIB) / (aKIC * aFEB - aGEC * aJIB);
             float t2 = (aHED - t3 * aGEC) / aFEB;
+            float t1=(system[0,3]- system[0,2]*t3- system[0,1]*t2)/system[0,0];
             //MessageBox.Show("t2 " + t2);
             //MessageBox.Show("t3 " + t3);
 
             if (t2 >= 0 && t2 <= 1 && t3 >= 0 && t3 <= 1)
             {
+                if(isObjectCollision)
+                {
+                    if(t1<0 || t1>1)
+                    {
+                        result = new Point3d(0, 0, 0);
+                        return false;
+                    }
+                }
                 result = p2 + v2 * t2 + v3 * t3;
                 return true;
             }
             result = new Point3d(0, 0, 0);
+            return false;
+        }
+
+        public bool CheckObjectCollision(WorldObject obj)
+        {
+            Point3d[] vertices = obj.boundingBox.ActualPoints;
+            if(CheckCollision(vertices[0], vertices[1]-vertices[0], true))
+            {
+                return true;
+            }
+            if(CheckCollision(vertices[1], vertices[2]-vertices[1], true))
+            {
+                return true;
+            }
+            if(CheckCollision(vertices[2], vertices[3]-vertices[2], true))
+            {
+                return true;
+            }
+            if(CheckCollision(vertices[3], vertices[0]-vertices[3], true))
+            {
+                return true;
+            }
+            if(CheckCollision(vertices[4], vertices[5]-vertices[4], true))
+            {
+                return true;
+            }
+            if(CheckCollision(vertices[5], vertices[6]-vertices[5], true))
+            {
+                return true;
+            }
+            if(CheckCollision(vertices[6], vertices[7]-vertices[6], true))
+            {
+                return true;
+            }
+            if(CheckCollision(vertices[7], vertices[4]-vertices[7], true))
+            {
+                return true;
+            }
+            if(CheckCollision(vertices[4], vertices[0]-vertices[4], true))
+            {
+                return true;
+            }
+            if(CheckCollision(vertices[5], vertices[1]-vertices[5], true))
+            {
+                return true;
+            }
+            if(CheckCollision(vertices[6], vertices[2]-vertices[6], true))
+            {
+                return true;
+            }
+            if(CheckCollision(vertices[7], vertices[3]-vertices[7], true))
+            {
+                return true;
+            }
+
             return false;
         }
 

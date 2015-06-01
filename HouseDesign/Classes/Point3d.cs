@@ -5,6 +5,7 @@ using System.Text;
 
 namespace HouseDesign.Classes
 {
+    [Serializable]
     public struct Point3d
     {
         public float X { get; set; }

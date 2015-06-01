@@ -5,6 +5,7 @@ using System.Text;
 
 namespace HouseDesign.Classes
 {
+    [Serializable]
     public class BoundingBox
     {
         private Point3d[] points;
@@ -33,6 +34,7 @@ namespace HouseDesign.Classes
 
             obj.Translating += obj_RecalculateActualPoints;
             obj.Scaling += obj_RecalculateActualPoints;
+            obj.Rotating += obj_RecalculateActualPoints;
 
         }
         void obj_RecalculateActualPoints(object sender, EventArgs e)
@@ -40,7 +42,16 @@ namespace HouseDesign.Classes
             WorldObject obj=(sender as WorldObject);
             for (int i = 0; i < count; i++)
             {
-                ActualPoints[i] = points[i] * obj.Scale + obj.Translate;
+                Point3d pR = new Point3d();
+                float x=points[i].X;
+                float y=points[i].Y;
+                float z=points[i].Z;
+                pR.X = Convert.ToSingle(x*Math.Cos(y)*Math.Cos(z) - y*Math.Cos(y)*Math.Sin(z)+x*Math.Sin(x)*Math.Sin(y)*Math.Sin(z)+
+                    y*Math.Sin(x)*Math.Sin(y)*Math.Cos(z)+z*Math.Sin(y)*Math.Cos(x));
+                pR.Y = Convert.ToSingle(x*Math.Sin(z)*Math.Cos(x)+y*Math.Cos(x)*Math.Cos(z)-z*Math.Sin(x));
+                pR.Z = Convert.ToSingle(-x*Math.Sin(y)*Math.Cos(z)+y*Math.Sin(y)*Math.Sin(z)+x*Math.Sin(x)*Math.Sin(z)*Math.Cos(y)+
+                    y*Math.Sin(x)*Math.Cos(y)*Math.Cos(z)+z*Math.Cos(x)*Math.Cos(y));
+                ActualPoints[i] = pR * obj.Scale + obj.Translate;
             }
         }
 

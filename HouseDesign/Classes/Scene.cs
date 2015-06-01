@@ -6,6 +6,7 @@ using System.Text;
 
 namespace HouseDesign.Classes
 {
+    [Serializable]
     public class Scene
     {
         public Camera MainCamera { get; set; }
@@ -65,13 +66,18 @@ namespace HouseDesign.Classes
         {
             for(int i=0;i<houseObjects.Count;i++)
             {
-                if(houseObjects[i].CheckCollision(point, direction))
+                if(houseObjects[i].CheckCollision(point, direction, false))
                 {
                     return houseObjects[i];
                 }
             }
 
             return null;
+        }
+
+        public void DeleteHouseObject(WorldObject sceneObject)
+        {
+            houseObjects.Remove(sceneObject);
         }
     }
 }

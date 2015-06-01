@@ -19,13 +19,15 @@ using System.Windows.Threading;
 using System.Runtime.Serialization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Microsoft.Win32;
+using System.ComponentModel;
 
 namespace HouseDesign
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private WorldObject sceneObject;
         private HouseDesign.Classes.Scene scene;
@@ -33,6 +35,23 @@ namespace HouseDesign
         private String configurationFileName;
         private Configuration configuration;
         private WorldObject currentObject;
+        private int rotateCount;
+        private Decimal totalPrice;
+        private float sceneHeight;
+        public event PropertyChangedEventHandler PropertyChanged;
+        public Decimal TotalPrice
+        {
+            get
+            {
+                return totalPrice;
+            }
+            set
+            {
+                totalPrice = value;
+                OnPropertyChanged("TotalPrice");
+            }
+        }
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
         /// </summary>
@@ -60,10 +79,20 @@ namespace HouseDesign
             {
                 DeserializeConfiguration();
             }
-            
+
+            rotateCount = 0;
+            totalPrice = 0;
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             
         }
 
+        protected void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
         public int IsEmptyConfiguration()
         {
             if (!File.Exists(configurationFileName))
@@ -106,70 +135,91 @@ namespace HouseDesign
                 configuration = (Configuration)formatter.Deserialize(fileStream);
             }
         }
+
+        private void SerializeScene(String sceneFileName)
+        {
+            using (Stream fileStream = new FileStream(sceneFileName, FileMode.Create,
+                           FileAccess.Write, FileShare.None))
+            {
+                IFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(fileStream, scene);
+            }
+        }
+
+        private void DeserializeScene(String sceneFileName)
+        {
+            using (Stream fileStream = new FileStream(sceneFileName, FileMode.Open,
+                           FileAccess.Read, FileShare.Read))
+            {
+                IFormatter formatter = new BinaryFormatter();
+                scene = (HouseDesign.Classes.Scene)formatter.Deserialize(fileStream);
+            }
+        }
         void timer_Tick(object sender, EventArgs e)
         {
             if (Keyboard.IsKeyUp(Key.Up))
             {
-                scene.MainCamera.Translate += new Point3d(speed,0,0);
+                scene.MainCamera.Translate += new Point3d(0, 0, speed);
             }
             if (Keyboard.IsKeyUp(Key.Down))
             {
-                scene.MainCamera.Translate += new Point3d(-speed, 0, 0);
-            }
-            if (Keyboard.IsKeyUp(Key.Left))
-            {
-                scene.MainCamera.Translate += new Point3d(0, 0, speed);
-            }
-            if (Keyboard.IsKeyUp(Key.Right))
-            {
                 scene.MainCamera.Translate += new Point3d(0, 0, -speed);
 
+                if (Keyboard.IsKeyUp(Key.Left))
+                {
+                    scene.MainCamera.Translate += new Point3d(-speed, 0, 0);
+                }
+                if (Keyboard.IsKeyUp(Key.Right))
+                {
+                    scene.MainCamera.Translate += new Point3d(speed, 0, 0);
+                    
+                }
+
+                //if (Keyboard.IsKeyUp(Key.A))
+                //{
+                //    scene.MainCamera.Rotate += new Point3d(0, speed, 0);
+                //}
+                //if (Keyboard.IsKeyUp(Key.D))
+                //{
+                //    scene.MainCamera.Rotate += new Point3d(0, -speed, 0);
+
+                //}
+
+
+                //if (Keyboard.IsKeyUp(Key.Up))
+                //{
+                //    scene.MainCamera.Rotate += new Point3d(speed, 0, 0);
+
+
+                //}
+                //if (Keyboard.IsKeyUp(Key.Down))
+                //{
+                //    scene.MainCamera.Rotate += new Point3d(-speed, 0, 0);
+
+                //}
+                //if (Keyboard.IsKeyUp(Key.Left))
+                //{
+                //    scene.MainCamera.Rotate += new Point3d(0, speed, 0);
+                //}
+                //if (Keyboard.IsKeyUp(Key.Right))
+                //{
+                //    scene.MainCamera.Rotate += new Point3d(0, -speed, 0);
+
+                //}
+
+                //if (Keyboard.IsKeyUp(Key.LeftShift))
+                //{
+                //    scene.MainCamera.Translate += scene.MainCamera.Forward * -speed;
+                //}
+                //if (Keyboard.IsKeyUp(Key.RightShift))
+                //{
+                //    scene.MainCamera.Translate += scene.MainCamera.Forward * speed;
+                //}
+
+                //lblPosition.Content = scene.MainCamera.Translate.X + " " + scene.MainCamera.Translate.Y + " " + scene.MainCamera.Translate.Z + scene.MainCamera.Rotate.Y;
+                //lblPosition.Content = "R "+scene.MainCamera.Rotate.X + " " + scene.MainCamera.Rotate.Y + " " + scene.MainCamera.Rotate.Z+
+                //" T "+ scene.MainCamera.Translate.X+" "+scene.MainCamera.Translate.Y+" "+ scene.MainCamera.Translate.Z;
             }
-
-            //if (Keyboard.IsKeyUp(Key.A))
-            //{
-            //    scene.MainCamera.Rotate += new Point3d(0, speed, 0);
-            //}
-            //if (Keyboard.IsKeyUp(Key.D))
-            //{
-            //    scene.MainCamera.Rotate += new Point3d(0, -speed, 0);
-
-            //}
-
-
-            //if (Keyboard.IsKeyUp(Key.Up))
-            //{
-            //    scene.MainCamera.Rotate += new Point3d(speed, 0, 0);
-                
-                
-            //}
-            //if (Keyboard.IsKeyUp(Key.Down))
-            //{
-            //    scene.MainCamera.Rotate += new Point3d(-speed, 0, 0);
-                
-            //}
-            //if (Keyboard.IsKeyUp(Key.Left))
-            //{
-            //    scene.MainCamera.Rotate += new Point3d(0, speed, 0);
-            //}
-            //if (Keyboard.IsKeyUp(Key.Right))
-            //{
-            //    scene.MainCamera.Rotate += new Point3d(0, -speed, 0);
-
-            //}
-
-            //if (Keyboard.IsKeyUp(Key.LeftShift))
-            //{
-            //    scene.MainCamera.Translate += scene.MainCamera.Forward * -speed;
-            //}
-            //if (Keyboard.IsKeyUp(Key.RightShift))
-            //{
-            //    scene.MainCamera.Translate += scene.MainCamera.Forward * speed;
-            //}
-
-            //lblPosition.Content = scene.MainCamera.Translate.X + " " + scene.MainCamera.Translate.Y + " " + scene.MainCamera.Translate.Z + scene.MainCamera.Rotate.Y;
-            lblPosition.Content = "R "+scene.MainCamera.Rotate.X + " " + scene.MainCamera.Rotate.Y + " " + scene.MainCamera.Rotate.Z+
-                " T "+ scene.MainCamera.Translate.X+" "+scene.MainCamera.Translate.Y+" "+ scene.MainCamera.Translate.Z;
         }
 
         /// <summary>
@@ -273,12 +323,12 @@ namespace HouseDesign
         {            
             NewProject project = new NewProject("New Project");
             project.ShowDialog();
-            float height = project.GetHeight();
+            sceneHeight = project.GetHeight();
             List<Wall> walls = project.currentHousePlan.GetWalls();
 
             for(int i=0;i<walls.Count;i++)
             {
-                WallObject wall = new WallObject(walls[i], height);
+                WallObject wall = new WallObject(walls[i], sceneHeight);
                // wall.InitializeTextures(openGLControl.OpenGL);
                 scene.AddWall(wall);
             }
@@ -289,11 +339,31 @@ namespace HouseDesign
         private void menuItemOpenProject_Click(object sender, RoutedEventArgs e)
         {
             groupBoxCurrentProject.Visibility = Visibility.Visible;
+            OpenFileDialog fdlg = new OpenFileDialog();
+            fdlg.Title = "Open project";
+            fdlg.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\SavedProjects";
+            fdlg.Filter = "HouseDesign Projects (.hds)|*.hds";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == true)
+            {
+                DeserializeScene(fdlg.FileName);
+            }
         }
 
         private void menuItemSaveProject_Click(object sender, RoutedEventArgs e)
         {
-
+            SaveFileDialog saveProject = new SaveFileDialog();            
+            saveProject.DefaultExt = ".hds";
+            saveProject.Filter = "HouseDesign Projects (.hds)|*.hds";
+            saveProject.Title = "Save Project";
+            saveProject.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\SavedProjects";
+            if (saveProject.ShowDialog() == true)
+            {
+                String[] tokens = saveProject.FileName.Split('\\');
+                String auxName = tokens[tokens.Count() - 1];
+                SerializeScene(auxName);
+            }
         }
 
         private void menuItemExit_Click(object sender, RoutedEventArgs e)
@@ -394,7 +464,7 @@ namespace HouseDesign
         void menuItemDesign_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Category<FurnitureObject> currentCategory = ((ExtendedMenuItem)sender).Tag as Category<FurnitureObject>;
-            GenericCategory wndDesign = new GenericCategory(currentCategory, scene, configuration.Materials);
+            GenericCategory wndDesign = new GenericCategory(currentCategory, scene, configuration.Materials, sceneHeight);
             wndDesign.ShowDialog();
             if(scene.IsEmpty()==false)
             {
@@ -434,7 +504,6 @@ namespace HouseDesign
             }
             
         }
-
         private Point3d GetClickDirection(Point clickPoint)
         {
             double height = openGLControl.ActualHeight;
@@ -460,10 +529,17 @@ namespace HouseDesign
             Point3d destination = GetFloorClickPoint(e.GetPosition(openGLControl));
             if (sceneObject != null)
             {
+                if(sceneObject.Translate.Y!=0)
+                {
+                    destination.Y = sceneObject.Translate.Y;
+                }
                 sceneObject.Translate = destination;
                 sceneObject.Rotate = new Point3d(0, 180, 0);
                 sceneObject.Scale = new Point3d(20, 20, 20);
                 scene.AddHouseObject(sceneObject);
+                totalPrice += sceneObject.Price;
+                lblTotalPrice.Content = "Total price is: " + totalPrice;
+                sceneObject = null;
             }
         }
 
@@ -505,7 +581,8 @@ namespace HouseDesign
             Point3d destination = GetFloorClickPoint(e.GetPosition(openGLControl));
             if(currentObject!=null)
             {
-                currentObject.Translate = destination;
+                destination.Y = currentObject.Translate.Y;
+                currentObject.Translate = destination;                
             }
 
             Point difference = new Point(currentMousePosition.X-oldMousePosition.X,currentMousePosition.Y-oldMousePosition.Y);
@@ -516,7 +593,19 @@ namespace HouseDesign
             }
             if(e.MiddleButton == MouseButtonState.Pressed)
             {
-                scene.MainCamera.RotateAroundPoint(new Point3d(0,0,0), angle);
+                if (currentObject != null)
+                {
+                    rotateCount += 10;
+                    if(rotateCount%100==0)
+                    {
+                        currentObject.Rotate = new Point3d(currentObject.Rotate.X, currentObject.Rotate.Y + 90, currentObject.Rotate.Z);
+                    }                    
+                }
+                else
+                {
+                    scene.MainCamera.RotateAroundPoint(new Point3d(0, 0, 0), angle);
+                }                
+                
             }
             oldMousePosition = currentMousePosition;
         }
@@ -540,7 +629,34 @@ namespace HouseDesign
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             rotateAroudPosition = GetFloorClickPoint(e.GetPosition(openGLControl));
-        }              
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+            {
+                if(currentObject==null)
+                {
+                    MessageBox.Show("Select an object to delete!");
+                }
+                else
+                {
+                    MessageBoxResult result = MessageBox.Show("Do you really want to delete this object?", "Delete object", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        totalPrice -= currentObject.Price;
+                        scene.DeleteHouseObject(currentObject);
+                        lblTotalPrice.Content = "Total price is: " + totalPrice;
+                        currentObject = null;
+
+                    }
+                    e.Handled = true;
+                }
+                
+            }
+        }
+
+
         
     }
 }

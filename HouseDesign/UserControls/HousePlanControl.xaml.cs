@@ -35,7 +35,7 @@ namespace HouseDesign.UserControls
             }
             else
             {
-                MessageBox.Show("Couldn't find the corresponding image for the current house plan!");
+                //MessageBox.Show("Couldn't find the corresponding image for the current house plan!");
             }
         }
 

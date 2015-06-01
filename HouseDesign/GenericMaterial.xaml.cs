@@ -31,6 +31,7 @@ namespace HouseDesign
             this.materials.AddRange(materials);
             this.Index = index;
             InitializeTreeViewMaterials();
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
         }
 
         public void InitializeTreeViewMaterials()

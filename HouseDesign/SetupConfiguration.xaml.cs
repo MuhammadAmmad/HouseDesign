@@ -44,6 +44,7 @@ namespace HouseDesign
             InitializeExtendedMenuItems();
             InitializeTreeViewCategories();
             InitializeTreeViewMaterials();
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
 
 
         }

@@ -6,6 +6,7 @@ using System.Text;
 
 namespace HouseDesign.Classes
 {
+    [Serializable]
     public class Camera: WorldObject
     {
         public Camera()

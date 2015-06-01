@@ -5,6 +5,7 @@ using System.Text;
 
 namespace HouseDesign.Classes
 {
+    [Serializable]
     public struct UV
     {
         public float U { get; set; }

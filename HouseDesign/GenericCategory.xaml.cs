@@ -30,7 +30,10 @@ namespace HouseDesign
 
         private HouseDesign.Classes.Scene scene;
         private Decimal selectedObjectInitialPrice;
-        public GenericCategory(Category<FurnitureObject> category,  HouseDesign.Classes.Scene scene, List<Category<Material>> materials)
+        private float sceneHeight;
+        public float ChosenHeight { get; set; }
+        private DimensionType dimensionType;
+        public GenericCategory(Category<FurnitureObject> category,  HouseDesign.Classes.Scene scene, List<Category<Material>> materials, float sceneHeight)
         {
             InitializeComponent();
             this.category = category;
@@ -41,6 +44,10 @@ namespace HouseDesign
             treeViewCategory.Items.Add(mainTreeViewItem);
             PopulateTreeView(category, mainTreeViewItem);
             this.scene = scene;
+            ChosenHeight = 0;
+            this.sceneHeight = sceneHeight;
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            this.Title = category.Name;
         }
 
         public void PopulateTreeView(Category<FurnitureObject> mainCategory, TreeViewItem currentItem)
@@ -150,8 +157,40 @@ namespace HouseDesign
 
         private void btnAddToScene_Click(object sender, RoutedEventArgs e)
         {
+            if(checkBoxIsSuspended.IsChecked==true )
+            {
+                if (textBoxChosenHeight.Text.Length == 0 || Convert.ToSingle(textBoxChosenHeight.Text) == 0)
+                {
+                    MessageBox.Show("Type a height for the suspended object!");
+                    return;
+                }
+                else
+                {
+                    if(dimensionType==DimensionType.cm)
+                    {
+                        ChosenHeight *= 10;
+                    }
+                    else
+                    {
+                        if(dimensionType==DimensionType.m)
+                        {
+                            ChosenHeight *= 1000;
+                        }
+                    }
+                    ChosenHeight = 0.05f*Convert.ToSingle(textBoxChosenHeight.Text);
+                    if(SelectedObject.Height+ChosenHeight>sceneHeight*0.05f)
+                    {
+                        MessageBox.Show("The chosen height is invalid! Type another!");
+                        return;
+                    }
+                }
+                
+            }
+
             SelectedObject.Price = Convert.ToDecimal(textBlockTotalPrice.Text);
+            SelectedObject.Translate = new Point3d(SelectedObject.Translate.X, ChosenHeight, SelectedObject.Translate.Z);
             this.Close();
+            
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -186,8 +225,10 @@ namespace HouseDesign
             genericMaterial.StatusUpdated += genericMaterial_StatusUpdated;
             genericMaterial.ShowDialog();
             Material currentMaterial = genericMaterial.GetCurrentMaterial();
-            selectedObjectMaterials.Remove(oldMaterial);
-            selectedObjectMaterials.Add(currentMaterial);
+            //selectedObjectMaterials.Remove(oldMaterial);
+            //selectedObjectMaterials.Add(currentMaterial);
+            int i = selectedObjectMaterials.IndexOf(oldMaterial);
+            selectedObjectMaterials[i] = currentMaterial;
             //oldMaterial = currentMaterial;
             InitializeMaterials();
             InitializePrices();
@@ -290,6 +331,51 @@ namespace HouseDesign
         public void Dispose()
         {
             SelectedObject = null;
+        }
+
+        private void checkBoxIsSuspended_Checked(object sender, RoutedEventArgs e)
+        {
+            stackPanelChosenHeight.Visibility = Visibility.Visible;
+        }
+
+        private void checkBoxIsSuspended_Unchecked(object sender, RoutedEventArgs e)
+        {
+            textBoxChosenHeight.Text = "";
+            stackPanelChosenHeight.Visibility = Visibility.Collapsed;
+        }
+
+        private void comboBoxDimensionType_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            dimensionType = (DimensionType)comboBoxDimensionType.SelectedValue;
+        }
+
+        private enum DimensionType
+        {
+            m,
+            cm,
+            mm
+        };
+
+        private void comboBoxDimensionType_DropDownClosed(object sender, EventArgs e)
+        {
+            switch(comboBoxDimensionType.SelectionBoxItem.ToString())
+            {
+                case "m":
+                    {
+                        dimensionType = DimensionType.m;
+                        break;
+                    }
+                case"cm":
+                    {
+                        dimensionType = DimensionType.cm;
+                        break;
+                    }
+                case "mm":
+                    {
+                        dimensionType = DimensionType.mm;
+                        break;
+                    }
+            }
         }
     }
 }

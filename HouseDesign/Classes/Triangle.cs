@@ -5,6 +5,7 @@ using System.Text;
 
 namespace HouseDesign.Classes
 {
+    [Serializable]
     public class Triangle
     {
         public int vertex1 { get; private set; }

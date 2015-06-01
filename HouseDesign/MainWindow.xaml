@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="House Design" Height="350" Width="525" 
         xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF" MouseLeftButtonDown="Window_MouseLeftButtonDown"
-        MouseWheel="Window_MouseWheel"
+        MouseWheel="Window_MouseWheel" KeyDown="Window_KeyDown"
         MouseDown="Window_MouseDown"
         MouseRightButtonDown="Window_MouseRightButtonDown" MouseDoubleClick="Window_MouseDoubleClick" MouseUp="Window_MouseUp" MouseMove="Window_MouseMove">
     <Grid >
@@ -54,7 +54,8 @@
             </GroupBox>
         </Grid>        
 
-        <Label Grid.Row="2" Name="lblPosition" Foreground="White"></Label>
+        <!--<Label Grid.Row="2" Name="lblPosition" Foreground="White"></Label>-->
+        <Label Grid.Row="2" Name="lblTotalPrice" Foreground="White" FontSize="18" FontWeight="ExtraBold" Content="{Binding Path=TotalPrice}" ></Label>
 
     </Grid>
 </Window>
