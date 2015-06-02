@@ -97,6 +97,16 @@
     <Compile Include="GenericMaterial.xaml.cs">
       <DependentUpon>GenericMaterial.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ImageProcessing\Dilation.cs" />
+    <Compile Include="ImageProcessing\HoughLines.cs" />
+    <Compile Include="ImageProcessing\HoughTableCalculator.cs" />
+    <Compile Include="ImageProcessing\ILineCrossable.cs" />
+    <Compile Include="ImageProcessing\LineSegmentator.cs" />
+    <Compile Include="ImageProcessing\Node.cs" />
+    <Compile Include="ImageProcessing\Point2d.cs" />
+    <Compile Include="ImageProcessing\Segment.cs" />
+    <Compile Include="ImageProcessing\Skeletation.cs" />
+    <Compile Include="ImageProcessing\StandardOperation.cs" />
     <Compile Include="NewProject.xaml.cs">
       <DependentUpon>NewProject.xaml</DependentUpon>
     </Compile>
@@ -152,11 +162,6 @@
     <Compile Include="Classes\Triangle.cs" />
     <Compile Include="Classes\UV.cs" />
     <Compile Include="Classes\WorldObject.cs" />
-    <Compile Include="ImageProcessing\HoughLines.cs" />
-    <Compile Include="ImageProcessing\HoughTableCalculator.cs" />
-    <Compile Include="ImageProcessing\ILineCrossable.cs" />
-    <Compile Include="ImageProcessing\LineSegmentator.cs" />
-    <Compile Include="ImageProcessing\Segment.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

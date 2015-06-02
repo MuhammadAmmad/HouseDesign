@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 
-namespace ISIP_FrameworkGUI.Classes
+namespace HouseDesign.ImageProcessing
 {
     public class LineSegmentator : ILineCrossable
     {
@@ -16,7 +16,7 @@ namespace ISIP_FrameworkGUI.Classes
         int lastY;
         bool isFoundFirst;
         List<Segment> segments;
-        int thresold = 100;
+        int thresold = 20;
         Image<Gray, byte> image;
 
         public LineSegmentator(Image<Gray,byte> image)

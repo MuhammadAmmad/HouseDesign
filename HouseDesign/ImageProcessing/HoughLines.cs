@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 
-namespace ISIP_FrameworkGUI.Classes
+namespace HouseDesign.ImageProcessing
 {
     public static class HoughLines
     {
@@ -20,7 +20,7 @@ namespace ISIP_FrameworkGUI.Classes
         const double radianConverter = Math.PI / 180.0;
         delegate void CrossLine(int r,int t, ILineCrossable function);
 
-        public static void InitializeHoughMatrix(Image<Gray, byte> originalImage)
+        public static void InitializeHoughMatrix(Image<Gray, byte> originalImage, int threshold)
         {
             originalImageWidth = originalImage.Width;
             originalImageHeight = originalImage.Height;
@@ -30,7 +30,7 @@ namespace ISIP_FrameworkGUI.Classes
 
             HoughTableCalculator houghCalculator = new HoughTableCalculator(image,houghHeight,houghWidth);
 
-            int r, y, t;
+            int r, t;
             for (r = 0; r < houghHeight; r++)
             {
                 for (t = 0; t < houghWidth; t++)
@@ -46,31 +46,66 @@ namespace ISIP_FrameworkGUI.Classes
                 }               
             }
 
-            houghMatrix = houghCalculator.GetHoughMatrix();
+            houghMatrix = houghCalculator.GetLocalMaximum(3, 3, threshold);
+            
         }
 
-        public static List<Segment> GetSegments(Image<Gray, byte> image, int threshold)
+        private class DoubleComparer : IComparer<double>
         {
-            InitializeHoughMatrix(image);
-            List<Segment> segments = new List<Segment>();
+            public int Compare(double x, double y)
+            {
+                if (x.CompareTo(y) == 0)
+                    return -1;
+                else
+                    return x.CompareTo(y);
+            }
+        }
+
+        public static SortedList<double, Segment> GetSegments(Image<Gray, byte> image, int threshold)
+        {
+
+
+
+
+
+
+            InitializeHoughMatrix(image, threshold);
+            int validLinesCount = 0;
+
+            SortedList<double, Segment> segments = new SortedList<double, Segment>(new DoubleComparer());
             for (int r = 0; r < houghHeight; r++)
             {               
                 for (int t = 0; t < houghWidth; t++)
                 {
-                    if(houghMatrix[r, t]>threshold)
+                    if(houghMatrix[r, t]>0)
                     {
+                        validLinesCount++;
                         if ((t >= 0 && t <= 45) || (t >= 135 && t <= 225))
                         {
-                            segments.AddRange(GetSegmentFromPair(r, t, CrossLineViaX));
+                            //segments.Add(new Segment(GetPointViaX(r,t,0),GetPointViaX(r,t,image.Width)));
+                            
+                            List<Segment> result = GetSegmentFromPair(r, t, CrossLineViaX);
+                            foreach(Segment segment in result)
+                            {
+                                segments.Add(segment.Slope, segment);
+                            }
                         }
                         else
                         {
-                            segments.AddRange(GetSegmentFromPair(r, t, CrossLineViaY));
+                            //segments.Add(new Segment(GetPointViaY(r, t, 0), GetPointViaY(r, t, image.Height)));
+                            List<Segment> result = GetSegmentFromPair(r, t, CrossLineViaY);
+                            foreach (Segment segment in result)
+                            {
+                                segments.Add(segment.Slope, segment);
+                            }
                         }
                         
                     }
                 }
             }
+
+            MessageBox.Show(validLinesCount + "Q");
+            MessageBox.Show(segments.Count + " Seg");
 
             return segments;
         }
@@ -126,6 +161,15 @@ namespace ISIP_FrameworkGUI.Classes
             return originalImage;
         }
         
+        private static Point GetPointViaX(int r,int t,int x)
+        {
+            return new Point(x,Convert.ToInt32((r - x * Math.Cos((t - 90) * radianConverter)) / (Math.Sin((t - 90) * radianConverter))));
+        }
+        private static Point GetPointViaY(int r, int t, int y)
+        {
+            return new Point(Convert.ToInt32((r - y * Math.Sin((t - 90) * radianConverter)) / (Math.Cos((t - 90) * radianConverter))), y);
+        }
+
         private static void CrossLineViaX(int r, int t, ILineCrossable function)
         {
             int y;
@@ -152,6 +196,6 @@ namespace ISIP_FrameworkGUI.Classes
                     function.AtLinePoint(x, y);
                 }
             }
-        }
+        }         
     }
 }

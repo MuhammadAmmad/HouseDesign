@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ISIP_FrameworkGUI.Classes
+namespace HouseDesign.ImageProcessing
 {
     public interface ILineCrossable
     {

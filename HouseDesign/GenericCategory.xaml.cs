@@ -33,6 +33,7 @@ namespace HouseDesign
         private float sceneHeight;
         public float ChosenHeight { get; set; }
         private DimensionType dimensionType;
+        private Decimal currentTradeAllowance;
         public GenericCategory(Category<FurnitureObject> category,  HouseDesign.Classes.Scene scene, List<Category<Material>> materials, float sceneHeight)
         {
             InitializeComponent();
@@ -48,6 +49,7 @@ namespace HouseDesign
             this.sceneHeight = sceneHeight;
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             this.Title = category.Name;
+            currentTradeAllowance = Convert.ToDecimal(category.TradeAllowance);
         }
 
         public void PopulateTreeView(Category<FurnitureObject> mainCategory, TreeViewItem currentItem)
@@ -260,6 +262,15 @@ namespace HouseDesign
                         groupBoxPrices.Visibility = Visibility.Visible;
                         InitializeMaterials();
                         selectedObjectInitialPrice=((selectedTreeViewItem.Header as ExtendedTreeViewItem).Tag as FurnitureObject).InitialPrice;
+                        //if(selectedTreeViewItem.Parent as TreeViewItem!=null)
+                        //{
+                        //    Category<FurnitureObject> currentCategory = (selectedTreeViewItem.Parent as ExtendedTreeViewItem).Tag as Category<FurnitureObject>;
+                        //    if (currentCategory != null)
+                        //    {
+                        //        currentTradeAllowance = Convert.ToDecimal(currentCategory.TradeAllowance);
+                        //    }
+                        //}                       
+                        
                         InitializePrices();
                     }                    
                 }
@@ -274,8 +285,10 @@ namespace HouseDesign
         {
             textBlockInitialPrice.Text = string.Format("{0:0.000}", selectedObjectInitialPrice);
             Decimal materialsPrice = GetMaterialsPrice();
+            textBlockTradeAllowance.Text =string.Format("{0:0.000} %", currentTradeAllowance);
             textBlockMaterialsPrice.Text = string.Format("{0:0.000}", materialsPrice);
-            textBlockTotalPrice.Text = string.Format("{0:0.000}", (materialsPrice + selectedObjectInitialPrice));
+            textBlockTotalPrice.Text = string.Format("{0:0.000}", (materialsPrice + selectedObjectInitialPrice +
+                currentTradeAllowance/100*(materialsPrice + selectedObjectInitialPrice)));
         }
 
         private Decimal GetMaterialsPrice()

@@ -46,7 +46,7 @@ namespace HouseDesign.Classes
             }
             catch (Exception ex)
             {
-                MessageBox.Show("The file could not be read!");
+                MessageBox.Show("The file could not be read! "+ex.Message);
             }
         }
 
@@ -57,6 +57,11 @@ namespace HouseDesign.Classes
                 InitializeWalls();
             }
             return this.walls;
+        }
+
+        public void AddWall(Wall wall)
+        {
+            this.walls.Add(wall);
         }
     }
 }

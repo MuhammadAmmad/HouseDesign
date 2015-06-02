@@ -174,48 +174,6 @@ namespace HouseDesign
                     scene.MainCamera.Translate += new Point3d(speed, 0, 0);
                     
                 }
-
-                //if (Keyboard.IsKeyUp(Key.A))
-                //{
-                //    scene.MainCamera.Rotate += new Point3d(0, speed, 0);
-                //}
-                //if (Keyboard.IsKeyUp(Key.D))
-                //{
-                //    scene.MainCamera.Rotate += new Point3d(0, -speed, 0);
-
-                //}
-
-
-                //if (Keyboard.IsKeyUp(Key.Up))
-                //{
-                //    scene.MainCamera.Rotate += new Point3d(speed, 0, 0);
-
-
-                //}
-                //if (Keyboard.IsKeyUp(Key.Down))
-                //{
-                //    scene.MainCamera.Rotate += new Point3d(-speed, 0, 0);
-
-                //}
-                //if (Keyboard.IsKeyUp(Key.Left))
-                //{
-                //    scene.MainCamera.Rotate += new Point3d(0, speed, 0);
-                //}
-                //if (Keyboard.IsKeyUp(Key.Right))
-                //{
-                //    scene.MainCamera.Rotate += new Point3d(0, -speed, 0);
-
-                //}
-
-                //if (Keyboard.IsKeyUp(Key.LeftShift))
-                //{
-                //    scene.MainCamera.Translate += scene.MainCamera.Forward * -speed;
-                //}
-                //if (Keyboard.IsKeyUp(Key.RightShift))
-                //{
-                //    scene.MainCamera.Translate += scene.MainCamera.Forward * speed;
-                //}
-
                 //lblPosition.Content = scene.MainCamera.Translate.X + " " + scene.MainCamera.Translate.Y + " " + scene.MainCamera.Translate.Z + scene.MainCamera.Rotate.Y;
                 //lblPosition.Content = "R "+scene.MainCamera.Rotate.X + " " + scene.MainCamera.Rotate.Y + " " + scene.MainCamera.Rotate.Z+
                 //" T "+ scene.MainCamera.Translate.X+" "+scene.MainCamera.Translate.Y+" "+ scene.MainCamera.Translate.Z;
@@ -374,6 +332,7 @@ namespace HouseDesign
         private void menuItemResetHousePlan_Click(object sender, RoutedEventArgs e)
         {
             scene.ClearWalls();
+            scene.ClearHouseObjects();
             //menuItemLoadHousePlan.Visibility = Visibility.Visible;
             MessageBoxResult result=MessageBox.Show("Would you like to load a new house plan?", "Reset house plan", MessageBoxButton.YesNoCancel);
             switch(result)
@@ -404,26 +363,10 @@ namespace HouseDesign
                     }
             }
         }
-
-        private void menuItemLoadHousePlan_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
         private void menuItemResetObjects_Click(object sender, RoutedEventArgs e)
         {
             scene.ClearHouseObjects();
         }
-
-        private void menuItemImportObject_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void menuItemImportHousePlan_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-       
 
         private void addExtendedMenuItems(String menuType)
         {
@@ -578,35 +521,41 @@ namespace HouseDesign
         private void Window_MouseMove(object sender, MouseEventArgs e)
         {
             Point currentMousePosition = e.GetPosition(openGLControl);
-            Point3d destination = GetFloorClickPoint(e.GetPosition(openGLControl));
-            if(currentObject!=null)
-            {
-                destination.Y = currentObject.Translate.Y;
-                currentObject.Translate = destination;                
-            }
-
-            Point difference = new Point(currentMousePosition.X-oldMousePosition.X,currentMousePosition.Y-oldMousePosition.Y);
-            float angle = Convert.ToSingle(Math.Sqrt(difference.X*difference.X+difference.Y*difference.Y))*0.01f;
-            if(difference.X > 0 )
-            {
-                angle = -angle;
-            }
-            if(e.MiddleButton == MouseButtonState.Pressed)
+            Point difference = new Point(currentMousePosition.X - oldMousePosition.X, currentMousePosition.Y - oldMousePosition.Y);
+            float angle = Convert.ToSingle(Math.Sqrt(difference.X * difference.X + difference.Y * difference.Y)) * 0.01f;
+            if (e.MiddleButton == MouseButtonState.Pressed)
             {
                 if (currentObject != null)
                 {
                     rotateCount += 10;
-                    if(rotateCount%100==0)
+                    if (rotateCount % 100 == 0)
                     {
                         currentObject.Rotate = new Point3d(currentObject.Rotate.X, currentObject.Rotate.Y + 90, currentObject.Rotate.Z);
-                    }                    
+                    }
                 }
                 else
                 {
                     scene.MainCamera.RotateAroundPoint(new Point3d(0, 0, 0), angle);
-                }                
-                
+                }
+
             }
+            else
+            {                
+                Point3d destination = GetFloorClickPoint(e.GetPosition(openGLControl));
+                if (currentObject != null)
+                {
+                    destination.Y = currentObject.Translate.Y;
+                    currentObject.Translate = destination;
+                }
+
+                
+                if (difference.X > 0)
+                {
+                    angle = -angle;
+                }
+            }
+            
+            
             oldMousePosition = currentMousePosition;
         }
 
