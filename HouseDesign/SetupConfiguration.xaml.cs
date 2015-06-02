@@ -169,6 +169,36 @@ namespace HouseDesign
 
         }
 
+        private void importObject_StatusUpdated(object sender, EventArgs e)
+        {
+            FurnitureObject importedObject = (sender as ImportObject).GetImportedObject();
+            if ((sender as ImportObject).IsEdited)
+            {
+                selectedTreeViewItem.Tag = importedObject;
+                SaveCategories();
+                InitializeTreeViewCategories();
+                TreeViewItem parent = selectedTreeViewItem.Parent as TreeViewItem;
+                if (parent != null)
+                {
+                    parent.IsExpanded = true;
+                }
+            }
+            else
+            {
+                ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(importedObject.DefaultIconPath, importedObject.Name, importedObject.FullPath);
+                TreeViewItem item = new TreeViewItem();
+                item.Tag = importedObject;
+                item.Header = extendedItem;
+                if (selectedTreeViewItem != null)
+                {
+                    selectedTreeViewItem.Items.Add(item);
+                    Category<FurnitureObject> currentCategory = selectedTreeViewItem.Tag as Category<FurnitureObject>;
+                    currentCategory.StoredObjects.Add(importedObject);
+                    SaveCategories();
+                }
+            }
+        }
+
         private void extendedMenuItemEdit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (selectedItemType==LastSelectedItemType.Category)
@@ -191,6 +221,27 @@ namespace HouseDesign
                     Grid grid = new Grid();
                     grid.Children.Add(importObject);
                     groupBoxRightSide.Content = grid;
+                }
+                else
+                {
+                    if(selectedItemType==LastSelectedItemType.CategoryMaterial)
+                    {
+                        Category<Material> currentMaterialCategory = selectedTreeViewItem.Tag as Category<Material>;
+                        AddMaterialCategory addMaterialCategory = new AddMaterialCategory("Edit Material Category", currentMaterialCategory, false, true, @"D:\Licenta\HouseDesign\HouseDesign\Icons\IconsCategory");
+                        addMaterialCategory.StatusUpdated += addMaterialCategory_StatusUpdated;
+                        Grid grid = new Grid();
+                        grid.Children.Add(addMaterialCategory);
+                        groupBoxRightSide.Content = grid;
+                    }
+                    else
+                    {
+                        Material currentMaterial = selectedTreeViewItem.Tag as Material;
+                        ImportMaterial importMaterial = new ImportMaterial("Import Material", currentMaterial, false, true);
+                        importMaterial.StatusUpdated += importMaterial_StatusUpdated;
+                        Grid grid = new Grid();
+                        grid.Children.Add(importMaterial);
+                        groupBoxRightSide.Content = grid;
+                    }
                 }
 
             }
@@ -361,7 +412,7 @@ namespace HouseDesign
                 }
             } 
         }
-        void importObject_StatusUpdated(object sender, EventArgs e)
+        void MaterialimportObject_StatusUpdated(object sender, EventArgs e)
         {
             FurnitureObject importedObject = (sender as ImportObject).GetImportedObject();
             if((sender as ImportObject).IsEdited)

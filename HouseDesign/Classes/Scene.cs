@@ -79,5 +79,21 @@ namespace HouseDesign.Classes
         {
             houseObjects.Remove(sceneObject);
         }
+
+        public bool CheckCurrentObjectCollisions(WorldObject currentObject)
+        {
+            for(int i=0;i<houseObjects.Count;i++)
+            {
+                if(houseObjects[i]!=currentObject)
+                {
+                    if(currentObject.CheckObjectCollision(houseObjects[i]))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
     }
 }

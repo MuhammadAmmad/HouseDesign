@@ -61,7 +61,7 @@ namespace HouseDesign.ImageProcessing
                 }
             }
 
-            MessageBox.Show(maximums.Count + "CCC");
+            //MessageBox.Show(maximums.Count + "CCC");
 
             for (int i = 0; i < maximums.Count - 1;i++ )
             {

@@ -104,8 +104,8 @@ namespace HouseDesign.ImageProcessing
                 }
             }
 
-            MessageBox.Show(validLinesCount + "Q");
-            MessageBox.Show(segments.Count + " Seg");
+            //MessageBox.Show(validLinesCount + "Q");
+            //MessageBox.Show(segments.Count + " Seg");
 
             return segments;
         }

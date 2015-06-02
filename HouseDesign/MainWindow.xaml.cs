@@ -83,7 +83,7 @@ namespace HouseDesign
             rotateCount = 0;
             totalPrice = 0;
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
-            
+            isCollision = false;
         }
 
         protected void OnPropertyChanged(string propertyName)
@@ -426,6 +426,13 @@ namespace HouseDesign
         {
             Point3d direction=GetClickDirection(e.GetPosition(openGLControl));
             currentObject= scene.GetCollisionObject(scene.MainCamera.Translate, direction);
+            if (currentObject != null)
+            {
+                if(isCollision==false)
+                {
+                    lastValidObjectPosition = currentObject.Translate;
+                }                
+            }
         }
 
         private void Window_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -513,10 +520,13 @@ namespace HouseDesign
         private void Window_MouseUp(object sender, MouseButtonEventArgs e)
         {
             currentObject=null;
+            isCollision = false;
         }
 
         Point oldMousePosition;
         Point3d rotateAroudPosition;
+        Point3d lastValidObjectPosition;
+        bool isCollision;
 
         private void Window_MouseMove(object sender, MouseEventArgs e)
         {
@@ -544,8 +554,17 @@ namespace HouseDesign
                 Point3d destination = GetFloorClickPoint(e.GetPosition(openGLControl));
                 if (currentObject != null)
                 {
-                    destination.Y = currentObject.Translate.Y;
-                    currentObject.Translate = destination;
+                    isCollision=scene.CheckCurrentObjectCollisions(currentObject);
+                    if(isCollision)
+                    {
+                        MessageBox.Show("COLLISION!!!");
+                        currentObject.Translate = lastValidObjectPosition;
+                    }
+                    else
+                    {
+                        destination.Y = currentObject.Translate.Y;
+                        currentObject.Translate = destination;
+                    }                    
                 }
 
                 
@@ -604,6 +623,7 @@ namespace HouseDesign
                 
             }
         }
+        
 
 
         

@@ -168,6 +168,7 @@ namespace HouseDesign
                 }
                 else
                 {
+                    ChosenHeight = 0.05f * Convert.ToSingle(textBoxChosenHeight.Text);
                     if(dimensionType==DimensionType.cm)
                     {
                         ChosenHeight *= 10;
@@ -179,7 +180,7 @@ namespace HouseDesign
                             ChosenHeight *= 1000;
                         }
                     }
-                    ChosenHeight = 0.05f*Convert.ToSingle(textBoxChosenHeight.Text);
+                   
                     if(SelectedObject.Height+ChosenHeight>sceneHeight*0.05f)
                     {
                         MessageBox.Show("The chosen height is invalid! Type another!");
