@@ -159,7 +159,7 @@ namespace HouseDesign
 
         private void btnAddToScene_Click(object sender, RoutedEventArgs e)
         {
-            if(checkBoxIsSuspended.IsChecked==true )
+            if(checkBoxIsSuspendable.IsChecked==true )
             {
                 if (textBoxChosenHeight.Text.Length == 0 || Convert.ToSingle(textBoxChosenHeight.Text) == 0)
                 {
@@ -286,7 +286,6 @@ namespace HouseDesign
         {
             textBlockInitialPrice.Text = string.Format("{0:0.000}", selectedObjectInitialPrice);
             Decimal materialsPrice = GetMaterialsPrice();
-            textBlockTradeAllowance.Text =string.Format("{0:0.000} %", currentTradeAllowance);
             textBlockMaterialsPrice.Text = string.Format("{0:0.000}", materialsPrice);
             textBlockTotalPrice.Text = string.Format("{0:0.000}", (materialsPrice + selectedObjectInitialPrice +
                 currentTradeAllowance/100*(materialsPrice + selectedObjectInitialPrice)));
@@ -347,12 +346,12 @@ namespace HouseDesign
             SelectedObject = null;
         }
 
-        private void checkBoxIsSuspended_Checked(object sender, RoutedEventArgs e)
+        private void checkBoxIsSuspendable_Checked(object sender, RoutedEventArgs e)
         {
             stackPanelChosenHeight.Visibility = Visibility.Visible;
         }
 
-        private void checkBoxIsSuspended_Unchecked(object sender, RoutedEventArgs e)
+        private void checkBoxIsSuspendable_Unchecked(object sender, RoutedEventArgs e)
         {
             textBoxChosenHeight.Text = "";
             stackPanelChosenHeight.Visibility = Visibility.Collapsed;

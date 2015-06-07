@@ -41,16 +41,13 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition></ColumnDefinition>
                                 <ColumnDefinition></ColumnDefinition>
-                                <ColumnDefinition></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <Label Grid.Row="0" Grid.Column="0" Content="Initial Price:"></Label>
                             <TextBlock Grid.Row="1" Grid.Column="0" Name="textBlockInitialPrice"></TextBlock>
                             <Label Grid.Row="2" Grid.Column="0" Content="Materials Price:"></Label>
                             <TextBlock Grid.Row="3" Grid.Column="0" Name="textBlockMaterialsPrice"></TextBlock>
-                            <Label Grid.Row="1" Grid.Column="1" Content="Trade Allowance"></Label>
-                            <TextBlock Grid.RowSpan="2" Grid.Row="2" Grid.Column="1" Name="textBlockTradeAllowance" FontSize="16"></TextBlock>
-                            <Label Grid.Row="1" Grid.Column="2" Content="Total Price"></Label>
-                            <TextBlock Grid.RowSpan="2" Grid.Row="2" Grid.Column="2" Name="textBlockTotalPrice" FontWeight="ExtraBold" FontSize="16"></TextBlock>
+                            <Label Grid.Row="1" Grid.Column="1" Content="Total Price"></Label>
+                            <TextBlock Grid.RowSpan="2" Grid.Row="2" Grid.Column="1" Name="textBlockTotalPrice" FontWeight="ExtraBold" FontSize="16"></TextBlock>
                         </Grid>
                     </GroupBox>                    
                     <Grid Grid.Row="2">
@@ -65,7 +62,7 @@
                         </GroupBox>
                     </Grid> 
                     <StackPanel Orientation="Vertical" Grid.Row="3">
-                        <CheckBox Name="checkBoxIsSuspended" Content="Is Suspended" Checked="checkBoxIsSuspended_Checked" Unchecked="checkBoxIsSuspended_Unchecked">
+                        <CheckBox Name="checkBoxIsSuspendable" Content="Is Suspendable" Checked="checkBoxIsSuspendable_Checked" Unchecked="checkBoxIsSuspendable_Unchecked">
                         </CheckBox>
                         <StackPanel Name="stackPanelChosenHeight" Visibility="Collapsed" Orientation="Horizontal">
                             <Label Margin="5">Height:</Label>

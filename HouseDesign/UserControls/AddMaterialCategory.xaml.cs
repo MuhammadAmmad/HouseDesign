@@ -59,6 +59,16 @@ namespace HouseDesign.UserControls
                 btnOK.IsEnabled = false;
                 listViewIcons.Visibility = Visibility.Collapsed;
             }
+            else
+            {
+                textBoxName.IsReadOnly = false;
+                textBoxDescription.IsReadOnly = false;
+                textBoxTradeAllowance.IsReadOnly = false;
+                btnLoadIcon.IsEnabled = true;
+                btnCancel.IsEnabled = true;
+                btnOK.IsEnabled = true;
+                listViewIcons.Visibility = Visibility.Visible;
+            }
         }
 
         private void InitializeIcon(ref Image icon, String path)

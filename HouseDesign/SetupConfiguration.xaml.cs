@@ -110,7 +110,7 @@ namespace HouseDesign
                     selectedTreeViewItem.Tag = currentCategory;
                     SaveMaterials();
                     InitializeTreeViewMaterials();
-                    groupBoxRightSide.Content = null;
+                    groupBoxPreviewMaterial.Content = null;
                 }
             }
             else
@@ -214,7 +214,7 @@ namespace HouseDesign
             {
                 if(selectedItemType==LastSelectedItemType.FurnitureObject)
                 {
-                    selectedItemType = LastSelectedItemType.FurnitureObject;
+                    //electedItemType = LastSelectedItemType.FurnitureObject;
                     FurnitureObject currentObject = selectedTreeViewItem.Tag as FurnitureObject;
                     ImportObject importObject = new ImportObject("Import Object", currentObject, false, true);
                     importObject.StatusUpdated += importObject_StatusUpdated;
@@ -231,7 +231,8 @@ namespace HouseDesign
                         addMaterialCategory.StatusUpdated += addMaterialCategory_StatusUpdated;
                         Grid grid = new Grid();
                         grid.Children.Add(addMaterialCategory);
-                        groupBoxRightSide.Content = grid;
+                        groupBoxPreviewMaterial.Content = grid;
+
                     }
                     else
                     {
@@ -240,7 +241,7 @@ namespace HouseDesign
                         importMaterial.StatusUpdated += importMaterial_StatusUpdated;
                         Grid grid = new Grid();
                         grid.Children.Add(importMaterial);
-                        groupBoxRightSide.Content = grid;
+                        groupBoxPreviewMaterial.Content = grid;
                     }
                 }
 
@@ -295,8 +296,18 @@ namespace HouseDesign
             {
                 if(selectedItemType!=lastSelectedItemType)
                 {
-                    MessageBox.Show("Check the type of the paste Category!");
-                    return;
+                    if(lastSelectedItemType==LastSelectedItemType.FurnitureObject && selectedItemType==LastSelectedItemType.Category 
+                        || lastSelectedItemType==LastSelectedItemType.Material && selectedItemType==LastSelectedItemType.CategoryMaterial)
+                    {
+                        TreeViewItem item = GetTreeViewItemCopy(lastSelectedTreeViewItem);
+                        selectedTreeViewItem.Items.Add(item);
+                        return;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Check the type of the paste Category!");
+                        return;
+                    }                    
                 }
                 if(selectedItemType==LastSelectedItemType.Category || selectedItemType==LastSelectedItemType.CategoryMaterial)
                 {
@@ -396,6 +407,7 @@ namespace HouseDesign
                 {
                     parent.IsExpanded = true;
                 }
+                //(sender as ImportMaterial).SetImportedMaterial(null);
             }
             else
             {
@@ -410,6 +422,7 @@ namespace HouseDesign
                     currentCategory.StoredObjects.Add(importedMaterial);
                     SaveMaterials();
                 }
+                //(sender as ImportMaterial).SetImportedMaterial(null);
             } 
         }
         void MaterialimportObject_StatusUpdated(object sender, EventArgs e)

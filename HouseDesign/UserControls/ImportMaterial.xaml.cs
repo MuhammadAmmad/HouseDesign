@@ -127,5 +127,10 @@ namespace HouseDesign.UserControls
         {
             return importedMaterial;
         }
+
+        public void SetImportedMaterial(Material material)
+        {
+            this.importedMaterial = material;
+        }
     }
 }

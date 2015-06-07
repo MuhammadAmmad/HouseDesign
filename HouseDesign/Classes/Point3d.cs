@@ -72,5 +72,15 @@ namespace HouseDesign.Classes
             return angle;
         }
 
+        public static Point3d operator-(Point3d point)
+        {
+            return new Point3d(-1*point.X, -1*point.Y, -1*point.Z);
+        }
+
+        public override String ToString()
+        {
+            return X + " " + Y + " " + Z;
+        }
+
     }
 }

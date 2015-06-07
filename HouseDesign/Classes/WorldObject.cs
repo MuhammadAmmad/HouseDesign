@@ -104,30 +104,30 @@ namespace HouseDesign.Classes
             }
         }
 
-        private OpenGL currentGL;
+        private GLHolder currentGL;
 
         private BoundingBox boundingBox;
 
         public Decimal Price { get; set; }
-        public Point3d Forward
+        public virtual Point3d Forward
         {
             get
             {
-                return new  Point3d(0.0f, 0.0f, 1.0f).RotateY(Rotate.Y).RotateX(Rotate.X);
+                return new Point3d(0.0f, 0.0f, 1.0f).RotateY(Rotate.Y).RotateX(Rotate.X);
             
             }
         }
 
-        public Point3d Top
+        public virtual Point3d Top
         {
             get
             {
-                return new Point3d(0.0f, 1.0f, 0.0f).RotateY(Rotate.Y).RotateX(Rotate.X);
+                return new Point3d(0.0f, -1.0f, 0.0f).RotateY(Rotate.Y).RotateX(Rotate.X);
 
             }
         }
 
-        public Point3d Right
+        public virtual Point3d Right
         {
             get
             {
@@ -143,6 +143,7 @@ namespace HouseDesign.Classes
             this.uvs = new List<UV>();
             this.textures = new List<String>();
             Scale = new Point3d(1, 1, 1);
+            currentGL = new GLHolder();
         }
         public WorldObject(List<Point3d> vertices, List<Triangle> triangles, List<UV> uvs, List<String> textures):this()
         {
@@ -253,13 +254,16 @@ namespace HouseDesign.Classes
         {
             if(tex!=null)
             {
-                currentGL.DeleteTextures(textures.Count, tex);
+                if (currentGL.Gl != null)
+                {
+                    currentGL.Gl.DeleteTextures(textures.Count, tex);
+                }
             }
-            currentGL = gl;
+            currentGL.Gl = gl;
             tex = new uint[textures.Count];
             for(int i=0;i<textures.Count;i++)
             {
-                tex[i] = Texture.LoadTexture(textures[i], currentGL);
+                tex[i] = Texture.LoadTexture(textures[i], currentGL.Gl);
             }
         }
 
@@ -271,7 +275,7 @@ namespace HouseDesign.Classes
         }
         protected virtual void DrawObject(OpenGL gl)
         {
-            if(gl!=currentGL)
+            if(gl!=currentGL.Gl)
             {
                 InitializeTextures(gl);
             }
@@ -300,87 +304,87 @@ namespace HouseDesign.Classes
                     gl.Vertex(vertices[triangles[j][i].vertex3].X, vertices[triangles[j][i].vertex3].Y, vertices[triangles[j][i].vertex3].Z);
                 }
 
-                //if(boundingBox!=null)
-                //{
-                //    Point3d[] vertices=boundingBox.GetPoints();
-                //    gl.TexCoord(0, 0);
-                //    gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
-                //    gl.TexCoord(1, 0);
-                //    gl.Vertex(vertices[1].X, vertices[1].Y, vertices[1].Z);
-                //    gl.TexCoord(1, 1);
-                //    gl.Vertex(vertices[5].X, vertices[5].Y, vertices[5].Z);                    
-                //    gl.TexCoord(1, 1);
-                //    gl.Vertex(vertices[5].X, vertices[5].Y, vertices[5].Z);                   
-                //    gl.TexCoord(0, 0);
-                //    gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
-                //    gl.TexCoord(0, 1);
-                //    gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
+                if (boundingBox != null)
+                {
+                    Point3d[] vertices = boundingBox.GetPoints();
+                    gl.TexCoord(0, 0);
+                    gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
+                    gl.TexCoord(1, 0);
+                    gl.Vertex(vertices[1].X, vertices[1].Y, vertices[1].Z);
+                    gl.TexCoord(1, 1);
+                    gl.Vertex(vertices[5].X, vertices[5].Y, vertices[5].Z);
+                    gl.TexCoord(1, 1);
+                    gl.Vertex(vertices[5].X, vertices[5].Y, vertices[5].Z);
+                    gl.TexCoord(0, 0);
+                    gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
+                    gl.TexCoord(0, 1);
+                    gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
 
-                //    gl.TexCoord(0, 0);
-                //    gl.Vertex(vertices[1].X, vertices[1].Y, vertices[1].Z);
-                //    gl.TexCoord(1, 0);
-                //    gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
-                //    gl.TexCoord(1, 1);
-                //    gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
-                //    gl.TexCoord(1, 1);
-                //    gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
-                //    gl.TexCoord(0, 0);
-                //    gl.Vertex(vertices[1].X, vertices[1].Y, vertices[1].Z);
-                //    gl.TexCoord(0, 1);
-                //    gl.Vertex(vertices[5].X, vertices[5].Y, vertices[5].Z);
+                    gl.TexCoord(0, 0);
+                    gl.Vertex(vertices[1].X, vertices[1].Y, vertices[1].Z);
+                    gl.TexCoord(1, 0);
+                    gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
+                    gl.TexCoord(1, 1);
+                    gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
+                    gl.TexCoord(1, 1);
+                    gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
+                    gl.TexCoord(0, 0);
+                    gl.Vertex(vertices[1].X, vertices[1].Y, vertices[1].Z);
+                    gl.TexCoord(0, 1);
+                    gl.Vertex(vertices[5].X, vertices[5].Y, vertices[5].Z);
 
-                //    gl.TexCoord(0, 0);
-                //    gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
-                //    gl.TexCoord(1, 0);
-                //    gl.Vertex(vertices[3].X, vertices[3].Y, vertices[3].Z);
-                //    gl.TexCoord(1, 1);
-                //    gl.Vertex(vertices[7].X, vertices[7].Y, vertices[7].Z);
-                //    gl.TexCoord(1, 1);
-                //    gl.Vertex(vertices[7].X, vertices[7].Y, vertices[7].Z);
-                //    gl.TexCoord(0, 0);
-                //    gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
-                //    gl.TexCoord(0, 1);
-                //    gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
+                    gl.TexCoord(0, 0);
+                    gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
+                    gl.TexCoord(1, 0);
+                    gl.Vertex(vertices[3].X, vertices[3].Y, vertices[3].Z);
+                    gl.TexCoord(1, 1);
+                    gl.Vertex(vertices[7].X, vertices[7].Y, vertices[7].Z);
+                    gl.TexCoord(1, 1);
+                    gl.Vertex(vertices[7].X, vertices[7].Y, vertices[7].Z);
+                    gl.TexCoord(0, 0);
+                    gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
+                    gl.TexCoord(0, 1);
+                    gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
 
-                //    gl.TexCoord(0, 0);
-                //    gl.Vertex(vertices[3].X, vertices[3].Y, vertices[3].Z);
-                //    gl.TexCoord(1, 0);
-                //    gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
-                //    gl.TexCoord(1, 1);
-                //    gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
-                //    gl.TexCoord(1, 1);
-                //    gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
-                //    gl.TexCoord(0, 0);
-                //    gl.Vertex(vertices[3].X, vertices[3].Y, vertices[3].Z);
-                //    gl.TexCoord(0, 1);
-                //    gl.Vertex(vertices[7].X, vertices[7].Y, vertices[7].Z);
+                    gl.TexCoord(0, 0);
+                    gl.Vertex(vertices[3].X, vertices[3].Y, vertices[3].Z);
+                    gl.TexCoord(1, 0);
+                    gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
+                    gl.TexCoord(1, 1);
+                    gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
+                    gl.TexCoord(1, 1);
+                    gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
+                    gl.TexCoord(0, 0);
+                    gl.Vertex(vertices[3].X, vertices[3].Y, vertices[3].Z);
+                    gl.TexCoord(0, 1);
+                    gl.Vertex(vertices[7].X, vertices[7].Y, vertices[7].Z);
 
-                //    gl.TexCoord(0, 0);
-                //    gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
-                //    gl.TexCoord(1, 0);
-                //    gl.Vertex(vertices[5].X, vertices[5].Y, vertices[5].Z);
-                //    gl.TexCoord(1, 1);
-                //    gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
-                //    gl.TexCoord(1, 1);
-                //    gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
-                //    gl.TexCoord(0, 0);
-                //    gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
-                //    gl.TexCoord(0, 1);
-                //    gl.Vertex(vertices[7].X, vertices[7].Y, vertices[7].Z);
+                    //gl.TexCoord(0, 0);
+                    //gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
+                    //gl.TexCoord(1, 0);
+                    //gl.Vertex(vertices[5].X, vertices[5].Y, vertices[5].Z);
+                    //gl.TexCoord(1, 1);
+                    //gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
+                    //gl.TexCoord(1, 1);
+                    //gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
+                    //gl.TexCoord(0, 0);
+                    //gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
+                    //gl.TexCoord(0, 1);
+                    //gl.Vertex(vertices[7].X, vertices[7].Y, vertices[7].Z);
 
-                //    gl.TexCoord(0, 0);
-                //    gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
-                //    gl.TexCoord(1, 0);
-                //    gl.Vertex(vertices[1].X, vertices[1].Y, vertices[1].Z);
-                //    gl.TexCoord(1, 1);
-                //    gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
-                //    gl.TexCoord(1, 1);
-                //    gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
-                //    gl.TexCoord(0, 0);
-                //    gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
-                //    gl.TexCoord(0, 1);
-                //    gl.Vertex(vertices[3].X, vertices[3].Y, vertices[3].Z);
-                //}
+                    //gl.TexCoord(0, 0);
+                    //gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
+                    //gl.TexCoord(1, 0);
+                    //gl.Vertex(vertices[1].X, vertices[1].Y, vertices[1].Z);
+                    //gl.TexCoord(1, 1);
+                    //gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
+                    //gl.TexCoord(1, 1);
+                    //gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
+                    //gl.TexCoord(0, 0);
+                    //gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
+                    //gl.TexCoord(0, 1);
+                    //gl.Vertex(vertices[3].X, vertices[3].Y, vertices[3].Z);
+                }
                 
 
 
@@ -443,11 +447,16 @@ namespace HouseDesign.Classes
             return area;
         }
 
-        public bool CheckCollision(Point3d point, Point3d direction, bool isObjectCollision)
+        public List<Collision> CheckCollision(Point3d point, Point3d direction, bool isObjectCollision)
         {
+            List<Collision> collisions = new List<Collision>();
             if(direction.X==0)
             {
                 direction.X += 0.0000000001f;
+            }
+            if (direction.Z == 0)
+            {
+                direction.Z += 0.0000000001f;
             }
             if(direction.Y==0)
             {
@@ -455,43 +464,60 @@ namespace HouseDesign.Classes
             }
             Point3d[] vertices = boundingBox.ActualPoints;
             Point3d result;
-            if (CheckParticularCollision(point, direction, vertices[0], vertices[4] - vertices[0], vertices[1] - vertices[0],
-                out result, isObjectCollision))
-            {
-                return true;
-            }
-            if (CheckParticularCollision(point, direction, vertices[1], vertices[5] - vertices[1], vertices[2] - vertices[1], 
-                out result, isObjectCollision))
-            {
-                return true;
-            }
-            if (CheckParticularCollision(point, direction, vertices[2], vertices[6] - vertices[2], vertices[3] - vertices[2],
-                out result, isObjectCollision))
-            {
-                return true;
-            }
-            if (CheckParticularCollision(point, direction, vertices[3], vertices[7] - vertices[3], vertices[0] - vertices[3],
-                out result, isObjectCollision))
-            {
-                return true;
-            }
-            if (CheckParticularCollision(point, direction, vertices[7], vertices[4] - vertices[7], vertices[6] - vertices[7],
-                out result, isObjectCollision))
-            {
-                return true;
-            }
-            if (CheckParticularCollision(point, direction, vertices[3], vertices[0] - vertices[3], vertices[2] - vertices[3],
-                out result, isObjectCollision))
-            {
-                return true;
-            }
+            AddCollision(point, direction, vertices[0], vertices[4] - vertices[0], vertices[1] - vertices[0], out result,
+                isObjectCollision, collisions);
+            AddCollision(point, direction, vertices[1], vertices[5] - vertices[1], vertices[2] - vertices[1],
+                out result, isObjectCollision, collisions);
+            AddCollision(point, direction, vertices[2], vertices[6] - vertices[2], vertices[3] - vertices[2],
+                out result, isObjectCollision, collisions);
+            AddCollision(point, direction, vertices[3], vertices[7] - vertices[3], vertices[0] - vertices[3],
+                out result, isObjectCollision, collisions);
+            AddCollision(point, direction, vertices[7], vertices[4] - vertices[7], vertices[6] - vertices[7],
+               out result, isObjectCollision, collisions);
+            AddCollision(point, direction, vertices[3], vertices[0] - vertices[3], vertices[2] - vertices[3],
+                out result, isObjectCollision, collisions);
 
-
+            //AddCollision(new Point3d(1, 1, 1), new Point3d(0.0000000001f, -1, 0.0000000001f), new Point3d(0, 0, 0), new Point3d(2, 0, 0), new Point3d(0, 0, 2), out result, isObjectCollision, collisions);
+           
             //MessageBox.Show("TYYYYYYYYYYYYYYYYYYYYyy");
-            return false;
+            return collisions;
         }
 
-        private bool CheckParticularCollision(Point3d p1, Point3d v1, Point3d p2, Point3d v2, Point3d v3, out Point3d result, bool isObjectCollision)
+        private void AddCollision(Point3d p1, Point3d v1, Point3d p2, Point3d v2, Point3d v3, out Point3d result, bool isObjectCollision,
+            List<Collision> collisions)
+        {
+            if (v2.X == 0)
+            {
+                v2.X += 0.001f;
+            }
+            if (v2.Y == 0)
+            {
+                v2.Y += 0.001f;
+            }
+            if (v2.Z == 0)
+            {
+                v2.Z += 0.001f;
+            }
+            if (v3.X == 0)
+            {
+                v3.X += 0.001f;
+            }
+            if (v3.Y == 0)
+            {
+                v3.Y += 0.001f;
+            }
+            if (v3.Z == 0)
+            {
+                v3.Z += 0.001f;
+            } 
+            Collision currentCollision = CheckParticularCollision(p1, v1, p2, v2, v3, out result, isObjectCollision);
+            if (currentCollision != null)
+            {
+                collisions.Add(currentCollision);
+            }
+        }
+
+        private Collision CheckParticularCollision(Point3d p1, Point3d v1, Point3d p2, Point3d v2, Point3d v3, out Point3d result, bool isObjectCollision)
         {
             float[,] system=new float[3,4];
             system[0, 0] = v1.X;
@@ -509,6 +535,37 @@ namespace HouseDesign.Classes
             system[2, 2] = -v3.Z;
             system[2, 3] = p2.Z - p1.Z;
 
+            
+            //MessageBox.Show("t2 " + t2);
+            //MessageBox.Show("t3 " + t3);
+
+            float t1=0, t2=0, t3=0;
+            GetSystem3DSolutions(system, ref t1, ref t2, ref t3);
+
+            if (t2 > 0 && t2 < 1 && t3 > 0 && t3 < 1)
+            {
+                if (isObjectCollision)
+                {
+                    if (t1 < 0 || t1 > 1)
+                    {
+                        result = new Point3d(0, 0, 0);
+                        return null;
+                    }
+                }
+                result = p2 + v2 * t2 + v3 * t3;
+                Point3d result2 = p1 + v1 * t1;
+                //MessageBox.Show("RESULT " + result+"***"+result2);
+
+                return new Collision(p1, p2, v1, v2, v3);
+            }
+            //Console.WriteLine("T1: " + t1 + "\t\tT2: " + t2 + "\t\tT3:" + t3);
+
+            result = new Point3d(0, 0, 0);
+            return null;
+        }
+
+        public static void GetSystem3DSolutions(float[,] system, ref float t1, ref float t2, ref float t3)
+        {
             float aLID = system[0, 0] * system[2, 3] - system[2, 0] * system[0, 3];
             float aFEB = system[0, 0] * system[1, 1] - system[1, 0] * system[0, 1];
             float aHED = system[0, 0] * system[1, 3] - system[1, 0] * system[0, 3];
@@ -516,82 +573,80 @@ namespace HouseDesign.Classes
             float aKIC = system[0, 0] * system[2, 2] - system[2, 0] * system[0, 2];
             float aGEC = system[0, 0] * system[1, 2] - system[1, 0] * system[0, 2];
 
-            float t3 = (aLID * aFEB - aHED * aJIB) / (aKIC * aFEB - aGEC * aJIB);
-            float t2 = (aHED - t3 * aGEC) / aFEB;
-            float t1=(system[0,3]- system[0,2]*t3- system[0,1]*t2)/system[0,0];
-            //MessageBox.Show("t2 " + t2);
-            //MessageBox.Show("t3 " + t3);
+            t3 = (aLID * aFEB - aHED * aJIB) / (aKIC * aFEB - aGEC * aJIB);
+            t2 = (aHED - t3 * aGEC) / aFEB;
+            t1 = (system[0, 3] - system[0, 2] * t3 - system[0, 1] * t2) / system[0, 0];
+        }
+        public bool CheckObjectCollision(WorldObject obj, Point3d d, out float td)
+        {
+            bool collision = false;
+            List<Collision> collisions = new List<Collision>();
 
-            if (t2 >= 0 && t2 <= 1 && t3 >= 0 && t3 <= 1)
+            collisions = GetCollisionsWithObject(obj);
+            float minTD = 1;
+            for(int i=0;i<collisions.Count;i++)
             {
-                if(isObjectCollision)
+                float currentTD = collisions[i].GetMaxTD(d);
+                if(currentTD < minTD)
                 {
-                    if(t1<0 || t1>1)
-                    {
-                        result = new Point3d(0, 0, 0);
-                        return false;
-                    }
+                    minTD = currentTD;
                 }
-                result = p2 + v2 * t2 + v3 * t3;
-                return true;
+                    
             }
-            result = new Point3d(0, 0, 0);
-            return false;
+
+            if (collisions.Count > 0)
+                collision = true;
+
+            collisions = obj.GetCollisionsWithObject(this);
+            for (int i = 0; i < collisions.Count; i++)
+            {
+                float currentTD = collisions[i].GetMaxTD(-d);
+                if (currentTD < minTD)
+                {
+                    minTD = currentTD;
+                }
+
+            }
+
+            td = minTD;
+
+            if (collisions.Count > 0)
+                collision = true;
+            return collision;
         }
 
-        public bool CheckObjectCollision(WorldObject obj)
+        private List<Collision> GetCollisionsWithObject(WorldObject obj)
         {
             Point3d[] vertices = obj.boundingBox.ActualPoints;
-            if(CheckCollision(vertices[0], vertices[1]-vertices[0], true))
-            {
-                return true;
-            }
-            if(CheckCollision(vertices[1], vertices[2]-vertices[1], true))
-            {
-                return true;
-            }
-            if(CheckCollision(vertices[2], vertices[3]-vertices[2], true))
-            {
-                return true;
-            }
-            if(CheckCollision(vertices[3], vertices[0]-vertices[3], true))
-            {
-                return true;
-            }
-            if(CheckCollision(vertices[4], vertices[5]-vertices[4], true))
-            {
-                return true;
-            }
-            if(CheckCollision(vertices[5], vertices[6]-vertices[5], true))
-            {
-                return true;
-            }
-            if(CheckCollision(vertices[6], vertices[7]-vertices[6], true))
-            {
-                return true;
-            }
-            if(CheckCollision(vertices[7], vertices[4]-vertices[7], true))
-            {
-                return true;
-            }
-            if(CheckCollision(vertices[4], vertices[0]-vertices[4], true))
-            {
-                return true;
-            }
-            if(CheckCollision(vertices[5], vertices[1]-vertices[5], true))
-            {
-                return true;
-            }
-            if(CheckCollision(vertices[6], vertices[2]-vertices[6], true))
-            {
-                return true;
-            }
-            if(CheckCollision(vertices[7], vertices[3]-vertices[7], true))
-            {
-                return true;
-            }
+            List<Collision> collisions = new List<Collision>();
 
-            return false;
+            collisions.AddRange(CheckCollision(vertices[0], vertices[1] - vertices[0], true));
+
+            collisions.AddRange(CheckCollision(vertices[1], vertices[2] - vertices[1], true));
+
+            collisions.AddRange(CheckCollision(vertices[2], vertices[3] - vertices[2], true));
+
+            collisions.AddRange(CheckCollision(vertices[3], vertices[0] - vertices[3], true));
+
+            collisions.AddRange(CheckCollision(vertices[4], vertices[5] - vertices[4], true));
+
+            collisions.AddRange(CheckCollision(vertices[5], vertices[6] - vertices[5], true));
+
+            collisions.AddRange(CheckCollision(vertices[5], vertices[6] - vertices[5], true));
+
+            collisions.AddRange(CheckCollision(vertices[6], vertices[7] - vertices[6], true));
+
+            collisions.AddRange(CheckCollision(vertices[7], vertices[4] - vertices[7], true));
+
+            collisions.AddRange(CheckCollision(vertices[4], vertices[0] - vertices[4], true));
+
+            collisions.AddRange(CheckCollision(vertices[5], vertices[1] - vertices[5], true));
+
+            collisions.AddRange(CheckCollision(vertices[6], vertices[2] - vertices[6], true));
+
+            collisions.AddRange(CheckCollision(vertices[7], vertices[3] - vertices[7], true));
+
+            return collisions;
         }
 
         public enum Criteria

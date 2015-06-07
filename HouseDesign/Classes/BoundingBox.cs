@@ -43,15 +43,26 @@ namespace HouseDesign.Classes
             for (int i = 0; i < count; i++)
             {
                 Point3d pR = new Point3d();
-                float x=points[i].X;
-                float y=points[i].Y;
+                float x = points[i].X;
+                float y = points[i].Y;
                 float z=points[i].Z;
-                pR.X = Convert.ToSingle(x*Math.Cos(y)*Math.Cos(z) - y*Math.Cos(y)*Math.Sin(z)+x*Math.Sin(x)*Math.Sin(y)*Math.Sin(z)+
-                    y*Math.Sin(x)*Math.Sin(y)*Math.Cos(z)+z*Math.Sin(y)*Math.Cos(x));
-                pR.Y = Convert.ToSingle(x*Math.Sin(z)*Math.Cos(x)+y*Math.Cos(x)*Math.Cos(z)-z*Math.Sin(x));
-                pR.Z = Convert.ToSingle(-x*Math.Sin(y)*Math.Cos(z)+y*Math.Sin(y)*Math.Sin(z)+x*Math.Sin(x)*Math.Sin(z)*Math.Cos(y)+
-                    y*Math.Sin(x)*Math.Cos(y)*Math.Cos(z)+z*Math.Cos(x)*Math.Cos(y));
+
+                float xAngle = Convert.ToSingle(obj.Rotate.X * Math.PI) / 180;
+                float yAngle = Convert.ToSingle(obj.Rotate.Y * Math.PI) / 180;
+                float zAngle = Convert.ToSingle(obj.Rotate.Z * Math.PI) / 180;
+
+                pR.X = Convert.ToSingle(x * (Math.Cos(yAngle) * Math.Cos(zAngle) - Math.Sin(xAngle) * Math.Sin(yAngle) * Math.Sin(zAngle))
+                    - y * (Math.Sin(zAngle) * Math.Cos(xAngle)) + z * (Math.Sin(yAngle) * Math.Cos(zAngle) +
+                    Math.Sin(xAngle) * Math.Sin(zAngle) * Math.Cos(yAngle)));
+
+                pR.Y = Convert.ToSingle(x * (Math.Sin(zAngle) * Math.Cos(yAngle) + Math.Sin(xAngle) * Math.Sin(yAngle) * Math.Cos(zAngle)) +
+                    y * (Math.Cos(xAngle) * Math.Cos(zAngle)) + z * (Math.Sin(yAngle) * Math.Sin(zAngle) 
+                    - Math.Sin(xAngle) * Math.Cos(yAngle) * Math.Cos(zAngle)));
+
+                pR.Z = Convert.ToSingle(-x * Math.Sin(yAngle) * Math.Cos(xAngle) + y * Math.Sin(xAngle) + 
+                    z * Math.Cos(xAngle) * Math.Cos(yAngle));
                 ActualPoints[i] = pR * obj.Scale + obj.Translate;
+                //ActualPoints[i] = points[i] * obj.Scale + obj.Translate;
             }
         }
 

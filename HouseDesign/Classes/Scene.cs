@@ -66,7 +66,7 @@ namespace HouseDesign.Classes
         {
             for(int i=0;i<houseObjects.Count;i++)
             {
-                if(houseObjects[i].CheckCollision(point, direction, false))
+                if(houseObjects[i].CheckCollision(point, direction, false).Count>0)
                 {
                     return houseObjects[i];
                 }
@@ -80,20 +80,37 @@ namespace HouseDesign.Classes
             houseObjects.Remove(sceneObject);
         }
 
-        public bool CheckCurrentObjectCollisions(WorldObject currentObject)
+        public bool CheckCurrentObjectCollisions(WorldObject currentObject, Point3d d, out float td)
         {
+            bool collision = false;
+            td = 1;
+
             for(int i=0;i<houseObjects.Count;i++)
             {
                 if(houseObjects[i]!=currentObject)
                 {
-                    if(currentObject.CheckObjectCollision(houseObjects[i]))
+                    float currentTD;
+                    if(currentObject.CheckObjectCollision(houseObjects[i], d, out currentTD))
                     {
-                        return true;
+                        td = currentTD;
+                        Console.WriteLine("T " + td);
+                        collision = true;
                     }
                 }
             }
 
-            return false;
+            for (int i = 0; i < walls.Count;i++ )
+            {
+                float currentTD;
+                if (currentObject.CheckObjectCollision(walls[i], d, out currentTD))
+                {
+                    td = currentTD;
+                    Console.WriteLine("TWALLS!!!!!!!!!!!!!! " + td);
+                    collision = true;
+                }
+            }
+
+                return collision;
         }
     }
 }
