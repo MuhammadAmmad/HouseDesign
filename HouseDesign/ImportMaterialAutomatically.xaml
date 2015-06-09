@@ -1,0 +1,21 @@
+﻿<Window x:Class="HouseDesign.ImportMaterialAutomatically"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ImportMaterialAutomatically" Height="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TreeView Name="treeViewMaterials" Grid.Row="0" Grid.Column="0" TreeViewItem.Selected="treeViewMaterials_Selected"></TreeView>
+        <GroupBox Name="groupBoxPreviewMaterial" Grid.Row="0" Grid.Column="1">
+        </GroupBox>
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Name="btnClose" Content="Close" Margin="5" Click="btnClose_Click"></Button>
+        </StackPanel>
+    </Grid>
+</Window>

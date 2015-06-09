@@ -46,7 +46,7 @@ namespace HouseDesign
             PopulateTreeView(category, mainTreeViewItem);
             this.scene = scene;
             ChosenHeight = 0;
-            this.sceneHeight = sceneHeight;
+            this.sceneHeight = sceneHeight*0.0025f;
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             this.Title = category.Name;
             currentTradeAllowance = Convert.ToDecimal(category.TradeAllowance);
@@ -159,6 +159,7 @@ namespace HouseDesign
 
         private void btnAddToScene_Click(object sender, RoutedEventArgs e)
         {
+            float realHeightScaleFactor=1;
             if(checkBoxIsSuspendable.IsChecked==true )
             {
                 if (textBoxChosenHeight.Text.Length == 0 || Convert.ToSingle(textBoxChosenHeight.Text) == 0)
@@ -168,20 +169,28 @@ namespace HouseDesign
                 }
                 else
                 {
-                    ChosenHeight = 0.05f * Convert.ToSingle(textBoxChosenHeight.Text);
+                    ChosenHeight = Convert.ToSingle(textBoxChosenHeight.Text);
+                    float scaleFactor;
                     if(dimensionType==DimensionType.cm)
                     {
-                        ChosenHeight *= 10;
+                        scaleFactor= 0.025f;
+                        realHeightScaleFactor = 0.01f;
                     }
                     else
                     {
                         if(dimensionType==DimensionType.m)
                         {
-                            ChosenHeight *= 1000;
+                           scaleFactor= 2.5f;
+                           realHeightScaleFactor = 1;
+                        }
+                        else
+                        {
+                            scaleFactor= 0.0025f;
+                            realHeightScaleFactor = 0.001f;
                         }
                     }
                    
-                    if(SelectedObject.Height+ChosenHeight>sceneHeight*0.05f)
+                    if(SelectedObject.Height+ChosenHeight*scaleFactor>sceneHeight)
                     {
                         MessageBox.Show("The chosen height is invalid! Type another!");
                         return;
@@ -191,7 +200,7 @@ namespace HouseDesign
             }
 
             SelectedObject.Price = Convert.ToDecimal(textBlockTotalPrice.Text);
-            SelectedObject.Translate = new Point3d(SelectedObject.Translate.X, ChosenHeight, SelectedObject.Translate.Z);
+            SelectedObject.Translate = new Point3d(SelectedObject.Translate.X, ChosenHeight*realHeightScaleFactor*50, SelectedObject.Translate.Z);
             this.Close();
             
         }
@@ -210,11 +219,11 @@ namespace HouseDesign
         public void InitializeMaterials()
         {
             listViewMaterials.Items.Clear();
-            listViewMaterials.Items.Add(new CustomizeHeader("NAME", "IMAGE", "PRICE/M²", "SURFACE", "TOTAL"));
+            listViewMaterials.Items.Add(new CustomizeHeader("NAME", "IMAGE", "PRICE/M²", "SURFACE", "TOTAL", ""));
             for(int i=0;i<selectedObjectMaterials.Count;i++)
             {
                 double surfaceNeeded = SelectedObject.getTotalAreaPerTexture(i);
-                CustomizeMaterial customizeMaterial = new CustomizeMaterial(i, selectedObjectMaterials[i], surfaceNeeded);
+                CustomizeMaterial customizeMaterial = new CustomizeMaterial(i, selectedObjectMaterials[i], surfaceNeeded, false);
                 customizeMaterial.MouseLeftButtonDown += customizeMaterial_MouseLeftButtonDown;
                 listViewMaterials.Items.Add(customizeMaterial);
             }
@@ -284,11 +293,15 @@ namespace HouseDesign
 
         public void InitializePrices()
         {
-            textBlockInitialPrice.Text = string.Format("{0:0.000}", selectedObjectInitialPrice);
+            Currency projectCurrency=CurrencyHelper.GetProjectCurrency();
+            Decimal actualInitialPrice = CurrencyHelper.FromCurrencyToCurrency(CurrencyHelper.GetCurrentCurrency(), selectedObjectInitialPrice, projectCurrency);
+            textBlockInitialPrice.Text = string.Format("{0:0.000}", actualInitialPrice);
             Decimal materialsPrice = GetMaterialsPrice();
-            textBlockMaterialsPrice.Text = string.Format("{0:0.000}", materialsPrice);
-            textBlockTotalPrice.Text = string.Format("{0:0.000}", (materialsPrice + selectedObjectInitialPrice +
-                currentTradeAllowance/100*(materialsPrice + selectedObjectInitialPrice)));
+            Decimal actualMaterialsPrice = CurrencyHelper.FromCurrencyToCurrency(CurrencyHelper.GetCurrentCurrency(), materialsPrice, projectCurrency);
+            textBlockMaterialsPrice.Text = string.Format("{0:0.000}", actualMaterialsPrice);
+
+            textBlockTotalPrice.Text = string.Format("{0:0.000}", (actualMaterialsPrice + actualInitialPrice +
+                currentTradeAllowance/100*(actualMaterialsPrice + actualInitialPrice)));
         }
 
         private Decimal GetMaterialsPrice()
@@ -320,7 +333,7 @@ namespace HouseDesign
             }
         }
 
-        private Material GetMaterialByImagePath(List<Category<Material>> materials, String imagePath)
+        public static Material GetMaterialByImagePath(List<Category<Material>> materials, String imagePath)
         {
             for(int i=0;i<materials.Count;i++)
             {

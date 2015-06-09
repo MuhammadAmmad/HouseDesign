@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="HouseDesign.UserControls.CurrencyUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" Name="currencyUserControl">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"></ColumnDefinition>
+            <ColumnDefinition Width="250"></ColumnDefinition>
+            <ColumnDefinition Width="100"></ColumnDefinition>
+            <ColumnDefinition Width="150"></ColumnDefinition>
+        </Grid.ColumnDefinitions>   
+        <TextBlock Grid.Column="0" Name="textBlockCurrency" Text="{Binding ElementName=currencyUserControl, Path=CurrencyShortcut}"></TextBlock>
+        <TextBlock Grid.Column="1" Name="textBlockName" Text="{Binding ElementName=currencyUserControl, Path=CurrencyName}"></TextBlock>
+        <TextBlock Grid.Column="2" Name="textBlockValue" Text="{Binding ElementName=currencyUserControl, Path=CurrencyValue}"></TextBlock>
+        <TextBlock Grid.Column="3" Name="textBlockRelativeCurrency" Text="{Binding ElementName=currencyUserControl, Path=RelativeCurrency}"></TextBlock>
+    </Grid>
+</UserControl>

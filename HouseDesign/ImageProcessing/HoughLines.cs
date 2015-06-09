@@ -64,11 +64,6 @@ namespace HouseDesign.ImageProcessing
         public static SortedList<double, Segment> GetSegments(Image<Gray, byte> image, int threshold)
         {
 
-
-
-
-
-
             InitializeHoughMatrix(image, threshold);
             int validLinesCount = 0;
 

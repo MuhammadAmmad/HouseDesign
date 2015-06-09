@@ -10,10 +10,12 @@ namespace HouseDesign.Classes
     {     
         
         public Decimal InitialPrice { get; set; }
+        public List<Material> Materials { get; set; }
 
         public FurnitureObject()
         {
             DefaultIconPath = @"D:\Licenta\HouseDesign\HouseDesign\Images\defaultObjectIcon.png";
+            Materials = new List<Material>();
         }
         public FurnitureObject(String name, String fullPath, String description, Decimal initialPrice):this()
         {

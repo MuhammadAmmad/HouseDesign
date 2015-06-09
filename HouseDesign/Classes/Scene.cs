@@ -112,5 +112,13 @@ namespace HouseDesign.Classes
 
                 return collision;
         }
+
+        public void ConvertHouseObjectPrices(Currency lastCurrency, Currency currentCurrency)
+        {
+            for (int i = 0; i < houseObjects.Count; i++)
+            {
+                houseObjects[i].Price = CurrencyHelper.FromCurrencyToCurrency(lastCurrency, houseObjects[i].Price, currentCurrency);
+            }
+        }
     }
 }

@@ -16,6 +16,40 @@
             <ListView Name="listViewHousePlans" Margin="5"  SelectionChanged="listViewHousePlans_SelectionChanged"></ListView>
         </GroupBox>
         <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" Grid.Column="1">
+            <Button Name="btnSetCurrency" Click="btnSetCurrency_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Content="SetCurrency" Margin="5"></Button>
+            <ComboBox Name="comboBoxCurrencies" SelectionChanged="comboBoxCurrencies_SelectionChanged" Visibility="Collapsed">
+                <ComboBoxItem Content="AED"></ComboBoxItem>
+                <ComboBoxItem Content="AUD"></ComboBoxItem>
+                <ComboBoxItem Content="BGN"></ComboBoxItem>
+                <ComboBoxItem Content="BRL"></ComboBoxItem>
+                <ComboBoxItem Content="CAD"></ComboBoxItem>
+                <ComboBoxItem Content="CHF"></ComboBoxItem>
+                <ComboBoxItem Content="CNY"></ComboBoxItem>
+                <ComboBoxItem Content="CZK"></ComboBoxItem>
+                <ComboBoxItem Content="DKK"></ComboBoxItem>
+                <ComboBoxItem Content="EGP"></ComboBoxItem>
+                <ComboBoxItem Content="EUR"></ComboBoxItem>
+                <ComboBoxItem Content="GBP"></ComboBoxItem>
+                <ComboBoxItem Content="HUF"></ComboBoxItem>
+                <ComboBoxItem Content="INR"></ComboBoxItem>
+                <ComboBoxItem Content="JPY"></ComboBoxItem>
+                <ComboBoxItem Content="KRW"></ComboBoxItem>
+                <ComboBoxItem Content="MDL"></ComboBoxItem>
+                <ComboBoxItem Content="MXN"></ComboBoxItem>
+                <ComboBoxItem Content="NOK"></ComboBoxItem>
+                <ComboBoxItem Content="NZD"></ComboBoxItem>
+                <ComboBoxItem Content="PLN"></ComboBoxItem>
+                <ComboBoxItem IsSelected="true" Content="RON"></ComboBoxItem>
+                <ComboBoxItem Content="RSD"></ComboBoxItem>
+                <ComboBoxItem Content="RUB"></ComboBoxItem>
+                <ComboBoxItem Content="SEK"></ComboBoxItem>
+                <ComboBoxItem Content="TRY"></ComboBoxItem>
+                <ComboBoxItem Content="UAH"></ComboBoxItem>
+                <ComboBoxItem Content="USD"></ComboBoxItem>
+                <ComboBoxItem Content="XAU"></ComboBoxItem>
+                <ComboBoxItem Content="XDR"></ComboBoxItem>
+                <ComboBoxItem Content="ZAR"></ComboBoxItem>
+            </ComboBox>
             <Button Name="btnImport" Click="btnImport_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Content="Import" Margin="5"></Button>
             <Button Name="btnLoadPlan" Click="btnLoadPlan_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Content="Load" Margin="5"></Button>
         </StackPanel>

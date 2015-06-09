@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ctrl="clr-namespace:HouseDesign.UserControls"
         Height="675"
-        Closed="Window_Closed">
+        Closed="Window_Closed" Name="setupConfiguration">
     <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="65"></RowDefinition>
@@ -36,6 +36,25 @@
                     </TreeView>
                     <GroupBox Name="groupBoxPreviewMaterial" Grid.Column="1">                        
                     </GroupBox>               
+                </Grid>
+            </TabItem>
+            <TabItem Header="Currency">
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="5" Text="The current currency is:"></TextBlock>
+                            <TextBlock Name="textBlockCurrentCurrency" Margin="5" Text="{Binding ElementName=setupConfiguration, Path=CurrentCurrency}"></TextBlock>
+                        </StackPanel>
+                        <Button Name="btnChangeCurrency" Content="Change currency" Click="btnChangeCurrency_Click" Width="100"></Button>
+                    </StackPanel>
+                    <GroupBox Name="groupBoxCurrencies" Width="600" Margin="10" Visibility="Collapsed" Grid.Row="1">
+                        <ListView Name="listViewCurrencies" SelectionChanged="listViewCurrencies_SelectionChanged"></ListView>
+                    </GroupBox>
+                    
                 </Grid>
             </TabItem>
         </TabControl>

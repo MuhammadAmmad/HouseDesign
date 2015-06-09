@@ -205,5 +205,20 @@ namespace HouseDesign
         {
             
         }
+
+        private void btnSetCurrency_Click(object sender, RoutedEventArgs e)
+        {
+            comboBoxCurrencies.Visibility = Visibility.Visible;
+        }
+
+        private void comboBoxCurrencies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBoxItem currentItem = comboBoxCurrencies.SelectedItem as ComboBoxItem;
+            if (currentItem.Content !=null)
+            {
+                Currency.CurrencyName currencyName = (Currency.CurrencyName)Enum.Parse(typeof(Currency.CurrencyName), currentItem.Content.ToString());
+                CurrencyHelper.SetProjectCurrency(CurrencyHelper.GetCurrencyByName(currencyName));
+            }            
+        }
     }
 }

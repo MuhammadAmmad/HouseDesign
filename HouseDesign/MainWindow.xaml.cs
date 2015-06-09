@@ -21,6 +21,8 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Microsoft.Win32;
 using System.ComponentModel;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace HouseDesign
 {
@@ -41,22 +43,9 @@ namespace HouseDesign
         //private Decimal totalPrice;
         private float sceneHeight;
         public event PropertyChangedEventHandler PropertyChanged;
-        private Currency currency;
-        //public Decimal TotalPrice
-        //{
-        //    get
-        //    {
-        //        return totalPrice;
-        //    }
-        //    set
-        //    {
-        //        totalPrice = value;
-        //        OnPropertyChanged("TotalPrice");
-        //    }
-        //}
+        private String currentProjectName;
 
-
-
+        private List<Currency> currencies;
         public decimal TotalPrice
         {
             get { return (decimal)GetValue(TotalPriceProperty); }
@@ -74,6 +63,7 @@ namespace HouseDesign
         public MainWindow()
         {
             InitializeComponent();
+            currencies = CurrencyHelper.GetCurrencies();
             //Collision collision = new Collision(new Point3d(2, 0, 3), new Point3d(3, -1, 2), new Point3d(2, 0, 0), new Point3d(0, 2, 0), new Point3d(0, 0, 2));
             //float rez=collision.GetMaxTD(new Point3d(2, 0, 2));
             //MessageBox.Show(rez + "********");
@@ -101,17 +91,28 @@ namespace HouseDesign
             //openGLControl.AddHandler(UIElement.MouseLeftButtonDownEvent, new RoutedEventHandler(), true);
 
             configurationFileName = "configuration.config";
-            configuration = new Configuration();
-            if(IsEmptyConfiguration()==0)
-            {
-                DeserializeConfiguration();
-            }
+            configuration = new Configuration();         
 
             rotateCount = 0;
             TotalPrice = 0;
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             isCollision = false;
-            currency = Currency.Lei;
+            CurrencyHelper.SetLastCurrency(CurrencyHelper.GetDefaultCurrency());
+
+            if (IsEmptyConfiguration() == 0)
+            {
+                DeserializeConfiguration();
+                CurrencyHelper.SetCurrentCurrency(configuration.CurrentCurrency);
+            }
+            else
+            {
+                CurrencyHelper.SetCurrentCurrency(CurrencyHelper.GetDefaultCurrency());
+                SetupConfiguration setupConfiguration = new SetupConfiguration("Setup configuration", configuration);
+                setupConfiguration.ShowDialog();
+            }
+
+            CurrencyHelper.SetProjectCurrency(CurrencyHelper.GetDefaultCurrency());
+            
         }
 
         protected void OnPropertyChanged(string propertyName)
@@ -319,7 +320,6 @@ namespace HouseDesign
                // wall.InitializeTextures(openGLControl.OpenGL);
                 scene.AddWall(wall);
             }
-
             groupBoxCurrentProject.Visibility = Visibility.Visible;
         }
 
@@ -334,22 +334,42 @@ namespace HouseDesign
             fdlg.RestoreDirectory = true;
             if (fdlg.ShowDialog() == true)
             {
-                DeserializeScene(fdlg.FileName);
+                currentProjectName = fdlg.FileName;
+                DeserializeScene(currentProjectName);
             }
         }
 
         private void menuItemSaveProject_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog saveProject = new SaveFileDialog();            
+            if(currentProjectName==null)
+            {
+                SaveFileDialog saveProject = new SaveFileDialog();
+                saveProject.DefaultExt = ".hds";
+                saveProject.Filter = "HouseDesign Projects (.hds)|*.hds";
+                saveProject.Title = "Save Project";
+                saveProject.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\SavedProjects";
+                if (saveProject.ShowDialog() == true)
+                {
+                    SerializeScene(saveProject.FileName);
+                }
+            }
+            else
+            {
+                SerializeScene(currentProjectName);
+            }
+            
+        }
+        private void menuItemSaveProjectAs_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveProject = new SaveFileDialog();
             saveProject.DefaultExt = ".hds";
             saveProject.Filter = "HouseDesign Projects (.hds)|*.hds";
             saveProject.Title = "Save Project";
             saveProject.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\SavedProjects";
             if (saveProject.ShowDialog() == true)
             {
-                String[] tokens = saveProject.FileName.Split('\\');
-                String auxName = tokens[tokens.Count() - 1];
-                SerializeScene(auxName);
+                SerializeScene(saveProject.FileName);
+                currentProjectName = saveProject.FileName;
             }
         }
 
@@ -521,7 +541,7 @@ namespace HouseDesign
                 sceneObject.Rotate = new Point3d(0, 180, 0);
                 sceneObject.Scale = new Point3d(20, 20, 20);
                 scene.AddHouseObject(sceneObject);
-                TotalPrice += sceneObject.Price;
+                TotalPrice += Math.Round(sceneObject.Price, 2);
                 //lblTotalPrice.Content = "Total price is: " + TotalPrice + " " + currency.ToString();
                 sceneObject = null;
             }
@@ -539,9 +559,15 @@ namespace HouseDesign
             if(setupConfiguration.IsSavedConfiguration==true)
             {
                 this.configuration = setupConfiguration.GetConfiguration();
+                this.configuration.CurrentCurrency = CurrencyHelper.GetCurrentCurrency();
                 SerializeConfiguration();
                 addExtendedMenuItems("Design");
             }
+
+            //if(setupConfiguration.IsEditedCurrency)
+            //{
+            //    scene.ConvertHouseObjectPrices(CurrencyHelper.GetLastCurrency(), CurrencyHelper.GetCurrentCurrency());
+            //}
         }
 
         private void menuItemResetConfiguration_Click(object sender, RoutedEventArgs e)
@@ -550,6 +576,8 @@ namespace HouseDesign
             if(result==MessageBoxResult.Yes)
             {
                 configuration.Reset();
+                CurrencyHelper.SetCurrentCurrency(CurrencyHelper.GetDefaultCurrency());
+                this.configuration.CurrentCurrency = CurrencyHelper.GetCurrentCurrency();
                 SerializeConfiguration();
                 addExtendedMenuItems("Design");
             }            
@@ -666,20 +694,14 @@ namespace HouseDesign
             }
         }
 
-        public enum Currency
-        {
-            Lei,
-            Euro,
-            Dollar,
-            BritishPound
-        };
+        
 
         private void menuItemScreenshot_Click(object sender, RoutedEventArgs e)
         {
             int width = (int)openGLControl.RenderSize.Width;
             int height = (int)openGLControl.RenderSize.Height;
             RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
-            renderTargetBitmap.Render(openGLControl);
+            renderTargetBitmap.Render(gridScene);
             PngBitmapEncoder pngImage = new PngBitmapEncoder();
             pngImage.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
             MessageBoxResult result = MessageBox.Show("Do you want to take a screenshot of the current scene?", "Screenshot", MessageBoxButton.YesNo);
@@ -707,6 +729,9 @@ namespace HouseDesign
             scene.MainCamera.Translate = new Point3d(0, 500, 0);
             scene.MainCamera.Rotate = new Point3d(-90, 180, 0);
         }
+                
+
+        
 
         
     }

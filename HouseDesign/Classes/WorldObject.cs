@@ -27,6 +27,7 @@ namespace HouseDesign.Classes
         private float height;
         private float width;
         private float length;
+        private List<Material> materials;
         public Point3d Translate 
         { 
             get
@@ -144,6 +145,7 @@ namespace HouseDesign.Classes
             this.textures = new List<String>();
             Scale = new Point3d(1, 1, 1);
             currentGL = new GLHolder();
+            materials = new List<Material>();
         }
         public WorldObject(List<Point3d> vertices, List<Triangle> triangles, List<UV> uvs, List<String> textures):this()
         {
@@ -304,87 +306,87 @@ namespace HouseDesign.Classes
                     gl.Vertex(vertices[triangles[j][i].vertex3].X, vertices[triangles[j][i].vertex3].Y, vertices[triangles[j][i].vertex3].Z);
                 }
 
-                if (boundingBox != null)
-                {
-                    Point3d[] vertices = boundingBox.GetPoints();
-                    gl.TexCoord(0, 0);
-                    gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
-                    gl.TexCoord(1, 0);
-                    gl.Vertex(vertices[1].X, vertices[1].Y, vertices[1].Z);
-                    gl.TexCoord(1, 1);
-                    gl.Vertex(vertices[5].X, vertices[5].Y, vertices[5].Z);
-                    gl.TexCoord(1, 1);
-                    gl.Vertex(vertices[5].X, vertices[5].Y, vertices[5].Z);
-                    gl.TexCoord(0, 0);
-                    gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
-                    gl.TexCoord(0, 1);
-                    gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
+                //if (boundingBox != null)
+                //{
+                //    Point3d[] vertices = boundingBox.GetPoints();
+                //    gl.TexCoord(0, 0);
+                //    gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
+                //    gl.TexCoord(1, 0);
+                //    gl.Vertex(vertices[1].X, vertices[1].Y, vertices[1].Z);
+                //    gl.TexCoord(1, 1);
+                //    gl.Vertex(vertices[5].X, vertices[5].Y, vertices[5].Z);
+                //    gl.TexCoord(1, 1);
+                //    gl.Vertex(vertices[5].X, vertices[5].Y, vertices[5].Z);
+                //    gl.TexCoord(0, 0);
+                //    gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
+                //    gl.TexCoord(0, 1);
+                //    gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
 
-                    gl.TexCoord(0, 0);
-                    gl.Vertex(vertices[1].X, vertices[1].Y, vertices[1].Z);
-                    gl.TexCoord(1, 0);
-                    gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
-                    gl.TexCoord(1, 1);
-                    gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
-                    gl.TexCoord(1, 1);
-                    gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
-                    gl.TexCoord(0, 0);
-                    gl.Vertex(vertices[1].X, vertices[1].Y, vertices[1].Z);
-                    gl.TexCoord(0, 1);
-                    gl.Vertex(vertices[5].X, vertices[5].Y, vertices[5].Z);
+                //    gl.TexCoord(0, 0);
+                //    gl.Vertex(vertices[1].X, vertices[1].Y, vertices[1].Z);
+                //    gl.TexCoord(1, 0);
+                //    gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
+                //    gl.TexCoord(1, 1);
+                //    gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
+                //    gl.TexCoord(1, 1);
+                //    gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
+                //    gl.TexCoord(0, 0);
+                //    gl.Vertex(vertices[1].X, vertices[1].Y, vertices[1].Z);
+                //    gl.TexCoord(0, 1);
+                //    gl.Vertex(vertices[5].X, vertices[5].Y, vertices[5].Z);
 
-                    gl.TexCoord(0, 0);
-                    gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
-                    gl.TexCoord(1, 0);
-                    gl.Vertex(vertices[3].X, vertices[3].Y, vertices[3].Z);
-                    gl.TexCoord(1, 1);
-                    gl.Vertex(vertices[7].X, vertices[7].Y, vertices[7].Z);
-                    gl.TexCoord(1, 1);
-                    gl.Vertex(vertices[7].X, vertices[7].Y, vertices[7].Z);
-                    gl.TexCoord(0, 0);
-                    gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
-                    gl.TexCoord(0, 1);
-                    gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
+                //    gl.TexCoord(0, 0);
+                //    gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
+                //    gl.TexCoord(1, 0);
+                //    gl.Vertex(vertices[3].X, vertices[3].Y, vertices[3].Z);
+                //    gl.TexCoord(1, 1);
+                //    gl.Vertex(vertices[7].X, vertices[7].Y, vertices[7].Z);
+                //    gl.TexCoord(1, 1);
+                //    gl.Vertex(vertices[7].X, vertices[7].Y, vertices[7].Z);
+                //    gl.TexCoord(0, 0);
+                //    gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
+                //    gl.TexCoord(0, 1);
+                //    gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
 
-                    gl.TexCoord(0, 0);
-                    gl.Vertex(vertices[3].X, vertices[3].Y, vertices[3].Z);
-                    gl.TexCoord(1, 0);
-                    gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
-                    gl.TexCoord(1, 1);
-                    gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
-                    gl.TexCoord(1, 1);
-                    gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
-                    gl.TexCoord(0, 0);
-                    gl.Vertex(vertices[3].X, vertices[3].Y, vertices[3].Z);
-                    gl.TexCoord(0, 1);
-                    gl.Vertex(vertices[7].X, vertices[7].Y, vertices[7].Z);
+                //    gl.TexCoord(0, 0);
+                //    gl.Vertex(vertices[3].X, vertices[3].Y, vertices[3].Z);
+                //    gl.TexCoord(1, 0);
+                //    gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
+                //    gl.TexCoord(1, 1);
+                //    gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
+                //    gl.TexCoord(1, 1);
+                //    gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
+                //    gl.TexCoord(0, 0);
+                //    gl.Vertex(vertices[3].X, vertices[3].Y, vertices[3].Z);
+                //    gl.TexCoord(0, 1);
+                //    gl.Vertex(vertices[7].X, vertices[7].Y, vertices[7].Z);
 
-                    //gl.TexCoord(0, 0);
-                    //gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
-                    //gl.TexCoord(1, 0);
-                    //gl.Vertex(vertices[5].X, vertices[5].Y, vertices[5].Z);
-                    //gl.TexCoord(1, 1);
-                    //gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
-                    //gl.TexCoord(1, 1);
-                    //gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
-                    //gl.TexCoord(0, 0);
-                    //gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
-                    //gl.TexCoord(0, 1);
-                    //gl.Vertex(vertices[7].X, vertices[7].Y, vertices[7].Z);
+                //    //gl.TexCoord(0, 0);
+                //    //gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
+                //    //gl.TexCoord(1, 0);
+                //    //gl.Vertex(vertices[5].X, vertices[5].Y, vertices[5].Z);
+                //    //gl.TexCoord(1, 1);
+                //    //gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
+                //    //gl.TexCoord(1, 1);
+                //    //gl.Vertex(vertices[6].X, vertices[6].Y, vertices[6].Z);
+                //    //gl.TexCoord(0, 0);
+                //    //gl.Vertex(vertices[4].X, vertices[4].Y, vertices[4].Z);
+                //    //gl.TexCoord(0, 1);
+                //    //gl.Vertex(vertices[7].X, vertices[7].Y, vertices[7].Z);
 
-                    //gl.TexCoord(0, 0);
-                    //gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
-                    //gl.TexCoord(1, 0);
-                    //gl.Vertex(vertices[1].X, vertices[1].Y, vertices[1].Z);
-                    //gl.TexCoord(1, 1);
-                    //gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
-                    //gl.TexCoord(1, 1);
-                    //gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
-                    //gl.TexCoord(0, 0);
-                    //gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
-                    //gl.TexCoord(0, 1);
-                    //gl.Vertex(vertices[3].X, vertices[3].Y, vertices[3].Z);
-                }
+                //    //gl.TexCoord(0, 0);
+                //    //gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
+                //    //gl.TexCoord(1, 0);
+                //    //gl.Vertex(vertices[1].X, vertices[1].Y, vertices[1].Z);
+                //    //gl.TexCoord(1, 1);
+                //    //gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
+                //    //gl.TexCoord(1, 1);
+                //    //gl.Vertex(vertices[2].X, vertices[2].Y, vertices[2].Z);
+                //    //gl.TexCoord(0, 0);
+                //    //gl.Vertex(vertices[0].X, vertices[0].Y, vertices[0].Z);
+                //    //gl.TexCoord(0, 1);
+                //    //gl.Vertex(vertices[3].X, vertices[3].Y, vertices[3].Z);
+                //}
                 
 
 
@@ -661,6 +663,16 @@ namespace HouseDesign.Classes
             OY,
             OZ
         };
+
+        public void SetMaterials(List<Material> materials)
+        {
+            this.materials = materials;
+        }
+
+        public List<Material> getMaterials()
+        {
+            return this.materials;
+        }
 
     }
 }

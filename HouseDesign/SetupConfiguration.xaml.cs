@@ -32,12 +32,28 @@ namespace HouseDesign
         private bool canPaste;
         private bool isCopying;
         private TreeViewItem copiedItem;
+        public bool IsEditedCurrency { get; set; }
+
+
+
+        public String CurrentCurrency
+        {
+            get { return (String)GetValue(CurrentCurrencyProperty); }
+            set { SetValue(CurrentCurrencyProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CurrentCurrency.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CurrentCurrencyProperty =
+            DependencyProperty.Register("CurrentCurrency", typeof(String), typeof(SetupConfiguration));
+
+        
         public SetupConfiguration(String title, Configuration conf)
         {
             InitializeComponent();
             mainTabControl.Height = this.Height - 70;
             this.Title = title;
             this.configuration = conf;
+            CurrentCurrency = CurrencyHelper.GetCurrentCurrency().Name.ToString();
             IsSavedConfiguration = false;
             canPaste = false;
             isCopying = false;
@@ -45,6 +61,7 @@ namespace HouseDesign
             InitializeTreeViewCategories();
             InitializeTreeViewMaterials();
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            //textBlockCurrentCurrency.Text = configuration.CurrentCurrency.Name.ToString();
 
 
         }
@@ -171,7 +188,8 @@ namespace HouseDesign
 
         private void importObject_StatusUpdated(object sender, EventArgs e)
         {
-            FurnitureObject importedObject = (sender as ImportObject).GetImportedObject();
+            ImportObject importObject=sender as ImportObject;
+            FurnitureObject importedObject = importObject.GetImportedObject();
             if ((sender as ImportObject).IsEdited)
             {
                 selectedTreeViewItem.Tag = importedObject;
@@ -196,6 +214,12 @@ namespace HouseDesign
                     currentCategory.StoredObjects.Add(importedObject);
                     SaveCategories();
                 }
+                if(importObject.ExistingImportedMaterials==true)
+                {
+                    configuration.Materials = importObject.GetMaterials();
+                    InitializeTreeViewMaterials();
+                    groupBoxPreviewMaterial.Content = null;
+                }
             }
         }
 
@@ -216,8 +240,9 @@ namespace HouseDesign
                 {
                     //electedItemType = LastSelectedItemType.FurnitureObject;
                     FurnitureObject currentObject = selectedTreeViewItem.Tag as FurnitureObject;
-                    ImportObject importObject = new ImportObject("Import Object", currentObject, false, true);
+                    ImportObject importObject = new ImportObject("Import Object", currentObject, configuration.Materials, false, true);
                     importObject.StatusUpdated += importObject_StatusUpdated;
+                    importObject.ImportMaterialStatusUpdated += importObject_ImportMaterialStatusUpdated;
                     Grid grid = new Grid();
                     grid.Children.Add(importObject);
                     groupBoxRightSide.Content = grid;
@@ -246,6 +271,11 @@ namespace HouseDesign
                 }
 
             }
+        }
+
+        void importObject_ImportMaterialStatusUpdated(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void extendedMenuItemCut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -364,8 +394,9 @@ namespace HouseDesign
             {
                 if(selectedItemType==LastSelectedItemType.Category)
                 {
-                    ImportObject importObject = new ImportObject("Import Object", null, false, false);
+                    ImportObject importObject = new ImportObject("Import Object", null, configuration.Materials, false, false);
                     importObject.StatusUpdated += importObject_StatusUpdated;
+                    importObject.ImportMaterialStatusUpdated+=importObject_ImportMaterialStatusUpdated;
                     Grid grid = new Grid();
                     grid.Children.Add(importObject);
                     groupBoxRightSide.Content = grid;
@@ -507,7 +538,7 @@ namespace HouseDesign
                 {
                     selectedItemType = LastSelectedItemType.FurnitureObject;
                     FurnitureObject currentObject = selectedTreeViewItem.Tag as FurnitureObject;
-                    ImportObject importObject = new ImportObject("Object", currentObject, true, false);
+                    ImportObject importObject = new ImportObject("Object", currentObject, configuration.Materials, true, false);
                     importObject.StatusUpdated += importObject_StatusUpdated;
                     Grid grid = new Grid();
                     grid.Children.Add(importObject);
@@ -777,6 +808,51 @@ namespace HouseDesign
             //item.IsSelected = false;
             ////selectedTreeViewItem = null;
             //treeView.Focus();
+        }
+
+        private void btnChangeCurrency_Click(object sender, RoutedEventArgs e)
+        {
+            InitializeCurrencies();
+            groupBoxCurrencies.Visibility = Visibility.Visible;
+        }
+
+        public void InitializeCurrencies()
+        {
+            List<Currency> currencies = CurrencyHelper.GetCurrencies();
+            Currency defaultCurrency=CurrencyHelper.GetDefaultCurrency();
+            CurrencyUserControl headers = new CurrencyUserControl("CURRENCY", "NAME", "VALUE", "RELATIVE CURRENCY");
+            headers.Tag="Header";
+            listViewCurrencies.Items.Add(headers);
+            for(int i=0;i<currencies.Count;i++)
+            {
+                CurrencyUserControl currency = new CurrencyUserControl(currencies[i], defaultCurrency);
+                currency.Tag = currencies[i];
+                listViewCurrencies.Items.Add(currency);
+            }
+
+            CurrencyUserControl defaultCurrencyUserControl = new CurrencyUserControl(defaultCurrency, defaultCurrency);
+            defaultCurrencyUserControl.Tag = defaultCurrency;
+            listViewCurrencies.Items.Add(defaultCurrencyUserControl);
+        }
+
+        private void listViewCurrencies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Currency currentCurrency = (listViewCurrencies.SelectedItem as CurrencyUserControl).Tag as Currency;
+            if(currentCurrency!=null)
+            {
+                String currencyInternationalName=Enum.GetName(typeof(Currency.InternationalName), (int)currentCurrency.Name);
+                CurrencyHelper.SetLastCurrency(CurrencyHelper.GetCurrentCurrency());
+                CurrencyHelper.SetCurrentCurrency(currentCurrency);
+                CurrentCurrency = currentCurrency.Name.ToString();
+                MessageBox.Show("The current currency is: " + currentCurrency.Name + " - " + currencyInternationalName);
+                configuration.ConvertAllPrices(CurrencyHelper.GetLastCurrency(), CurrencyHelper.GetCurrentCurrency());
+                configuration.CurrentCurrency = CurrencyHelper.GetCurrentCurrency();
+                IsEditedCurrency = true;
+                InitializeTreeViewCategories();
+                InitializeTreeViewMaterials();
+                groupBoxPreviewMaterial.Content = null;
+                groupBoxRightSide.Content = null;
+            }
         }
 
         

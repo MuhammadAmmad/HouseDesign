@@ -14,6 +14,8 @@ namespace HouseDesign.Classes
         public List<Category<Material>> Materials { get; set; }
         public bool IsEmpty { get; set; }
 
+        public Currency CurrentCurrency { get; set; }
+
         public Configuration()
         {
             Categories = new List<Category<FurnitureObject>>();
@@ -25,5 +27,48 @@ namespace HouseDesign.Classes
             Categories.Clear();
             Materials.Clear();
         }
+
+        public void ConvertAllPrices(Currency lastCurrency, Currency currentCurrency)
+        {
+            for (int i = 0; i < Categories.Count; i++)
+            {
+                ConvertFurnitureObjectPrices(lastCurrency, currentCurrency, Categories[i]);
+            }
+
+            for(int i=0;i<Materials.Count;i++)
+            {
+                ConvertMaterialPrices(lastCurrency, currentCurrency, Materials[i]);
+            }
+        }
+
+        private void ConvertFurnitureObjectPrices(Currency lastCurrency, Currency currentCurrency, Category<FurnitureObject> currentCategory)
+        {
+           
+            for (int j = 0; j < currentCategory.StoredObjects.Count; j++)
+            {
+                currentCategory.StoredObjects[j].InitialPrice = CurrencyHelper.FromCurrencyToCurrency(lastCurrency,
+                    currentCategory.StoredObjects[j].InitialPrice, currentCurrency);
+            }
+
+            for(int j=0;j<currentCategory.SubCategories.Count;j++)
+            {
+                ConvertFurnitureObjectPrices(lastCurrency, currentCurrency, currentCategory.SubCategories[j]);
+            }
+        }
+
+        private void ConvertMaterialPrices(Currency lastCurrency, Currency currentCurrency, Category<Material> currentCategory)
+        {
+            for(int j=0;j<currentCategory.StoredObjects.Count;j++)
+            {
+                currentCategory.StoredObjects[j].Price = CurrencyHelper.FromCurrencyToCurrency(lastCurrency, 
+                    currentCategory.StoredObjects[j].Price, currentCurrency);
+            }
+
+            for(int j=0;j<currentCategory.SubCategories.Count;j++)
+            {
+                ConvertMaterialPrices(lastCurrency, currentCurrency, currentCategory.SubCategories[j]);
+            }
+        }
+        
     }
 }

@@ -19,7 +19,8 @@ namespace HouseDesign.UserControls
     /// </summary>
     public partial class CustomizeHeader : UserControl
     {
-        public CustomizeHeader(String firstColumn, String secondColumn, String thridColumn, String fourthColumn, String fifthColumn)
+        public CustomizeHeader(String firstColumn, String secondColumn, String thridColumn, String fourthColumn, String fifthColumn, 
+            String sixthColumn)
         {
             InitializeComponent();
             lblFirstColumn.Content = firstColumn;
@@ -27,6 +28,10 @@ namespace HouseDesign.UserControls
             lblThirdColumn.Content = thridColumn;
             lblFourthColumn.Content = fourthColumn;
             lblFifthColumn.Content = fifthColumn;
+            if(sixthColumn.Length>0)
+            {
+                lblSixthColumn.Visibility = Visibility.Visible;
+            }
         }
     }
 }

@@ -12,6 +12,7 @@
             <Label Name="lblThirdColumn" Margin="5" Width="65" ></Label>
             <Label Name="lblFourthColumn" Margin="5" Width="65"></Label>
             <Label Name="lblFifthColumn" Margin="5" Width="65" ></Label>
+            <Label Name="lblSixthColumn" Margin="5" Width="50"  Visibility="Collapsed"></Label>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -25,6 +25,20 @@ namespace HouseDesign.UserControls
 
         private Material importedMaterial;
         public bool IsEdited { get; set; }
+
+
+
+        public String CurrencyName
+        {
+            get { return (String)GetValue(CurrencyNameProperty); }
+            set { SetValue(CurrencyNameProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CurrencyName.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CurrencyNameProperty =
+            DependencyProperty.Register("CurrencyName", typeof(String), typeof(ImportMaterial));
+
+        
         public ImportMaterial(String title, Material currentMaterial, bool isReadOnly, bool isEdited)
         {
             InitializeComponent();
@@ -48,14 +62,16 @@ namespace HouseDesign.UserControls
             else
             {
                 importedMaterial = new Material();
-            }            
+            }
+
+            CurrencyName = CurrencyHelper.GetCurrentCurrency().Name.ToString();
         }
         public void InitializeCurrentMaterial()
         {
             groupBoxPreviewMaterial.Visibility = Visibility.Visible;
             textBoxName.Text = importedMaterial.Name;
             textBoxDescription.Text = importedMaterial.Description;
-            textBoxPrice.Text = importedMaterial.Price.ToString();
+            textBoxPrice.Text = Math.Round(importedMaterial.Price, 2).ToString();
             String imagePath = importedMaterial.FullPath;
             InitializeImage(imagePath);
         }

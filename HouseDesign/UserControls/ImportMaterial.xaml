@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" Height="400" Width="300">
+             mc:Ignorable="d" Height="400" Width="300" Name="importMaterial">
     <Grid>
         <GroupBox Name="mainGroupBox">
             <Grid>
@@ -31,7 +31,10 @@
                     <TextBlock FontSize="12" Margin="0,2,0,0">Price/m</TextBlock>
                     <TextBlock FontSize="9" Margin="0,0,0,0">2</TextBlock>
                 </StackPanel>
-                <TextBox Name="textBoxPrice" Grid.Row="4" Grid.Column="1" Height="30" Margin="5"></TextBox>
+                <StackPanel Orientation="Horizontal"  Grid.Row="4" Grid.Column="1" Height="30">
+                    <TextBox Name="textBoxPrice" Margin="5" Width="100"></TextBox>
+                    <Label Content="{Binding ElementName=importMaterial, Path=CurrencyName}"></Label>
+                </StackPanel>                
                 <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="5">
                     <Button Name="btnOK" Click="btnOK_Click" Margin="5" Height="20">OK</Button>
                     <Button Name="btnCancel" Click="btnCancel_Click"  Margin="5" Height="20">Cancel</Button>

@@ -80,28 +80,37 @@ namespace HouseDesign.UserControls
         public int Index { get; set; }
 
         private Material currentMaterial;
+
+        public event EventHandler StatusUpdated;
         
-        public CustomizeMaterial(int index, Material material, double surfaceNeeded)
+        public CustomizeMaterial(int index, Material material, double surfaceNeeded, bool canBeImported)
         {
             InitializeComponent();
             this.Index = index;
             //this.MaterialName = name;
-            //this.ImagePath = imagePath;
+            this.ImagePath = material.FullPath;
             //this.InitialPrice = initialPrice;
             //this.SurfaceNeeded = surfaceNeeded;
             if(material!=null)
             {
                 currentMaterial = material;
                 InitializeCurrentMaterial(currentMaterial, surfaceNeeded);
-            }          
+            }
+            if (canBeImported)
+            {
+                btnImport.Visibility = Visibility.Visible;
+            }
         }
 
         public void InitializeCurrentMaterial(Material currentMaterial, double surfaceNeeded)
         {
             lblMaterialName.Content = currentMaterial.Name;
-            textBlockInitialPrice.Text = string.Format("{0:0.000}", currentMaterial.Price);
+            Currency projectCurrency = CurrencyHelper.GetProjectCurrency();
+            Decimal actualPrice=CurrencyHelper.FromCurrencyToCurrency(CurrencyHelper.GetCurrentCurrency(), currentMaterial.Price, projectCurrency);
+            textBlockInitialPrice.Text = string.Format("{0:0.000}", actualPrice);
             textBlockSurfaceNeeded.Text = string.Format("{0:0.000}", surfaceNeeded);
-            textBlockTotalPrice.Text = string.Format("{0:0.000}", (Convert.ToDouble(currentMaterial.Price) * surfaceNeeded));
+            Decimal actualTotalPrice=CurrencyHelper.FromCurrencyToCurrency(CurrencyHelper.GetCurrentCurrency(), (currentMaterial.Price) * Convert.ToDecimal(surfaceNeeded), projectCurrency);
+            textBlockTotalPrice.Text = string.Format("{0:0.000}", actualTotalPrice);
             imgMaterial.Source = new BitmapImage(new Uri(currentMaterial.FullPath));
         }
         public Material GetCurrentMaterial()
@@ -112,6 +121,14 @@ namespace HouseDesign.UserControls
         public void SetCurrentMaterial(Material material)
         {
             currentMaterial = material;
+        }
+
+        private void btnImport_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.StatusUpdated != null)
+            {
+                this.StatusUpdated(this, new EventArgs());
+            }
         }
     }
 }
