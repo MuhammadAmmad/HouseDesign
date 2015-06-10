@@ -27,7 +27,6 @@ namespace HouseDesign.Classes
         private float height;
         private float width;
         private float length;
-        private List<Material> materials;
         public Point3d Translate 
         { 
             get
@@ -137,6 +136,8 @@ namespace HouseDesign.Classes
             }
         }
 
+        private List<WorldObjectMaterial> materials;
+
         public WorldObject()
         {
             this.vertices = new List<Point3d>();
@@ -145,7 +146,7 @@ namespace HouseDesign.Classes
             this.textures = new List<String>();
             Scale = new Point3d(1, 1, 1);
             currentGL = new GLHolder();
-            materials = new List<Material>();
+            materials = new List<WorldObjectMaterial>();
         }
         public WorldObject(List<Point3d> vertices, List<Triangle> triangles, List<UV> uvs, List<String> textures):this()
         {
@@ -664,15 +665,52 @@ namespace HouseDesign.Classes
             OZ
         };
 
-        public void SetMaterials(List<Material> materials)
+        public void AddMaterial(Material material, double surfaceNeeded)
         {
-            this.materials = materials;
+            this.materials.Add(new WorldObjectMaterial(material, surfaceNeeded));
         }
 
-        public List<Material> getMaterials()
+        public List<WorldObjectMaterial> GetMaterials()
         {
             return this.materials;
         }
 
+        public void SetMaterials(List<WorldObjectMaterial> materials)
+        {
+            this.materials.Clear();
+            this.materials = materials;
+        }
+
+
+        public WorldObject Clone()
+        {
+            List<Point3d> cloneVertices=new List<Point3d>();
+            cloneVertices.AddRange(vertices);
+            List<Triangle> cloneTriangles=new List<Triangle>();
+
+            for(int i=0;i<triangles.Count;i++)
+            {
+                for(int j=0;j<triangles[i].Count;j++)
+                {
+                   cloneTriangles.Add(triangles[i][j].Clone());
+                }
+            }
+
+            List<UV> cloneUVS=new List<UV>();
+            cloneUVS.AddRange(uvs);
+
+            List<String> cloneTextures=new List<String>();
+            cloneTextures.AddRange(textures);
+            WorldObject clone = new WorldObject(cloneVertices, cloneTriangles, cloneUVS, cloneTextures);
+            List<WorldObjectMaterial> cloneMaterials = new List<WorldObjectMaterial>();
+            for (int i = 0; i < materials.Count;i++ )
+            {
+                cloneMaterials.Add(materials[i].Clone());
+            }
+            
+            clone.SetMaterials(cloneMaterials);
+
+            return clone;
+        }
     }
 }

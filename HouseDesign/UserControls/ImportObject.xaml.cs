@@ -31,6 +31,8 @@ namespace HouseDesign.UserControls
         private FurnitureObject importedObject;
         public bool IsEdited { get; set; }
 
+        private List<WorldObjectMaterial> currentObjectMaterials;
+
         public String CurrencyName
         {
             get { return (String)GetValue(CurrencyNameProperty); }
@@ -52,17 +54,16 @@ namespace HouseDesign.UserControls
 
         // Using a DependencyProperty as the backing store for TotalPrice.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TotalPriceProperty =
-            DependencyProperty.Register("TotalPrice", typeof(String), typeof(ImportObject));
+            DependencyProperty.Register("TotalPrice", typeof(String), typeof(ImportObject));       
 
         
-
-        
-        public ImportObject(String title, FurnitureObject currentObject, List<Category<Material>> materials, bool isReadOnly, bool isEdited)
+        public ImportObject(String title, FurnitureObject importedObject, List<Category<Material>> materials, bool isReadOnly, bool isEdited)
         {
             InitializeComponent();
             mainGroupBox.Header = title;
             this.IsEdited = isEdited;
             this.materials=materials;
+            this.currentObjectMaterials = new List<WorldObjectMaterial>();
             if(isReadOnly)
             {
                 textBoxName.IsReadOnly = true;
@@ -74,15 +75,15 @@ namespace HouseDesign.UserControls
                 groupBoxPreviewObject.Visibility = Visibility.Visible;
                 stackPanelTotalPrice.Visibility = Visibility.Visible;
             }
-            if(currentObject!=null)
+            if(importedObject!=null)
             {
-                this.importedObject = currentObject;
+                this.importedObject = importedObject;
                 InitializeCurrentObject();
                 InitializeMaterials();
             }
             else
             {
-                importedObject = new FurnitureObject();
+                this.importedObject = new FurnitureObject();
             }
 
             CurrencyName = CurrencyHelper.GetCurrentCurrency().Name.ToString();
@@ -96,8 +97,7 @@ namespace HouseDesign.UserControls
             textBoxInitialPrice.Text = Math.Round(importedObject.InitialPrice, 2).ToString();
             //Decimal materialsPrice = GetMaterialsPrice();
             //textBlockTotalPrice.Text = (Math.Round(importedObject.InitialPrice, 2) + materialsPrice).ToString();
-            Importer importer = new Importer();
-            currentObject = importer.Import(importedObject.FullPath);
+            currentObject = importedObject.GetInnerObject();
             //currentObject.InitializeTextures(openGLControl.OpenGL);
         }
 
@@ -196,8 +196,9 @@ namespace HouseDesign.UserControls
             if (fdlg.ShowDialog() == true)
             {
                 importedObject.FullPath = fdlg.FileName;
-                Importer importer = new Importer();
-                currentObject = importer.Import(importedObject.FullPath);
+                importedObject.InitializeInnerObject();
+                currentObject = importedObject.GetInnerObject();
+                //currentObject = importer.Import(importedObject.FullPath);
                // currentObject.InitializeTextures(openGLControl.OpenGL);
                 groupBoxPreviewObject.Visibility = Visibility.Visible;
             }
@@ -220,6 +221,7 @@ namespace HouseDesign.UserControls
                 importedObject.Name = textBoxName.Text;
                 importedObject.Description = textBoxDescription.Text;
                 importedObject.InitialPrice = Convert.ToDecimal(textBoxInitialPrice.Text);
+                importedObject.GetInnerObject().SetMaterials(currentObjectMaterials);
                 ClearAllFields();
                 if (this.StatusUpdated != null)
                 {
@@ -253,6 +255,7 @@ namespace HouseDesign.UserControls
             textBoxDescription.Clear();
             textBoxInitialPrice.Clear();
             textBoxName.Clear();
+            listViewMaterials.Items.Clear();
         }
 
         public FurnitureObject GetImportedObject()
@@ -263,7 +266,7 @@ namespace HouseDesign.UserControls
         public void InitializeMaterials()
         {
             listViewMaterials.Items.Clear();
-            importedObject.Materials.Clear();
+            currentObjectMaterials.Clear();
             listViewMaterials.Items.Add(new CustomizeHeader("NAME", "IMAGE", "PRICE/M²", "SURFACE", "TOTAL", "IMPORT"));
 
             List<String> textures=currentObject.GetTextures();
@@ -277,7 +280,7 @@ namespace HouseDesign.UserControls
                 {
                     
                     customizeMaterial = new CustomizeMaterial(i, material, surfaceNeeded, false);
-                    importedObject.Materials.Add(material);
+                    currentObjectMaterials.Add(new WorldObjectMaterial(material, surfaceNeeded));
                     
                 }
                 else
@@ -310,9 +313,28 @@ namespace HouseDesign.UserControls
             genericMaterial.StatusUpdated += genericMaterial_StatusUpdated;
             genericMaterial.ShowDialog();
             Material currentMaterial = genericMaterial.GetCurrentMaterial();
-            int i = importedObject.Materials.IndexOf(oldMaterial);
-            importedObject.Materials[i] = currentMaterial;
+            if(GenericCategory.GetMaterialByImagePath(materials, oldMaterial.FullPath)!=null)
+            {
+                int i = GetIndexOfMaterial(oldMaterial);
+                currentObjectMaterials[i] = new WorldObjectMaterial(currentMaterial, currentObjectMaterials[i].SurfaceNeeded);
+            }
+            importedObject.Materials.Add(currentMaterial);
             InitializeMaterials();
+        }
+
+        private int GetIndexOfMaterial(Material material)
+        {
+            int index=-1;
+            for (int i = 0; i < currentObjectMaterials.Count;i++ )
+            {
+                if(currentObjectMaterials[i].Material==material)
+                {
+                    index = i;
+                    return index;
+                }
+            }
+
+                return index;
         }
 
         void genericMaterial_StatusUpdated(object sender, EventArgs e)

@@ -25,7 +25,7 @@ namespace HouseDesign
     {
         private Category<FurnitureObject> category;
         private List<Category<Material>> materials;
-        private List<Material> selectedObjectMaterials;
+        private List<WorldObjectMaterial> selectedObjectMaterials;
         public WorldObject SelectedObject { get; set; }
 
         private HouseDesign.Classes.Scene scene;
@@ -39,7 +39,7 @@ namespace HouseDesign
             InitializeComponent();
             this.category = category;
             this.materials = materials;
-            selectedObjectMaterials = new List<Material>();
+            selectedObjectMaterials = new List<WorldObjectMaterial>();
             TreeViewItem mainTreeViewItem = new TreeViewItem();
             mainTreeViewItem.IsExpanded = true;
             treeViewCategory.Items.Add(mainTreeViewItem);
@@ -222,8 +222,7 @@ namespace HouseDesign
             listViewMaterials.Items.Add(new CustomizeHeader("NAME", "IMAGE", "PRICE/M²", "SURFACE", "TOTAL", ""));
             for(int i=0;i<selectedObjectMaterials.Count;i++)
             {
-                double surfaceNeeded = SelectedObject.getTotalAreaPerTexture(i);
-                CustomizeMaterial customizeMaterial = new CustomizeMaterial(i, selectedObjectMaterials[i], surfaceNeeded, false);
+                CustomizeMaterial customizeMaterial = new CustomizeMaterial(i, selectedObjectMaterials[i].Material, selectedObjectMaterials[i].SurfaceNeeded, false);
                 customizeMaterial.MouseLeftButtonDown += customizeMaterial_MouseLeftButtonDown;
                 listViewMaterials.Items.Add(customizeMaterial);
             }
@@ -239,11 +238,26 @@ namespace HouseDesign
             Material currentMaterial = genericMaterial.GetCurrentMaterial();
             //selectedObjectMaterials.Remove(oldMaterial);
             //selectedObjectMaterials.Add(currentMaterial);
-            int i = selectedObjectMaterials.IndexOf(oldMaterial);
-            selectedObjectMaterials[i] = currentMaterial;
+            int i = GetIndexOfMaterial(oldMaterial);
+            selectedObjectMaterials[i] = new WorldObjectMaterial(currentMaterial, selectedObjectMaterials[i].SurfaceNeeded);
             //oldMaterial = currentMaterial;
             InitializeMaterials();
             InitializePrices();
+        }
+
+        private int GetIndexOfMaterial(Material material)
+        {
+            int index = -1;
+            for (int i = 0; i < selectedObjectMaterials.Count; i++)
+            {
+                if (selectedObjectMaterials[i].Material == material)
+                {
+                    index = i;
+                    return index;
+                }
+            }
+
+            return index;
         }
 
         void genericMaterial_StatusUpdated(object sender, EventArgs e)
@@ -259,28 +273,17 @@ namespace HouseDesign
             TreeViewItem selectedTreeViewItem=treeViewCategory.SelectedItem as TreeViewItem;
             if (treeViewCategory.Items.Count > 0 &&  selectedTreeViewItem!= null)
             {
-                if((selectedTreeViewItem.Header as ExtendedTreeViewItem).Tag is FurnitureObject)
+                FurnitureObject currentObject=(selectedTreeViewItem.Header as ExtendedTreeViewItem).Tag as FurnitureObject;
+                if(currentObject!=null)
                 {
-                    String path = (selectedTreeViewItem.Header as ExtendedTreeViewItem).FullPath;
-                    Importer importer = new Importer();
-                    SelectedObject=importer.Import(path);
-                    //SelectedObject.InitializeTextures(openGLControl.OpenGL);
+                    SelectedObject=currentObject.GetInnerObject();
                     if(SelectedObject!=null)
                     {
                         InitializeSelectedObjectMaterials();
                         groupBoxObj.Visibility = Visibility.Visible;
                         groupBoxPrices.Visibility = Visibility.Visible;
                         InitializeMaterials();
-                        selectedObjectInitialPrice=((selectedTreeViewItem.Header as ExtendedTreeViewItem).Tag as FurnitureObject).InitialPrice;
-                        //if(selectedTreeViewItem.Parent as TreeViewItem!=null)
-                        //{
-                        //    Category<FurnitureObject> currentCategory = (selectedTreeViewItem.Parent as ExtendedTreeViewItem).Tag as Category<FurnitureObject>;
-                        //    if (currentCategory != null)
-                        //    {
-                        //        currentTradeAllowance = Convert.ToDecimal(currentCategory.TradeAllowance);
-                        //    }
-                        //}                       
-                        
+                        selectedObjectInitialPrice=currentObject.InitialPrice;                   
                         InitializePrices();
                     }                    
                 }
@@ -309,28 +312,16 @@ namespace HouseDesign
             Decimal sum = 0;
             for(int i=0;i<selectedObjectMaterials.Count;i++)
             {
-                double surfaceNeeded = SelectedObject.getTotalAreaPerTexture(i);
-                sum += Convert.ToDecimal(surfaceNeeded) * selectedObjectMaterials[i].Price;
+                double surfaceNeeded = selectedObjectMaterials[i].SurfaceNeeded;
+                sum += Convert.ToDecimal(surfaceNeeded) * selectedObjectMaterials[i].Material.Price;
             }
 
             return sum;
         }
         private void InitializeSelectedObjectMaterials()
         {
-            List<String> textures=SelectedObject.GetTextures();
-            for(int i=0;i<textures.Count;i++)
-            {
-                Material material = new Material();
-                material = GetMaterialByImagePath(materials, textures[i]);
-                if(material!=null)
-                {
-                    selectedObjectMaterials.Add(material);
-                }
-                else
-                {
-                    MessageBox.Show("The material does not exist!");
-                }
-            }
+            selectedObjectMaterials.Clear();
+            selectedObjectMaterials=SelectedObject.GetMaterials();
         }
 
         public static Material GetMaterialByImagePath(List<Category<Material>> materials, String imagePath)

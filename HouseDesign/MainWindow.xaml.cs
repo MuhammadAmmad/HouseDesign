@@ -112,7 +112,7 @@ namespace HouseDesign
             }
 
             CurrencyHelper.SetProjectCurrency(CurrencyHelper.GetDefaultCurrency());
-            
+            //configuration.ClearAllFurnitureObjects();
         }
 
         protected void OnPropertyChanged(string propertyName)

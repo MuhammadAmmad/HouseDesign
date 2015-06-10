@@ -20,5 +20,12 @@ namespace HouseDesign.Classes
             this.vertex2 = vertex2;
             this.vertex3 = vertex3;
         }
+
+        public Triangle Clone()
+        {
+            Triangle triangle = new Triangle(vertex1, vertex2, vertex3);
+            triangle.TextureIndex = TextureIndex;
+            return triangle;
+        }
     }
 }

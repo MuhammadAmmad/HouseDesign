@@ -69,6 +69,23 @@ namespace HouseDesign.Classes
                 ConvertMaterialPrices(lastCurrency, currentCurrency, currentCategory.SubCategories[j]);
             }
         }
+
+        public void ClearAllFurnitureObjects()
+        {
+            for(int i=0;i<Categories.Count;i++)
+            {
+                ClearAllFurnitureObjectItems(Categories[i]);
+            }
+        }
+
+        public void ClearAllFurnitureObjectItems(Category<FurnitureObject> category)
+        {
+            category.StoredObjects.Clear();
+            for(int i=0;i<category.SubCategories.Count;i++)
+            {
+                ClearAllFurnitureObjectItems(category.SubCategories[i]);
+            }
+        }
         
     }
 }

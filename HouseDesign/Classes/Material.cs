@@ -6,14 +6,15 @@ using System.Text;
 namespace HouseDesign.Classes
 {
     [Serializable]
-    public class Material:StoredObject
-    {       
+    public class Material : StoredObject
+    {
         public Decimal Price { get; set; }
         public Material()
         {
         }
 
-        public Material( String name, String imagePath, Decimal price):this()
+        public Material(String name, String imagePath, Decimal price)
+            : this()
         {
             this.Name = name;
             this.FullPath = imagePath;

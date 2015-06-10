@@ -114,6 +114,7 @@
     <Compile Include="Classes\StoredObject.cs" />
     <Compile Include="Classes\Wall.cs" />
     <Compile Include="Classes\WallObject.cs" />
+    <Compile Include="Classes\WorldObjectMaterial.cs" />
     <Compile Include="Converters\AddMessageConverter.cs" />
     <Compile Include="GenericCategory.xaml.cs">
       <DependentUpon>GenericCategory.xaml</DependentUpon>
