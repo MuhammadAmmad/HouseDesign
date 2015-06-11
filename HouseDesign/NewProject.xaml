@@ -17,7 +17,7 @@
         </GroupBox>
         <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" Grid.Column="1">
             <Button Name="btnSetCurrency" Click="btnSetCurrency_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Content="SetCurrency" Margin="5"></Button>
-            <ComboBox Name="comboBoxCurrencies" SelectionChanged="comboBoxCurrencies_SelectionChanged" Visibility="Collapsed">
+            <ComboBox Name="comboBoxCurrencies" SelectionChanged="comboBoxCurrencies_SelectionChanged" Visibility="Collapsed" SelectedValuePath="Content">
                 <ComboBoxItem Content="AED"></ComboBoxItem>
                 <ComboBoxItem Content="AUD"></ComboBoxItem>
                 <ComboBoxItem Content="BGN"></ComboBoxItem>
@@ -39,7 +39,7 @@
                 <ComboBoxItem Content="NOK"></ComboBoxItem>
                 <ComboBoxItem Content="NZD"></ComboBoxItem>
                 <ComboBoxItem Content="PLN"></ComboBoxItem>
-                <ComboBoxItem IsSelected="true" Content="RON"></ComboBoxItem>
+                <ComboBoxItem Content="RON"></ComboBoxItem>
                 <ComboBoxItem Content="RSD"></ComboBoxItem>
                 <ComboBoxItem Content="RUB"></ComboBoxItem>
                 <ComboBoxItem Content="SEK"></ComboBoxItem>

@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="HouseDesign.UserControls.HouseObjectUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" Name="houseObjectUserControl">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70"></ColumnDefinition>
+            <ColumnDefinition Width="150"></ColumnDefinition>
+            <ColumnDefinition Width="150"></ColumnDefinition>
+            <ColumnDefinition Width="150"></ColumnDefinition>
+            <ColumnDefinition Width="150"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock Name="textBlockQuantity" HorizontalAlignment="Center" Grid.Column="0" Text="{Binding ElementName=houseObjectUserControl, Path=Quantity}"></TextBlock>
+        <TextBlock Name="textBlockName" HorizontalAlignment="Center" Grid.Column="1" Text="{Binding ElementName=houseObjectUserControl, Path=ObjectName}"></TextBlock>
+        <TextBlock Name="textBlockInitialPrice" HorizontalAlignment="Center" Grid.Column="2" Text="{Binding ElementName=houseObjectUserControl, Path=InitialPrice}"></TextBlock>
+        <TextBlock Name="textBlockMaterialsPrice" HorizontalAlignment="Center" Grid.Column="3" Text="{Binding ElementName=houseObjectUserControl, Path=MaterialsPrice}"></TextBlock>
+        <TextBlock Name="textBlockTotalPrice" HorizontalAlignment="Center" Grid.Column="4" Text="{Binding ElementName=houseObjectUserControl, Path=TotalPrice}"></TextBlock>
+    </Grid>
+</UserControl>

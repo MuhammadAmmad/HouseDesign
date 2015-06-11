@@ -729,6 +729,12 @@ namespace HouseDesign
             scene.MainCamera.Translate = new Point3d(0, 500, 0);
             scene.MainCamera.Rotate = new Point3d(-90, 180, 0);
         }
+
+        private void menuItemReciept_Click(object sender, RoutedEventArgs e)
+        {
+            Receipt receipt = new Receipt(scene.GetSortedHouseObjects());
+            receipt.ShowDialog();
+        }
                 
 
         

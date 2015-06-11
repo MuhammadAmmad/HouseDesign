@@ -8,7 +8,7 @@ using System.Windows;
 namespace HouseDesign.Classes
 {
     [Serializable]
-    public class WorldObject
+    public class WorldObject:IComparable<WorldObject>
     {
         public delegate void Point3DEventHandler(object sender, EventArgs e);        
 
@@ -135,6 +135,10 @@ namespace HouseDesign.Classes
 
             }
         }
+
+        public Decimal InitialPrice { get; set; }
+        public Decimal MaterialsPrice { get; set; }
+        public String Name { get; set; }
 
         private List<WorldObjectMaterial> materials;
 
@@ -711,6 +715,11 @@ namespace HouseDesign.Classes
             clone.SetMaterials(cloneMaterials);
 
             return clone;
+        }
+
+        public int CompareTo(WorldObject other)
+        {
+            return Price > other.Price ? 1 : Price == other.Price? 0: -1;
         }
     }
 }

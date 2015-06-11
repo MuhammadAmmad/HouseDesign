@@ -82,8 +82,10 @@ namespace HouseDesign.UserControls
         private Material currentMaterial;
 
         public event EventHandler StatusUpdated;
+
+        private Currency currentCurrency;
         
-        public CustomizeMaterial(int index, Material material, double surfaceNeeded, bool canBeImported)
+        public CustomizeMaterial(int index, Material material, double surfaceNeeded, bool canBeImported, bool isConfigurationView)
         {
             InitializeComponent();
             this.Index = index;
@@ -91,6 +93,14 @@ namespace HouseDesign.UserControls
             this.ImagePath = material.FullPath;
             //this.InitialPrice = initialPrice;
             //this.SurfaceNeeded = surfaceNeeded;
+            if(isConfigurationView)
+            {
+                currentCurrency = CurrencyHelper.GetCurrentCurrency();
+            }
+            else
+            {
+                currentCurrency = CurrencyHelper.GetProjectCurrency();
+            }
             if(material!=null)
             {
                 currentMaterial = material;
@@ -105,11 +115,11 @@ namespace HouseDesign.UserControls
         public void InitializeCurrentMaterial(Material currentMaterial, double surfaceNeeded)
         {
             lblMaterialName.Content = currentMaterial.Name;
-            Currency projectCurrency = CurrencyHelper.GetProjectCurrency();
-            Decimal actualPrice=CurrencyHelper.FromCurrencyToCurrency(CurrencyHelper.GetCurrentCurrency(), currentMaterial.Price, projectCurrency);
+            //Currency projectCurrency = CurrencyHelper.GetProjectCurrency();
+            Decimal actualPrice=CurrencyHelper.FromCurrencyToCurrency(CurrencyHelper.GetCurrentCurrency(), currentMaterial.Price, currentCurrency);
             textBlockInitialPrice.Text = string.Format("{0:0.000}", actualPrice);
             textBlockSurfaceNeeded.Text = string.Format("{0:0.000}", surfaceNeeded);
-            Decimal actualTotalPrice=CurrencyHelper.FromCurrencyToCurrency(CurrencyHelper.GetCurrentCurrency(), (currentMaterial.Price) * Convert.ToDecimal(surfaceNeeded), projectCurrency);
+            Decimal actualTotalPrice=CurrencyHelper.FromCurrencyToCurrency(CurrencyHelper.GetCurrentCurrency(), (currentMaterial.Price) * Convert.ToDecimal(surfaceNeeded), currentCurrency);
             textBlockTotalPrice.Text = string.Format("{0:0.000}", actualTotalPrice);
             imgMaterial.Source = new BitmapImage(new Uri(currentMaterial.FullPath));
         }

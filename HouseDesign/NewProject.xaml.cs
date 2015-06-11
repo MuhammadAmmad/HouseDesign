@@ -37,6 +37,7 @@ namespace HouseDesign
             housePlans = new List<HousePlan>();
             InitializeHousePlans();
             currentHousePlan = new HousePlan("Current");
+            InitializeComboBoxCurrentCurrency();
         }
 
         public void InitializeHousePlans()
@@ -219,6 +220,12 @@ namespace HouseDesign
                 Currency.CurrencyName currencyName = (Currency.CurrencyName)Enum.Parse(typeof(Currency.CurrencyName), currentItem.Content.ToString());
                 CurrencyHelper.SetProjectCurrency(CurrencyHelper.GetCurrencyByName(currencyName));
             }            
+        }
+
+        private void InitializeComboBoxCurrentCurrency()
+        {
+
+            comboBoxCurrencies.SelectedValue = CurrencyHelper.GetCurrentCurrency().Name.ToString();
         }
     }
 }

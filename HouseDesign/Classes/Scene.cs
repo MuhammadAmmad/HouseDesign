@@ -120,5 +120,12 @@ namespace HouseDesign.Classes
                 houseObjects[i].Price = CurrencyHelper.FromCurrencyToCurrency(lastCurrency, houseObjects[i].Price, currentCurrency);
             }
         }
+
+        public List<WorldObject> GetSortedHouseObjects()
+        {
+            houseObjects.Sort();
+
+            return houseObjects;
+        }
     }
 }

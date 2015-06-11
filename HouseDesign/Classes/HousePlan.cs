@@ -52,7 +52,7 @@ namespace HouseDesign.Classes
 
         public List<Wall> GetWalls()
         {
-            if(this.walls.Count==0)
+            if(this.walls.Count!=0)
             {
                 InitializeWalls();
             }

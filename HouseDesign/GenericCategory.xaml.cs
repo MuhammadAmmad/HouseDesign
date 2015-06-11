@@ -201,6 +201,9 @@ namespace HouseDesign
 
             SelectedObject.Price = Convert.ToDecimal(textBlockTotalPrice.Text);
             SelectedObject.Translate = new Point3d(SelectedObject.Translate.X, ChosenHeight*realHeightScaleFactor*50, SelectedObject.Translate.Z);
+            //InitializeSelectedObjectMaterials();
+            SelectedObject.SetMaterials(selectedObjectMaterials);
+            SelectedObject.MaterialsPrice=Convert.ToDecimal(textBlockMaterialsPrice.Text);
             this.Close();
             
         }
@@ -222,7 +225,7 @@ namespace HouseDesign
             listViewMaterials.Items.Add(new CustomizeHeader("NAME", "IMAGE", "PRICE/M²", "SURFACE", "TOTAL", ""));
             for(int i=0;i<selectedObjectMaterials.Count;i++)
             {
-                CustomizeMaterial customizeMaterial = new CustomizeMaterial(i, selectedObjectMaterials[i].Material, selectedObjectMaterials[i].SurfaceNeeded, false);
+                CustomizeMaterial customizeMaterial = new CustomizeMaterial(i, selectedObjectMaterials[i].Material, selectedObjectMaterials[i].SurfaceNeeded, false, false);
                 customizeMaterial.MouseLeftButtonDown += customizeMaterial_MouseLeftButtonDown;
                 listViewMaterials.Items.Add(customizeMaterial);
             }
@@ -236,11 +239,8 @@ namespace HouseDesign
             genericMaterial.StatusUpdated += genericMaterial_StatusUpdated;
             genericMaterial.ShowDialog();
             Material currentMaterial = genericMaterial.GetCurrentMaterial();
-            //selectedObjectMaterials.Remove(oldMaterial);
-            //selectedObjectMaterials.Add(currentMaterial);
             int i = GetIndexOfMaterial(oldMaterial);
             selectedObjectMaterials[i] = new WorldObjectMaterial(currentMaterial, selectedObjectMaterials[i].SurfaceNeeded);
-            //oldMaterial = currentMaterial;
             InitializeMaterials();
             InitializePrices();
         }
@@ -277,9 +277,13 @@ namespace HouseDesign
                 if(currentObject!=null)
                 {
                     SelectedObject=currentObject.GetInnerObject();
+                    selectedObjectMaterials.Clear();
+                    selectedObjectMaterials.AddRange(currentObject.GetInnerObject().GetMaterials());
+                    SelectedObject.Name = currentObject.Name;
+                    SelectedObject.InitialPrice = currentObject.InitialPrice;
                     if(SelectedObject!=null)
                     {
-                        InitializeSelectedObjectMaterials();
+                        //InitializeSelectedObjectMaterials();
                         groupBoxObj.Visibility = Visibility.Visible;
                         groupBoxPrices.Visibility = Visibility.Visible;
                         InitializeMaterials();
@@ -321,7 +325,7 @@ namespace HouseDesign
         private void InitializeSelectedObjectMaterials()
         {
             selectedObjectMaterials.Clear();
-            selectedObjectMaterials=SelectedObject.GetMaterials();
+            selectedObjectMaterials.AddRange(SelectedObject.GetMaterials());
         }
 
         public static Material GetMaterialByImagePath(List<Category<Material>> materials, String imagePath)

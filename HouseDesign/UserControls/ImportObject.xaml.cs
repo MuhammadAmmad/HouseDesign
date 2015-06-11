@@ -279,13 +279,13 @@ namespace HouseDesign.UserControls
                 if(material!=null)
                 {
                     
-                    customizeMaterial = new CustomizeMaterial(i, material, surfaceNeeded, false);
+                    customizeMaterial = new CustomizeMaterial(i, material, surfaceNeeded, false, true);
                     currentObjectMaterials.Add(new WorldObjectMaterial(material, surfaceNeeded));
                     
                 }
                 else
                 {
-                    customizeMaterial = new CustomizeMaterial(i, new Material("", textures[i], 0), surfaceNeeded, true);
+                    customizeMaterial = new CustomizeMaterial(i, new Material("", textures[i], 0), surfaceNeeded, true, true);
                 }
 
                 customizeMaterial.MouseLeftButtonDown+=customizeMaterial_MouseLeftButtonDown;

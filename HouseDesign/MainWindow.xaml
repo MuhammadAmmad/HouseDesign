@@ -30,6 +30,7 @@
                 <MenuItem Name="menuItemProject" Header="Project" Click="menuItemProject_Click">
                     <MenuItem Name="menuItemResetHousePlan" Header="Reset House plan" Click="menuItemResetHousePlan_Click"></MenuItem>
                     <MenuItem Name="menuItemResetObjects" Header="Reset Objects" Click="menuItemResetObjects_Click"></MenuItem>
+                    <MenuItem Name="menuItemReciept" Header="Receipt" Click="menuItemReciept_Click"></MenuItem>
                 </MenuItem>
                 <MenuItem Name="menutItemConfiguration" Header="Configuration" Click="menutItemConfiguration_Click">
                     <MenuItem Name="menuItemEditConfiguration" Header="Edit Configuration" Click="menuItemEditConfiguration_Click"></MenuItem>
