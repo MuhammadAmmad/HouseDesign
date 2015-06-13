@@ -240,7 +240,8 @@ namespace HouseDesign
                 {
                     //electedItemType = LastSelectedItemType.FurnitureObject;
                     FurnitureObject currentObject = selectedTreeViewItem.Tag as FurnitureObject;
-                    ImportObject importObject = new ImportObject("Import Object", currentObject, configuration.Materials, false, true);
+                    double tradeAllowance = ((selectedTreeViewItem.Parent as TreeViewItem).Tag as Category<FurnitureObject>).TradeAllowance;
+                    ImportObject importObject = new ImportObject("Import Object", currentObject, configuration.Materials, false, true, tradeAllowance);
                     importObject.StatusUpdated += importObject_StatusUpdated;
                     importObject.ImportMaterialStatusUpdated += importObject_ImportMaterialStatusUpdated;
                     Grid grid = new Grid();
@@ -394,7 +395,8 @@ namespace HouseDesign
             {
                 if(selectedItemType==LastSelectedItemType.Category)
                 {
-                    ImportObject importObject = new ImportObject("Import Object", null, configuration.Materials, false, false);
+                    double tradeAllowance = (selectedTreeViewItem.Tag as Category<FurnitureObject>).TradeAllowance;
+                    ImportObject importObject = new ImportObject("Import Object", null, configuration.Materials, false, false, tradeAllowance);
                     importObject.StatusUpdated += importObject_StatusUpdated;
                     importObject.ImportMaterialStatusUpdated+=importObject_ImportMaterialStatusUpdated;
                     Grid grid = new Grid();
@@ -538,7 +540,8 @@ namespace HouseDesign
                 {
                     selectedItemType = LastSelectedItemType.FurnitureObject;
                     FurnitureObject currentObject = selectedTreeViewItem.Tag as FurnitureObject;
-                    ImportObject importObject = new ImportObject("Object", currentObject, configuration.Materials, true, false);
+                    double tradeAllowance = ((selectedTreeViewItem.Parent as TreeViewItem).Tag as Category<FurnitureObject>).TradeAllowance;
+                    ImportObject importObject = new ImportObject("Object", currentObject, configuration.Materials, true, false, tradeAllowance);
                     importObject.StatusUpdated += importObject_StatusUpdated;
                     Grid grid = new Grid();
                     grid.Children.Add(importObject);

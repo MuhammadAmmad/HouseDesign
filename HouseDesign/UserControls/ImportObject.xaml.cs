@@ -54,16 +54,20 @@ namespace HouseDesign.UserControls
 
         // Using a DependencyProperty as the backing store for TotalPrice.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TotalPriceProperty =
-            DependencyProperty.Register("TotalPrice", typeof(String), typeof(ImportObject));       
+            DependencyProperty.Register("TotalPrice", typeof(String), typeof(ImportObject));
 
+        private Decimal materialsPrice;
+        private double currentTradeAllowance;
         
-        public ImportObject(String title, FurnitureObject importedObject, List<Category<Material>> materials, bool isReadOnly, bool isEdited)
+        public ImportObject(String title, FurnitureObject importedObject, List<Category<Material>> materials, bool isReadOnly, bool isEdited,
+            double currentTradeAllowance)
         {
             InitializeComponent();
             mainGroupBox.Header = title;
             this.IsEdited = isEdited;
             this.materials=materials;
             this.currentObjectMaterials = new List<WorldObjectMaterial>();
+            this.currentTradeAllowance = currentTradeAllowance;
             if(isReadOnly)
             {
                 textBoxName.IsReadOnly = true;
@@ -80,6 +84,7 @@ namespace HouseDesign.UserControls
                 this.importedObject = importedObject;
                 InitializeCurrentObject();
                 InitializeMaterials();
+                stackPanelTotalPrice.Visibility = Visibility.Visible;
             }
             else
             {
@@ -95,17 +100,8 @@ namespace HouseDesign.UserControls
             textBoxName.Text = importedObject.Name;
             textBoxDescription.Text = importedObject.Description;
             textBoxInitialPrice.Text = Math.Round(importedObject.InitialPrice, 2).ToString();
-            //Decimal materialsPrice = GetMaterialsPrice();
-            //textBlockTotalPrice.Text = (Math.Round(importedObject.InitialPrice, 2) + materialsPrice).ToString();
             currentObject = importedObject.GetInnerObject();
-            //currentObject.InitializeTextures(openGLControl.OpenGL);
         }
-
-        //private Decimal GetMaterialsPrice()
-        //{
-            
-        //}
-
         private void openGLControl_OpenGLDraw(object sender, OpenGLEventArgs args)
         {
             //  Get the OpenGL object.
@@ -198,8 +194,6 @@ namespace HouseDesign.UserControls
                 importedObject.FullPath = fdlg.FileName;
                 importedObject.InitializeInnerObject();
                 currentObject = importedObject.GetInnerObject();
-                //currentObject = importer.Import(importedObject.FullPath);
-               // currentObject.InitializeTextures(openGLControl.OpenGL);
                 groupBoxPreviewObject.Visibility = Visibility.Visible;
             }
             InitializeMaterials();
@@ -226,8 +220,7 @@ namespace HouseDesign.UserControls
                 if (this.StatusUpdated != null)
                 {
                     this.StatusUpdated(this, new EventArgs());
-                }  
-                
+                }                  
             }
         }
         private bool CheckObjectMaterials()
@@ -270,11 +263,13 @@ namespace HouseDesign.UserControls
             listViewMaterials.Items.Add(new CustomizeHeader("NAME", "IMAGE", "PRICE/M²", "SURFACE", "TOTAL", "IMPORT"));
 
             List<String> textures=currentObject.GetTextures();
+            materialsPrice = 0;
             for(int i=0;i<textures.Count;i++)
             {
                 Material material = new Material();
                 material = GenericCategory.GetMaterialByImagePath(materials, textures[i]);
                 double surfaceNeeded = currentObject.getTotalAreaPerTexture(i);
+                materialsPrice += Convert.ToDecimal(surfaceNeeded) * material.Price;
                 CustomizeMaterial customizeMaterial;
                 if(material!=null)
                 {
@@ -292,6 +287,10 @@ namespace HouseDesign.UserControls
                 customizeMaterial.StatusUpdated+=customizeMaterial_StatusUpdated;
                 listViewMaterials.Items.Add(customizeMaterial);
             }
+
+            Decimal totalPrice = materialsPrice + importedObject.InitialPrice + 
+                Convert.ToDecimal(currentTradeAllowance) * (materialsPrice + importedObject.InitialPrice)/100;
+            textBlockTotalPrice.Text = String.Format("{0:0.000}", totalPrice);
         }
 
         void customizeMaterial_StatusUpdated(object sender, EventArgs e)

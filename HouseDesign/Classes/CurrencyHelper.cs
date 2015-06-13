@@ -52,11 +52,7 @@ namespace HouseDesign.Classes
             {
                 DeserializeCurrencyInformation();
                 currencies = currencyInformation.GetCurrencies();
-            }
-            
-
-            
-
+            }   
             return currencies;
         }
 

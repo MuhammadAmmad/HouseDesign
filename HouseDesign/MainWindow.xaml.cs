@@ -314,13 +314,18 @@ namespace HouseDesign
             sceneHeight = project.GetHeight();
             List<Wall> walls = project.currentHousePlan.GetWalls();
 
-            for(int i=0;i<walls.Count;i++)
+            if(walls.Count>0)
             {
-                WallObject wall = new WallObject(walls[i], sceneHeight);
-               // wall.InitializeTextures(openGLControl.OpenGL);
-                scene.AddWall(wall);
-            }
-            groupBoxCurrentProject.Visibility = Visibility.Visible;
+                groupBoxCurrentProject.Visibility = Visibility.Visible;
+
+                for (int i = 0; i < walls.Count; i++)
+                {
+                    WallObject wall = new WallObject(walls[i], sceneHeight);
+                    // wall.InitializeTextures(openGLControl.OpenGL);
+                    scene.AddWall(wall);
+                }
+            }           
+          
         }
 
         private void menuItemOpenProject_Click(object sender, RoutedEventArgs e)

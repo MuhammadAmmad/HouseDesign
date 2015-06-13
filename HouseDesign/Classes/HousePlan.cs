@@ -46,13 +46,13 @@ namespace HouseDesign.Classes
             }
             catch (Exception ex)
             {
-                MessageBox.Show("The file could not be read! "+ex.Message);
+               // MessageBox.Show("The file could not be read! "+ex.Message);
             }
         }
 
         public List<Wall> GetWalls()
         {
-            if(this.walls.Count!=0)
+            if(this.walls.Count==0)
             {
                 InitializeWalls();
             }

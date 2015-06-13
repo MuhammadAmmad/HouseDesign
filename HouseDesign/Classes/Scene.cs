@@ -20,16 +20,22 @@ namespace HouseDesign.Classes
             this.houseObjects = new List<WorldObject>();
         }
 
-        public void AddHouseObject(WorldObject houseObject)
-        {
-            this.houseObjects.Add(houseObject);
-        }
-
         public void AddWall(WorldObject wall)
         {
             this.walls.Add(wall);
         }
-
+        public void AddHouseObject(WorldObject houseObject)
+        {
+            this.houseObjects.Add(houseObject);
+        }
+        public void ClearHouseObjects()
+        {
+            houseObjects.Clear();
+        }
+        public void ClearWalls()
+        {
+            walls.Clear();
+        }
         public void Render(OpenGL gl)
         {
             MainCamera.Perspective(gl);
@@ -43,25 +49,12 @@ namespace HouseDesign.Classes
             {
                 houseObjects[i].Draw(gl);
             }
-
-           // mainCamera.SetRotate0
         }
 
         public bool IsEmpty()
         {
             return this.houseObjects.Count + this.walls.Count==0;
         }
-
-        public void ClearHouseObjects()
-        {
-            houseObjects.Clear();
-        }
-
-        public void ClearWalls()
-        {
-            walls.Clear();
-        }
-
         public WorldObject GetCollisionObject(Point3d point, Point3d direction)
         {
             for(int i=0;i<houseObjects.Count;i++)

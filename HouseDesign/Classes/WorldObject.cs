@@ -10,8 +10,7 @@ namespace HouseDesign.Classes
     [Serializable]
     public class WorldObject:IComparable<WorldObject>
     {
-        public delegate void Point3DEventHandler(object sender, EventArgs e);        
-
+        public delegate void Point3DEventHandler(object sender, EventArgs e); 
         public event Point3DEventHandler Translating;
         public event Point3DEventHandler Scaling;
         public event Point3DEventHandler Rotating;
@@ -19,14 +18,19 @@ namespace HouseDesign.Classes
         protected List<List<Triangle>> triangles;
         protected List<UV> uvs;
         protected List<String> textures;
-
         private Point3d translate;
         private Point3d scale;
         private Point3d rotate;
-
         private float height;
         private float width;
         private float length;
+        private GLHolder currentGL;
+        private BoundingBox boundingBox;
+        private List<WorldObjectMaterial> materials;
+        public Decimal InitialPrice { get; set; }
+        public Decimal MaterialsPrice { get; set; }
+        public String Name { get; set; }        
+        public Decimal Price { get; set; }
         public Point3d Translate 
         { 
             get
@@ -102,13 +106,7 @@ namespace HouseDesign.Classes
             {
                 length = value;
             }
-        }
-
-        private GLHolder currentGL;
-
-        private BoundingBox boundingBox;
-
-        public Decimal Price { get; set; }
+        }        
         public virtual Point3d Forward
         {
             get
@@ -134,14 +132,7 @@ namespace HouseDesign.Classes
                 return new Point3d(1.0f, 0.0f, 0.0f).RotateY(Rotate.Y).RotateX(Rotate.X);
 
             }
-        }
-
-        public Decimal InitialPrice { get; set; }
-        public Decimal MaterialsPrice { get; set; }
-        public String Name { get; set; }
-
-        private List<WorldObjectMaterial> materials;
-
+        }     
         public WorldObject()
         {
             this.vertices = new List<Point3d>();
@@ -280,6 +271,7 @@ namespace HouseDesign.Classes
             DrawObject(gl);
             ModifyPerspectiveBack(gl);
         }
+
         protected virtual void DrawObject(OpenGL gl)
         {
             if(gl!=currentGL.Gl)
@@ -288,15 +280,7 @@ namespace HouseDesign.Classes
             }
             for (int j = 0; j < textures.Count;j++ )
             {
-                //if (tex == null)
-                //{
-                    
-                //}
-
-
                 gl.BindTexture(OpenGL.GL_TEXTURE_2D, tex[j]);
-
-
 
                 gl.Begin(OpenGL.GL_TRIANGLES);
 
@@ -484,9 +468,6 @@ namespace HouseDesign.Classes
             AddCollision(point, direction, vertices[3], vertices[0] - vertices[3], vertices[2] - vertices[3],
                 out result, isObjectCollision, collisions);
 
-            //AddCollision(new Point3d(1, 1, 1), new Point3d(0.0000000001f, -1, 0.0000000001f), new Point3d(0, 0, 0), new Point3d(2, 0, 0), new Point3d(0, 0, 2), out result, isObjectCollision, collisions);
-           
-            //MessageBox.Show("TYYYYYYYYYYYYYYYYYYYYyy");
             return collisions;
         }
 
@@ -583,6 +564,7 @@ namespace HouseDesign.Classes
             t3 = (aLID * aFEB - aHED * aJIB) / (aKIC * aFEB - aGEC * aJIB);
             t2 = (aHED - t3 * aGEC) / aFEB;
             t1 = (system[0, 3] - system[0, 2] * t3 - system[0, 1] * t2) / system[0, 0];
+
         }
         public bool CheckObjectCollision(WorldObject obj, Point3d d, out float td)
         {
@@ -618,7 +600,10 @@ namespace HouseDesign.Classes
             td = minTD;
 
             if (collisions.Count > 0)
+            {
                 collision = true;
+            }                
+
             return collision;
         }
 
@@ -654,20 +639,8 @@ namespace HouseDesign.Classes
             collisions.AddRange(CheckCollision(vertices[7], vertices[3] - vertices[7], true));
 
             return collisions;
+
         }
-
-        public enum Criteria
-        {
-            less,
-            greater
-        };
-
-        public enum Axis
-        {
-            OX,
-            OY,
-            OZ
-        };
 
         public void AddMaterial(Material material, double surfaceNeeded)
         {
@@ -685,33 +658,32 @@ namespace HouseDesign.Classes
             this.materials = materials;
         }
 
-
         public WorldObject Clone()
         {
-            List<Point3d> cloneVertices=new List<Point3d>();
+            List<Point3d> cloneVertices = new List<Point3d>();
             cloneVertices.AddRange(vertices);
-            List<Triangle> cloneTriangles=new List<Triangle>();
+            List<Triangle> cloneTriangles = new List<Triangle>();
 
-            for(int i=0;i<triangles.Count;i++)
+            for (int i = 0; i < triangles.Count; i++)
             {
-                for(int j=0;j<triangles[i].Count;j++)
+                for (int j = 0; j < triangles[i].Count; j++)
                 {
-                   cloneTriangles.Add(triangles[i][j].Clone());
+                    cloneTriangles.Add(triangles[i][j].Clone());
                 }
             }
 
-            List<UV> cloneUVS=new List<UV>();
+            List<UV> cloneUVS = new List<UV>();
             cloneUVS.AddRange(uvs);
 
-            List<String> cloneTextures=new List<String>();
+            List<String> cloneTextures = new List<String>();
             cloneTextures.AddRange(textures);
             WorldObject clone = new WorldObject(cloneVertices, cloneTriangles, cloneUVS, cloneTextures);
             List<WorldObjectMaterial> cloneMaterials = new List<WorldObjectMaterial>();
-            for (int i = 0; i < materials.Count;i++ )
+            for (int i = 0; i < materials.Count; i++)
             {
                 cloneMaterials.Add(materials[i].Clone());
             }
-            
+
             clone.SetMaterials(cloneMaterials);
 
             return clone;
@@ -719,7 +691,22 @@ namespace HouseDesign.Classes
 
         public int CompareTo(WorldObject other)
         {
-            return Price > other.Price ? 1 : Price == other.Price? 0: -1;
+            return Price > other.Price ? 1 : Price == other.Price ? 0 : -1;
         }
+
+        public enum Criteria
+        {
+            less,
+            greater
+        };
+
+        public enum Axis
+        {
+            OX,
+            OY,
+            OZ
+        };
+
+        
     }
 }

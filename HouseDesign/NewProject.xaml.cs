@@ -218,7 +218,15 @@ namespace HouseDesign
             if (currentItem.Content !=null)
             {
                 Currency.CurrencyName currencyName = (Currency.CurrencyName)Enum.Parse(typeof(Currency.CurrencyName), currentItem.Content.ToString());
-                CurrencyHelper.SetProjectCurrency(CurrencyHelper.GetCurrencyByName(currencyName));
+                if(currencyName==Currency.CurrencyName.RON)
+                {
+                    CurrencyHelper.SetProjectCurrency(CurrencyHelper.GetDefaultCurrency());
+                }
+                else
+                {
+                    CurrencyHelper.SetProjectCurrency(CurrencyHelper.GetCurrencyByName(currencyName));
+                }
+                
             }            
         }
 

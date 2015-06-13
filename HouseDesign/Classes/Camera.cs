@@ -9,6 +9,30 @@ namespace HouseDesign.Classes
     [Serializable]
     public class Camera: WorldObject
     {
+        public override Point3d Forward
+        {
+            get
+            {
+                return new Point3d(0.0f, 0.0f, 1.0f).RotateX(-Rotate.X).RotateY(Rotate.Y);
+
+            }
+        }
+        public override Point3d Top
+        {
+            get
+            {
+                return new Point3d(0.0f, 1.0f, 0.0f).RotateX(-Rotate.X).RotateY(Rotate.Y);
+
+            }
+        }
+        public override Point3d Right
+        {
+            get
+            {
+                return new Point3d(1.0f, 0.0f, 0.0f).RotateX(-Rotate.X).RotateY(Rotate.Y);
+
+            }
+        }
         public Camera()
         {
 
@@ -19,32 +43,7 @@ namespace HouseDesign.Classes
 
         }
 
-        public override Point3d Forward
-        {
-            get
-            {
-                return new Point3d(0.0f, 0.0f, 1.0f).RotateX(-Rotate.X).RotateY(Rotate.Y);
-
-            }
-        }
-
-        public override Point3d Top
-        {
-            get
-            {
-                return new Point3d(0.0f, 1.0f, 0.0f).RotateX(-Rotate.X).RotateY(Rotate.Y);
-
-            }
-        }
-
-        public override Point3d Right
-        {
-            get
-            {
-                return new Point3d(1.0f, 0.0f, 0.0f).RotateX(-Rotate.X).RotateY(Rotate.Y);
-
-            }
-        }
+        
 
         public void Perspective(OpenGL gl)
         {

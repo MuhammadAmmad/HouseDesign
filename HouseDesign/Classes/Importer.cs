@@ -22,8 +22,6 @@ namespace HouseDesign.Classes
         private float maxX;
         private float minY;
         private float maxY;
-
-
         public Importer()
         {
             vertices = new List<Point3d>();
