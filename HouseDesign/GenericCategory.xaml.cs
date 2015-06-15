@@ -27,14 +27,15 @@ namespace HouseDesign
         private List<Category<Material>> materials;
         private List<WorldObjectMaterial> selectedObjectMaterials;
         public WorldObject SelectedObject { get; set; }
-
-        private HouseDesign.Classes.Scene scene;
         private Decimal selectedObjectInitialPrice;
         private float sceneHeight;
         public float ChosenHeight { get; set; }
         private DimensionType dimensionType;
         private Decimal currentTradeAllowance;
-        public GenericCategory(Category<FurnitureObject> category,  HouseDesign.Classes.Scene scene, List<Category<Material>> materials, float sceneHeight)
+        private Decimal actualPrice;
+        private Decimal projectBudget;
+        public GenericCategory(Category<FurnitureObject> category, List<Category<Material>> materials, float sceneHeight, 
+            Decimal actualPrice, Decimal projectBudget)
         {
             InitializeComponent();
             this.category = category;
@@ -44,12 +45,13 @@ namespace HouseDesign
             mainTreeViewItem.IsExpanded = true;
             treeViewCategory.Items.Add(mainTreeViewItem);
             PopulateTreeView(category, mainTreeViewItem);
-            this.scene = scene;
             ChosenHeight = 0;
             this.sceneHeight = sceneHeight*0.0025f;
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             this.Title = category.Name;
             currentTradeAllowance = Convert.ToDecimal(category.TradeAllowance);
+            this.actualPrice = actualPrice;
+            this.projectBudget = projectBudget;
         }
 
         public void PopulateTreeView(Category<FurnitureObject> mainCategory, TreeViewItem currentItem)
@@ -200,10 +202,16 @@ namespace HouseDesign
             }
 
             SelectedObject.Price = Convert.ToDecimal(textBlockTotalPrice.Text);
+            if (actualPrice + SelectedObject.Price > projectBudget)
+            {
+                MessageBox.Show("The object can't be added! You are exceeding the budget!");
+                return;
+            }
             SelectedObject.Translate = new Point3d(SelectedObject.Translate.X, ChosenHeight*realHeightScaleFactor*50, SelectedObject.Translate.Z);
             //InitializeSelectedObjectMaterials();
             SelectedObject.SetMaterials(selectedObjectMaterials);
             SelectedObject.MaterialsPrice=Convert.ToDecimal(textBlockMaterialsPrice.Text);
+            
             this.Close();
             
         }

@@ -37,6 +37,11 @@ namespace HouseDesign.Classes
             return this.innerWorldObject.Clone();
         }
 
+        public void SetInnerObjectMaterials(List<WorldObjectMaterial> materials)
+        {
+            this.innerWorldObject.SetMaterials(materials);
+        }
+
         public void AddMaterial(Material material, double surfaceNeeded)
         {
             innerWorldObject.AddMaterial(material, surfaceNeeded);

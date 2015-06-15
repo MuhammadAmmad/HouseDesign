@@ -34,7 +34,6 @@ namespace HouseDesign
         //private WorldObject testObject;
 
         private WorldObject sceneObject;
-        private HouseDesign.Classes.Scene scene;
         private bool isZoomedIn = false;
         private String configurationFileName;
         private Configuration configuration;
@@ -44,8 +43,8 @@ namespace HouseDesign
         private float sceneHeight;
         public event PropertyChangedEventHandler PropertyChanged;
         private String currentProjectName;
-
         private List<Currency> currencies;
+        private Project currentProject;
         public decimal TotalPrice
         {
             get { return (decimal)GetValue(TotalPriceProperty); }
@@ -64,31 +63,14 @@ namespace HouseDesign
         {
             InitializeComponent();
             currencies = CurrencyHelper.GetCurrencies();
-            //Collision collision = new Collision(new Point3d(2, 0, 3), new Point3d(3, -1, 2), new Point3d(2, 0, 0), new Point3d(0, 2, 0), new Point3d(0, 0, 2));
-            //float rez=collision.GetMaxTD(new Point3d(2, 0, 2));
-            //MessageBox.Show(rez + "********");
 
-
-            Importer importer = new Importer();
-            scene = new HouseDesign.Classes.Scene();
-            scene.MainCamera.Translate = new Point3d(0, 500, 0);
-            scene.MainCamera.Rotate = new Point3d(-90, 180, 0);
-            //scene.MainCamera.Translate = new Point3d(80, 540, 560);
-            //scene.MainCamera.Rotate = new Point3d(-40, 180, 0);
-
-
-            //testObject = importer.Import(@"D:\Licenta\HouseDesign\HouseDesign\Exports\bed.fbx");
-            //scene.AddHouseObject(testObject);
-
-            //testObject.Scale = new Point3d(20, 20, 20);
+            currentProject = new Project(new HouseDesign.Classes.Scene());
             
             DispatcherTimer timer = new DispatcherTimer();
             timer.Tick += timer_Tick;
             delta = 1000 / 40;
             timer.Interval = new TimeSpan(0, 0, 0, 0, delta);
             timer.Start();
-
-            //openGLControl.AddHandler(UIElement.MouseLeftButtonDownEvent, new RoutedEventHandler(), true);
 
             configurationFileName = "configuration.config";
             configuration = new Configuration();         
@@ -112,7 +94,7 @@ namespace HouseDesign
             }
 
             CurrencyHelper.SetProjectCurrency(CurrencyHelper.GetDefaultCurrency());
-            //configuration.ClearAllFurnitureObjects();
+            
         }
 
         protected void OnPropertyChanged(string propertyName)
@@ -165,42 +147,43 @@ namespace HouseDesign
             }
         }
 
-        private void SerializeScene(String sceneFileName)
+        private void SerializeProject(String sceneFileName)
         {
+            currentProject.ActualPrice = TotalPrice;
             using (Stream fileStream = new FileStream(sceneFileName, FileMode.Create,
                            FileAccess.Write, FileShare.None))
             {
                 IFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(fileStream, scene);
+                formatter.Serialize(fileStream, currentProject);
             }
         }
 
-        private void DeserializeScene(String sceneFileName)
+        private void DeserializeProject(String sceneFileName)
         {
             using (Stream fileStream = new FileStream(sceneFileName, FileMode.Open,
                            FileAccess.Read, FileShare.Read))
             {
                 IFormatter formatter = new BinaryFormatter();
-                scene = (HouseDesign.Classes.Scene)formatter.Deserialize(fileStream);
+                currentProject = (Project)formatter.Deserialize(fileStream);
             }
         }
         void timer_Tick(object sender, EventArgs e)
         {
             if (Keyboard.IsKeyUp(Key.Up))
             {
-                scene.MainCamera.Translate += new Point3d(0, 0, speed);
+                currentProject.Scene.MainCamera.Translate += new Point3d(0, 0, speed);
             }
             if (Keyboard.IsKeyUp(Key.Down))
             {
-                scene.MainCamera.Translate += new Point3d(0, 0, -speed);
+                currentProject.Scene.MainCamera.Translate += new Point3d(0, 0, -speed);
 
                 if (Keyboard.IsKeyUp(Key.Left))
                 {
-                    scene.MainCamera.Translate += new Point3d(-speed, 0, 0);
+                    currentProject.Scene.MainCamera.Translate += new Point3d(-speed, 0, 0);
                 }
                 if (Keyboard.IsKeyUp(Key.Right))
                 {
-                    scene.MainCamera.Translate += new Point3d(speed, 0, 0);
+                    currentProject.Scene.MainCamera.Translate += new Point3d(speed, 0, 0);
                     
                 }
                 //lblPosition.Content = scene.MainCamera.Translate.X + " " + scene.MainCamera.Translate.Y + " " + scene.MainCamera.Translate.Z + scene.MainCamera.Rotate.Y;
@@ -226,7 +209,7 @@ namespace HouseDesign
             //  Load the identity matrix.
             gl.LoadIdentity();
 
-            scene.Render(gl);
+            currentProject.Scene.Render(gl);
         }
 
         /// <summary>
@@ -275,31 +258,6 @@ namespace HouseDesign
             gl.MatrixMode(OpenGL.GL_MODELVIEW);
         }
 
-        private void menuItemFile_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void menuItemView_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void menuItemHelp_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void menuItemProject_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void menuItemScene_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void menuItemDesign_Click(object sender, RoutedEventArgs e)
         {
             addExtendedMenuItems("Design");
@@ -309,28 +267,19 @@ namespace HouseDesign
 
         private void menuItemNewProject_Click(object sender, RoutedEventArgs e)
         {            
-            NewProject project = new NewProject("New Project");
+            NewProject project = new NewProject("New Project", configuration);
             project.ShowDialog();
-            sceneHeight = project.GetHeight();
-            List<Wall> walls = project.currentHousePlan.GetWalls();
-
-            if(walls.Count>0)
+            currentProject = project.GetCurrentProject();
+            if(currentProject!=null)
             {
                 groupBoxCurrentProject.Visibility = Visibility.Visible;
-
-                for (int i = 0; i < walls.Count; i++)
-                {
-                    WallObject wall = new WallObject(walls[i], sceneHeight);
-                    // wall.InitializeTextures(openGLControl.OpenGL);
-                    scene.AddWall(wall);
-                }
-            }           
+                sceneHeight = currentProject.WallsHeight;
+            }
           
         }
 
         private void menuItemOpenProject_Click(object sender, RoutedEventArgs e)
-        {
-            groupBoxCurrentProject.Visibility = Visibility.Visible;
+        {            
             OpenFileDialog fdlg = new OpenFileDialog();
             fdlg.Title = "Open project";
             fdlg.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\SavedProjects";
@@ -340,12 +289,29 @@ namespace HouseDesign
             if (fdlg.ShowDialog() == true)
             {
                 currentProjectName = fdlg.FileName;
-                DeserializeScene(currentProjectName);
+                DeserializeProject(currentProjectName);
+                if(currentProject.GetConfiguration().Equals(configuration))
+                {
+                    TotalPrice = currentProject.ActualPrice;
+                    groupBoxCurrentProject.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    MessageBox.Show("The project can't be opened!");
+                }
+                
             }
+            
         }
 
         private void menuItemSaveProject_Click(object sender, RoutedEventArgs e)
         {
+            if(currentProject.IsEmpty)
+            {
+                MessageBox.Show("There is no project to save!");
+                return;
+            }
+
             if(currentProjectName==null)
             {
                 SaveFileDialog saveProject = new SaveFileDialog();
@@ -355,17 +321,23 @@ namespace HouseDesign
                 saveProject.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\SavedProjects";
                 if (saveProject.ShowDialog() == true)
                 {
-                    SerializeScene(saveProject.FileName);
+                    SerializeProject(saveProject.FileName);
                 }
             }
             else
             {
-                SerializeScene(currentProjectName);
+                SerializeProject(currentProjectName);
             }
             
         }
         private void menuItemSaveProjectAs_Click(object sender, RoutedEventArgs e)
         {
+            if (currentProject.IsEmpty)
+            {
+                MessageBox.Show("There is no project to save!");
+                return;
+            }
+
             SaveFileDialog saveProject = new SaveFileDialog();
             saveProject.DefaultExt = ".hds";
             saveProject.Filter = "HouseDesign Projects (.hds)|*.hds";
@@ -373,7 +345,7 @@ namespace HouseDesign
             saveProject.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\SavedProjects";
             if (saveProject.ShowDialog() == true)
             {
-                SerializeScene(saveProject.FileName);
+                SerializeProject(saveProject.FileName);
                 currentProjectName = saveProject.FileName;
             }
         }
@@ -385,41 +357,12 @@ namespace HouseDesign
 
         private void menuItemResetHousePlan_Click(object sender, RoutedEventArgs e)
         {
-            scene.ClearWalls();
-            scene.ClearHouseObjects();
-            //menuItemLoadHousePlan.Visibility = Visibility.Visible;
-            MessageBoxResult result=MessageBox.Show("Would you like to load a new house plan?", "Reset house plan", MessageBoxButton.YesNoCancel);
-            switch(result)
-            {
-                case MessageBoxResult.Yes:
-                    {
-                        NewProject project = new NewProject("Load house plan");
-                        project.Show();
-                        float height = project.GetHeight();
-                        List<Wall> walls = project.currentHousePlan.GetWalls();
-
-                        for (int i = 0; i < walls.Count; i++)
-                        {
-                            WallObject wall = new WallObject(walls[i], height);
-                            //wall.InitializeTextures(openGLControl.OpenGL);
-                            scene.AddWall(wall);
-                        }
-
-                        break;
-                    }
-                case MessageBoxResult.No:
-                    {
-                        break;
-                    }
-                case MessageBoxResult.Cancel:
-                    {
-                        break;
-                    }
-            }
+            currentProject.Scene.ClearWalls();
+            currentProject.Scene.ClearHouseObjects();
         }
         private void menuItemResetObjects_Click(object sender, RoutedEventArgs e)
         {
-            scene.ClearHouseObjects();
+            currentProject.Scene.ClearHouseObjects();
         }
 
         private void addExtendedMenuItems(String menuType)
@@ -461,9 +404,9 @@ namespace HouseDesign
         void menuItemDesign_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Category<FurnitureObject> currentCategory = ((ExtendedMenuItem)sender).Tag as Category<FurnitureObject>;
-            GenericCategory wndDesign = new GenericCategory(currentCategory, scene, configuration.Materials, sceneHeight);
+            GenericCategory wndDesign = new GenericCategory(currentCategory, configuration.Materials, sceneHeight, TotalPrice, currentProject.Budget);
             wndDesign.ShowDialog();
-            if(scene.IsEmpty()==false)
+            if (currentProject.Scene.IsEmpty() == false)
             {
                 groupBoxCurrentProject.Visibility = Visibility.Visible;
                 sceneObject = wndDesign.SelectedObject;
@@ -480,8 +423,8 @@ namespace HouseDesign
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Point3d direction=GetClickDirection(e.GetPosition(openGLControl));
-            
-            currentObject= scene.GetCollisionObject(scene.MainCamera.Translate, direction);
+
+            currentObject = currentProject.Scene.GetCollisionObject(currentProject.Scene.MainCamera.Translate, direction);
             if (currentObject != null)
             {
                 Point3d floorPoint = GetFloorClickPoint(e.GetPosition(openGLControl));
@@ -498,16 +441,17 @@ namespace HouseDesign
             if(isZoomedIn==false)
             {
                 Point3d direction = GetClickDirection(e.GetPosition(openGLControl));
-                float alpha = -(scene.MainCamera.Translate.Y) / direction.Y;
-                Point3d destination = new Point3d(scene.MainCamera.Translate.X + direction.X*alpha, 0, scene.MainCamera.Translate.Z + direction.Z * alpha);
-                scene.MainCamera.Translate = destination;
-                scene.MainCamera.Rotate = new Point3d(0, 180, 0);
+                float alpha = -(currentProject.Scene.MainCamera.Translate.Y) / direction.Y;
+                Point3d destination = new Point3d(currentProject.Scene.MainCamera.Translate.X + direction.X * alpha, 0, 
+                    currentProject.Scene.MainCamera.Translate.Z + direction.Z * alpha);
+                currentProject.Scene.MainCamera.Translate = destination;
+                currentProject.Scene.MainCamera.Rotate = new Point3d(0, 180, 0);
                 isZoomedIn = true;
             }
             else
             {
-                scene.MainCamera.Translate = new Point3d(80, 540, 560);
-                scene.MainCamera.Rotate = new Point3d(-40, 180, 0);
+                currentProject.Scene.MainCamera.Translate = new Point3d(80, 540, 560);
+                currentProject.Scene.MainCamera.Rotate = new Point3d(-40, 180, 0);
                 isZoomedIn = false;
             }
             
@@ -519,16 +463,17 @@ namespace HouseDesign
             float d = Convert.ToSingle(height * Math.Sqrt(3) / 2);
             Point3d position = new Point3d(Convert.ToSingle(clickPoint.X), Convert.ToSingle(clickPoint.Y), 0);
             Point3d v = new Point3d(Convert.ToSingle(clickPoint.X - width / 2), Convert.ToSingle(clickPoint.Y - height / 2), 0);
-            Point3d dif = scene.MainCamera.Right * v.X + scene.MainCamera.Top * v.Y;
-            Point3d direction = scene.MainCamera.Forward * d -dif;
+            Point3d dif = currentProject.Scene.MainCamera.Right * v.X + currentProject.Scene.MainCamera.Top * v.Y;
+            Point3d direction = currentProject.Scene.MainCamera.Forward * d - dif;
             return direction;
         }
 
         private Point3d GetFloorClickPoint(Point clickPoint)
         {
             Point3d direction = GetClickDirection(clickPoint);
-            float alpha = -(scene.MainCamera.Translate.Y) / direction.Y;
-            Point3d destination = new Point3d(scene.MainCamera.Translate.X + direction.X * alpha, 0, scene.MainCamera.Translate.Z + direction.Z * alpha);
+            float alpha = -(currentProject.Scene.MainCamera.Translate.Y) / direction.Y;
+            Point3d destination = new Point3d(currentProject.Scene.MainCamera.Translate.X + direction.X * alpha, 0, 
+                currentProject.Scene.MainCamera.Translate.Z + direction.Z * alpha);
 
 
             return destination;
@@ -545,7 +490,7 @@ namespace HouseDesign
                 sceneObject.Translate = destination;
                 sceneObject.Rotate = new Point3d(0, 180, 0);
                 sceneObject.Scale = new Point3d(20, 20, 20);
-                scene.AddHouseObject(sceneObject);
+                currentProject.Scene.AddHouseObject(sceneObject);
                 TotalPrice += Math.Round(sceneObject.Price, 2);
                 //lblTotalPrice.Content = "Total price is: " + TotalPrice + " " + currency.ToString();
                 sceneObject = null;
@@ -568,11 +513,6 @@ namespace HouseDesign
                 SerializeConfiguration();
                 addExtendedMenuItems("Design");
             }
-
-            //if(setupConfiguration.IsEditedCurrency)
-            //{
-            //    scene.ConvertHouseObjectPrices(CurrencyHelper.GetLastCurrency(), CurrencyHelper.GetCurrentCurrency());
-            //}
         }
 
         private void menuItemResetConfiguration_Click(object sender, RoutedEventArgs e)
@@ -618,7 +558,7 @@ namespace HouseDesign
                 {
                     if (difference.X > 0)
                         angle = -angle;
-                    scene.MainCamera.RotateAroundPoint(new Point3d(0, 0, 0), angle);
+                    currentProject.Scene.MainCamera.RotateAroundPoint(new Point3d(0, 0, 0), angle);
                 }
 
             }
@@ -632,7 +572,7 @@ namespace HouseDesign
 
                     Point3d d = currentObject.Translate - lastValidObjectPosition;
                     float td;
-                    isCollision=scene.CheckCurrentObjectCollisions(currentObject, d, out td);
+                    isCollision = currentProject.Scene.CheckCurrentObjectCollisions(currentObject, d, out td);
                     
                     if(isCollision)
                     {
@@ -666,7 +606,7 @@ namespace HouseDesign
             {
                 zoom = 1.2f;
             }
-            scene.MainCamera.Translate = (scene.MainCamera.Translate-center) * zoom+center;
+            currentProject.Scene.MainCamera.Translate = (currentProject.Scene.MainCamera.Translate - center) * zoom + center;
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -688,7 +628,7 @@ namespace HouseDesign
                     if (result == MessageBoxResult.Yes)
                     {
                         TotalPrice -= currentObject.Price;
-                        scene.DeleteHouseObject(currentObject);
+                        currentProject.Scene.DeleteHouseObject(currentObject);
                         //lblTotalPrice.Content = "Total price is: " + totalPrice + " " + currency.ToString();
                         currentObject = null;
 
@@ -731,14 +671,25 @@ namespace HouseDesign
 
         private void menuItemUpView_Click(object sender, RoutedEventArgs e)
         {
-            scene.MainCamera.Translate = new Point3d(0, 500, 0);
-            scene.MainCamera.Rotate = new Point3d(-90, 180, 0);
+            currentProject.Scene.MainCamera.Translate = new Point3d(0, 500, 0);
+            currentProject.Scene.MainCamera.Rotate = new Point3d(-90, 180, 0);
         }
 
         private void menuItemReciept_Click(object sender, RoutedEventArgs e)
         {
-            Receipt receipt = new Receipt(scene.GetSortedHouseObjects());
+            Receipt receipt = new Receipt(currentProject.Scene.GetSortedHouseObjects());
             receipt.ShowDialog();
+        }
+
+        private void menuItemAbout_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void menuItemEditProperties_Click(object sender, RoutedEventArgs e)
+        {
+            EditProperties editProperties = new EditProperties(currentProject);
+            editProperties.ShowDialog();
         }
                 
 

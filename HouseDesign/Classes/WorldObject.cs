@@ -655,7 +655,7 @@ namespace HouseDesign.Classes
         public void SetMaterials(List<WorldObjectMaterial> materials)
         {
             this.materials.Clear();
-            this.materials = materials;
+            this.materials.AddRange( materials);
         }
 
         public WorldObject Clone()

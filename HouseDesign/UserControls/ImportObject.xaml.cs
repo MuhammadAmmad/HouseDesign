@@ -215,7 +215,7 @@ namespace HouseDesign.UserControls
                 importedObject.Name = textBoxName.Text;
                 importedObject.Description = textBoxDescription.Text;
                 importedObject.InitialPrice = Convert.ToDecimal(textBoxInitialPrice.Text);
-                importedObject.GetInnerObject().SetMaterials(currentObjectMaterials);
+                importedObject.SetInnerObjectMaterials(currentObjectMaterials);
                 ClearAllFields();
                 if (this.StatusUpdated != null)
                 {

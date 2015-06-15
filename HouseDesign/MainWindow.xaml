@@ -20,29 +20,31 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Vertical" Grid.Row="0">
             <Menu>
-                <MenuItem Name="menuItemFile" Header="File" Click="menuItemFile_Click">
+                <MenuItem Name="menuItemFile" Header="File">
                     <MenuItem Name="menuItemNewProject" Header="New Project" Click="menuItemNewProject_Click"></MenuItem>
                     <MenuItem Name="menuItemOpenProject" Header="Open Project" Click="menuItemOpenProject_Click"></MenuItem>
                     <MenuItem Name="menuItemSaveProject" Header="Save Project" Click="menuItemSaveProject_Click"></MenuItem>
                     <MenuItem Name="menuItemSaveProjectAs" Header="Save Project As" Click="menuItemSaveProjectAs_Click"></MenuItem>
                     <MenuItem Name="menuItemExit" Header="Exit" Click="menuItemExit_Click"></MenuItem>
                 </MenuItem>                
-                <MenuItem Name="menuItemProject" Header="Project" Click="menuItemProject_Click">
+                <MenuItem Name="menuItemProject" Header="Project">
                     <MenuItem Name="menuItemResetHousePlan" Header="Reset House plan" Click="menuItemResetHousePlan_Click"></MenuItem>
                     <MenuItem Name="menuItemResetObjects" Header="Reset Objects" Click="menuItemResetObjects_Click"></MenuItem>
                     <MenuItem Name="menuItemReciept" Header="Receipt" Click="menuItemReciept_Click"></MenuItem>
+                    <MenuItem Name="menuItemEditProperties" Header="Edit Properties" Click="menuItemEditProperties_Click"></MenuItem>
                 </MenuItem>
-                <MenuItem Name="menutItemConfiguration" Header="Configuration" Click="menutItemConfiguration_Click">
+                <MenuItem Name="menutItemConfiguration" Header="Configuration">
                     <MenuItem Name="menuItemEditConfiguration" Header="Edit Configuration" Click="menuItemEditConfiguration_Click"></MenuItem>
                     <MenuItem Name="menuItemResetConfiguration" Header="Reset Configuration" Click="menuItemResetConfiguration_Click"></MenuItem>
                 </MenuItem>
                 <MenuItem Name="menuItemDesign" Header="Design" Click="menuItemDesign_Click"></MenuItem>
-                <MenuItem Name="menuItemScene" Header="Scene" Click="menuItemScene_Click">
+                <MenuItem Name="menuItemScene" Header="Scene">
                     <MenuItem Name="menuItemScreenshot" Header="Screenshot" Click="menuItemScreenshot_Click"></MenuItem>
                     <MenuItem Name="menuItemUpView" Header="Up View" Click="menuItemUpView_Click"></MenuItem>
                 </MenuItem>
-                <MenuItem Name="menuItemView" Header="View" Click="menuItemView_Click"></MenuItem>
-                <MenuItem Name="menuItemHelp" Header="Help" Click="menuItemHelp_Click"></MenuItem>
+                <MenuItem Name="menuItemHelp" Header="Help">
+                    <MenuItem Name="menuItemAbout" Header="About" Click="menuItemAbout_Click"></MenuItem>
+                </MenuItem>
            </Menu>
         </StackPanel>
         <GroupBox Name="groupBoxExtendedMenu" Visibility="Collapsed" Height="65" Grid.Row="1">
@@ -61,10 +63,6 @@
             DrawFPS="True" RenderContextType="FBO" FrameRate="15" MouseDown="openGLControl_MouseLeftButtonDown"/>
             </GroupBox>
             <Label Name="lblTotalPrice" Foreground="White" FontSize="18" FontWeight="ExtraBold" Content="{Binding ElementName=window, Path=TotalPrice, Converter={StaticResource ResourceKey=addMessageConverter}}" ></Label>
-        </Grid>        
-
-        <!--<Label Grid.Row="2" Name="lblPosition" Foreground="White"></Label>-->
-        
-
+        </Grid> 
     </Grid>
 </Window>

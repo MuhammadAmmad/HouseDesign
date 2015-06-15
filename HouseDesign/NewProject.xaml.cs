@@ -27,9 +27,10 @@ namespace HouseDesign
     {
         public HousePlan currentHousePlan { get; set; }
         private List<HousePlan> housePlans;
-        private float height;
         private String housePlansDirectory;
-        public NewProject(String title)
+        private Project currentProject;
+        private Configuration configuration;
+        public NewProject(String title, Configuration configuration)
         {
             InitializeComponent();
             this.Title = title;
@@ -37,7 +38,9 @@ namespace HouseDesign
             housePlans = new List<HousePlan>();
             InitializeHousePlans();
             currentHousePlan = new HousePlan("Current");
-            InitializeComboBoxCurrentCurrency();
+            this.configuration = configuration;
+            currentProject = new Project(new Scene());
+            
         }
 
         public void InitializeHousePlans()
@@ -62,36 +65,6 @@ namespace HouseDesign
                 Console.WriteLine("The process failed: {0}", e.ToString());
             }
         }
-        private void btnOK_Click(object sender, RoutedEventArgs e)
-        {
-            if(textBoxWallsHeight.Text.Length==0)
-            {
-                MessageBox.Show("Type a value for height!");
-                return;
-            }
-            else
-            {
-                float h = Convert.ToSingle(textBoxWallsHeight.Text);
-                if(comboBoxMeasurementUnits.Text=="m")
-                {
-                    h *= 1000;
-                }
-                if(comboBoxMeasurementUnits.Text=="cm")
-                {
-                    h *= 10;
-                }
-                this.height = h;
-            }
-
-            if(this.currentHousePlan.GetWalls().Count==0)
-            {
-                MessageBox.Show("Choose house plan to load!");
-                return;
-            }
-
-            this.Close();
-        }
-
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
@@ -181,59 +154,68 @@ namespace HouseDesign
 
                 }
             }
-
-            groupBoxWallsHeight.Visibility = Visibility.Visible;
-        }        
-
-        private void btnLoadPlan_Click(object sender, RoutedEventArgs e)
-        {           
-            HousePlanControl currentHousePlanControl = listViewHousePlans.SelectedItem as HousePlanControl;
-            if(currentHousePlanControl==null)
-            {
-                MessageBox.Show("Select a house plan!");
-                return;
-            }
-            currentHousePlan =currentHousePlanControl.GetCurrentHousePlan();
-            groupBoxWallsHeight.Visibility = Visibility.Visible;
         }
 
-        public float GetHeight()
+        private void btnCreateProject_Click(object sender, RoutedEventArgs e)
         {
-            return this.height;
+            if(currentHousePlan.GetWalls().Count==0)
+            {
+                HousePlanControl currentHousePlanControl = listViewHousePlans.SelectedItem as HousePlanControl;
+                if (currentHousePlanControl == null)
+                {
+                    MessageBox.Show("Select a house plan!");
+                    return;
+                }
+                
+                if(projectProperties.CheckEmptyFields()==true)
+                {
+                    MessageBox.Show("Complete mandatory fields!");
+                }
+                else
+                {
+                    currentHousePlan = currentHousePlanControl.GetCurrentHousePlan();
+                    List<Wall> walls = currentHousePlan.GetWalls();
+                    Project.UnitOfMeasurement measurementUnit = Project.UnitOfMeasurement.mm;
+                    float wallsHeight = Convert.ToSingle(projectProperties.textBoxWallsHeight.Text);
+
+                    if (projectProperties.comboBoxMeasurementUnits.Text == Project.UnitOfMeasurement.m.ToString())
+                    {
+                        wallsHeight *= 1000;
+                        measurementUnit = Project.UnitOfMeasurement.m;
+                    }
+                    if (projectProperties.comboBoxMeasurementUnits.Text == Project.UnitOfMeasurement.cm.ToString())
+                    {
+                        wallsHeight *= 10;
+                        measurementUnit = Project.UnitOfMeasurement.cm;
+                    }
+                    Client client=new Client(projectProperties.textBoxClientName.Text, Convert.ToInt64(projectProperties.textBoxTelephoneNumber.Text),
+                        projectProperties.textBoxEmailAddress.Text);
+                    Decimal budget=Convert.ToDecimal(projectProperties.textBoxBudget.Text);
+                    String notes=projectProperties.textBoxNotes.Text;
+                    Scene scene=new Scene();
+                    scene.MainCamera.Translate = new Point3d(0, 500, 0);
+                    scene.MainCamera.Rotate = new Point3d(-90, 180, 0);
+                    for (int i = 0; i < walls.Count; i++)
+                    {
+                        WallObject wall = new WallObject(walls[i], wallsHeight);
+                        scene.AddWall(wall);
+                    }
+                    currentProject = new Project(client, scene, configuration, CurrencyHelper.GetProjectCurrency(), wallsHeight, budget, 
+                        notes, measurementUnit);
+
+                    this.Close();
+                }               
+            }            
+        }
+
+        public Project GetCurrentProject()
+        {
+            return this.currentProject;
         }
 
         private void listViewHousePlans_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
-        }
 
-        private void btnSetCurrency_Click(object sender, RoutedEventArgs e)
-        {
-            comboBoxCurrencies.Visibility = Visibility.Visible;
-        }
-
-        private void comboBoxCurrencies_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ComboBoxItem currentItem = comboBoxCurrencies.SelectedItem as ComboBoxItem;
-            if (currentItem.Content !=null)
-            {
-                Currency.CurrencyName currencyName = (Currency.CurrencyName)Enum.Parse(typeof(Currency.CurrencyName), currentItem.Content.ToString());
-                if(currencyName==Currency.CurrencyName.RON)
-                {
-                    CurrencyHelper.SetProjectCurrency(CurrencyHelper.GetDefaultCurrency());
-                }
-                else
-                {
-                    CurrencyHelper.SetProjectCurrency(CurrencyHelper.GetCurrencyByName(currencyName));
-                }
-                
-            }            
-        }
-
-        private void InitializeComboBoxCurrentCurrency()
-        {
-
-            comboBoxCurrencies.SelectedValue = CurrencyHelper.GetCurrentCurrency().Name.ToString();
         }
     }
 }

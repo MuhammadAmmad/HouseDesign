@@ -86,6 +86,21 @@ namespace HouseDesign.Classes
                 ClearAllFurnitureObjectItems(category.SubCategories[i]);
             }
         }
+
+        //TO BE BETTER IMPLEMENTED
+        public bool Equals(Configuration conf)
+        {
+            if(this.CurrentCurrency.Name!=conf.CurrentCurrency.Name || this.IsEmpty!=conf.IsEmpty)
+            {
+                return false;
+            }
+            if(this.Materials.Count!=conf.Materials.Count || this.Categories.Count!=conf.Categories.Count)
+            {
+                return false;
+            }
+
+            return true;
+        }
         
     }
 }

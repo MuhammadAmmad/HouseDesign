@@ -67,6 +67,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\Emgu.Util.dll</HintPath>
     </Reference>
+    <Reference Include="itextsharp, Version=5.5.6.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="SharpGL">
       <HintPath>..\packages\SharpGLCore.2.3.0.1\lib\net40\SharpGL.dll</HintPath>
     </Reference>
@@ -101,6 +105,7 @@
     <Compile Include="Classes\BoundingBox.cs" />
     <Compile Include="Classes\Camera.cs" />
     <Compile Include="Classes\Category.cs" />
+    <Compile Include="Classes\Client.cs" />
     <Compile Include="Classes\Collision.cs" />
     <Compile Include="Classes\Configuration.cs" />
     <Compile Include="Classes\Currency.cs" />
@@ -110,12 +115,16 @@
     <Compile Include="Classes\GLHolder.cs" />
     <Compile Include="Classes\HousePlan.cs" />
     <Compile Include="Classes\Material.cs" />
+    <Compile Include="Classes\Project.cs" />
     <Compile Include="Classes\Scene.cs" />
     <Compile Include="Classes\StoredObject.cs" />
     <Compile Include="Classes\Wall.cs" />
     <Compile Include="Classes\WallObject.cs" />
     <Compile Include="Classes\WorldObjectMaterial.cs" />
     <Compile Include="Converters\AddMessageConverter.cs" />
+    <Compile Include="EditProperties.xaml.cs">
+      <DependentUpon>EditProperties.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GenericCategory.xaml.cs">
       <DependentUpon>GenericCategory.xaml</DependentUpon>
     </Compile>
@@ -180,6 +189,13 @@
     <Compile Include="UserControls\MaterialUserControl.xaml.cs">
       <DependentUpon>MaterialUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ProjectPropertiesUserControl.xaml.cs">
+      <DependentUpon>ProjectPropertiesUserControl.xaml</DependentUpon>
+    </Compile>
+    <Page Include="EditProperties.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GenericCategory.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -267,6 +283,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\MaterialUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ProjectPropertiesUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
