@@ -678,7 +678,7 @@ namespace HouseDesign
 
         private void menuItemReciept_Click(object sender, RoutedEventArgs e)
         {
-            Receipt receipt = new Receipt(currentProject.Scene.GetSortedHouseObjects());
+            Receipt receipt = new Receipt(currentProject.Scene.GetSortedHouseObjects(), configuration);
             receipt.ShowDialog();
         }
 
@@ -691,6 +691,26 @@ namespace HouseDesign
         {
             EditProperties editProperties = new EditProperties(currentProject);
             editProperties.ShowDialog();
+        }
+
+        private void window_Closed(object sender, EventArgs e)
+        {
+            if(currentProject.Scene.IsEmpty()==false)
+            {
+                MessageBoxResult result = MessageBox.Show("Do you want to save the current project?", "Saving current project", MessageBoxButton.YesNoCancel);
+                if (result == MessageBoxResult.Yes)
+                {
+                    if (currentProjectName != null)
+                    {
+                        SerializeProject(currentProjectName);
+                    }
+                    else
+                    {
+                        menuItemSaveProjectAs_Click(sender, new RoutedEventArgs());
+                    }
+                }
+            }
+            
         }
                 
 

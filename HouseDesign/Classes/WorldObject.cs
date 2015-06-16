@@ -425,7 +425,7 @@ namespace HouseDesign.Classes
             return area;
         }
 
-        public double getTotalAreaPerTexture(int textureIndex)
+        public double GetTotalAreaPerTexture(int textureIndex)
         {
             double area = 0;
             for(int i=0;i<triangles[textureIndex].Count;i++)
@@ -436,6 +436,12 @@ namespace HouseDesign.Classes
                 area += GetArea(a, b, c);
             }
             return area;
+        }
+
+        public double GetTotalAreaPerTextureByPath(String texturePath)
+        {
+            int textureIndex=textures.IndexOf(texturePath);
+            return GetTotalAreaPerTexture(textureIndex);
         }
 
         public List<Collision> CheckCollision(Point3d point, Point3d direction, bool isObjectCollision)

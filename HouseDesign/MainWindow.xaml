@@ -7,7 +7,7 @@
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
         MouseWheel="Window_MouseWheel" KeyDown="Window_KeyDown"
         MouseDown="Window_MouseDown"
-        Name="window"
+        Name="window" Closed="window_Closed"
         MouseRightButtonDown="Window_MouseRightButtonDown" MouseDoubleClick="Window_MouseDoubleClick" MouseUp="Window_MouseUp" MouseMove="Window_MouseMove">
     <Window.Resources>
         <converter:AddMessageConverter Message="Total price is {0}" x:Key="addMessageConverter"></converter:AddMessageConverter>

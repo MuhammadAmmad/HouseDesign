@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" Height="300" Width="400">
+             mc:Ignorable="d" Height="400" Width="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
@@ -11,6 +11,7 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
         </Grid.RowDefinitions>   
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -26,5 +27,13 @@
         <TextBox Grid.Row="3" Grid.Column="1" Name="textBoxEmailAddress" Width="200" Margin="10"></TextBox>
         <Label Grid.Row="4" Grid.Column="0" Margin="10">Website:</Label>
         <TextBox Grid.Row="4" Grid.Column="1" Name="textBoxWebsite" Width="200" Margin="10"></TextBox>
+        <Label Grid.Row="5" Grid.Column="0" Margin="10" VerticalAlignment="Center">Logo:</Label>
+        <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="1" Margin="10" HorizontalAlignment="Center">
+            <GroupBox Name="groupBoxLogo" Width="100" Height="100" Margin="5">
+                <Image Name="imgLogo" Width="100" Height="100"></Image>
+            </GroupBox>
+            <Button Name="btnLoadLogo" Content="Load" Width="80" Height="30" Margin="10" Click="btnLoadLogo_Click"></Button>
+            
+        </StackPanel>        
     </Grid>
 </UserControl>

@@ -262,31 +262,51 @@ namespace HouseDesign.UserControls
             currentObjectMaterials.Clear();
             listViewMaterials.Items.Add(new CustomizeHeader("NAME", "IMAGE", "PRICE/M²", "SURFACE", "TOTAL", "IMPORT"));
 
-            List<String> textures=currentObject.GetTextures();
-            materialsPrice = 0;
-            for(int i=0;i<textures.Count;i++)
+            if(currentObject.GetMaterials().Count>0)
             {
-                Material material = new Material();
-                material = GenericCategory.GetMaterialByImagePath(materials, textures[i]);
-                double surfaceNeeded = currentObject.getTotalAreaPerTexture(i);
-                
-                CustomizeMaterial customizeMaterial;
-                if(material!=null)
+                currentObjectMaterials.AddRange(currentObject.GetMaterials());
+                for(int i=0;i<currentObjectMaterials.Count;i++)
                 {
+                    Material material = currentObjectMaterials[i].Material;
+                    double surfaceNeeded = currentObject.GetTotalAreaPerTexture(i);
                     materialsPrice += Convert.ToDecimal(surfaceNeeded) * material.Price;
-                    customizeMaterial = new CustomizeMaterial(i, material, surfaceNeeded, false, true);
-                    currentObjectMaterials.Add(new WorldObjectMaterial(material, surfaceNeeded));
-                    
-                }
-                else
-                {
-                    customizeMaterial = new CustomizeMaterial(i, new Material("", textures[i], 0), surfaceNeeded, true, true);
-                }
+                    CustomizeMaterial customizeMaterial = new CustomizeMaterial(i, material, surfaceNeeded, false, true);
 
-                customizeMaterial.MouseLeftButtonDown+=customizeMaterial_MouseLeftButtonDown;
-                customizeMaterial.StatusUpdated+=customizeMaterial_StatusUpdated;
-                listViewMaterials.Items.Add(customizeMaterial);
+                    customizeMaterial.MouseLeftButtonDown += customizeMaterial_MouseLeftButtonDown;
+                    customizeMaterial.StatusUpdated += customizeMaterial_StatusUpdated;
+                    listViewMaterials.Items.Add(customizeMaterial);
+                }
             }
+            else
+            {
+                List<String> textures = currentObject.GetTextures();
+                materialsPrice = 0;
+                for (int i = 0; i < textures.Count; i++)
+                {
+                    Material material = new Material();
+                    material = GenericCategory.GetMaterialByImagePath(materials, textures[i]);
+                    double surfaceNeeded = currentObject.GetTotalAreaPerTexture(i);
+
+                    CustomizeMaterial customizeMaterial;
+                    if (material != null)
+                    {
+                        materialsPrice += Convert.ToDecimal(surfaceNeeded) * material.Price;
+                        customizeMaterial = new CustomizeMaterial(i, material, surfaceNeeded, false, true);
+                        currentObjectMaterials.Add(new WorldObjectMaterial(material, surfaceNeeded));
+
+                    }
+                    else
+                    {
+                        customizeMaterial = new CustomizeMaterial(i, new Material("", textures[i], 0), surfaceNeeded, true, true);
+                    }
+
+                    customizeMaterial.MouseLeftButtonDown += customizeMaterial_MouseLeftButtonDown;
+                    customizeMaterial.StatusUpdated += customizeMaterial_StatusUpdated;
+                    listViewMaterials.Items.Add(customizeMaterial);
+                }
+            }
+
+            
 
             Decimal totalPrice = materialsPrice + importedObject.InitialPrice + 
                 Convert.ToDecimal(currentTradeAllowance) * (materialsPrice + importedObject.InitialPrice)/100;
@@ -312,10 +332,19 @@ namespace HouseDesign.UserControls
             genericMaterial.StatusUpdated += genericMaterial_StatusUpdated;
             genericMaterial.ShowDialog();
             Material currentMaterial = genericMaterial.GetCurrentMaterial();
-            if(GenericCategory.GetMaterialByImagePath(materials, oldMaterial.FullPath)!=null)
+            if(GenericCategory.GetMaterialByImagePath(materials, currentMaterial.FullPath)!=null)
             {
                 int i = GetIndexOfMaterial(oldMaterial);
-                currentObjectMaterials[i] = new WorldObjectMaterial(currentMaterial, currentObjectMaterials[i].SurfaceNeeded);
+                if(i==-1)
+                {
+                    i=currentObjectMaterials.Count;
+                    currentObjectMaterials.Add(new WorldObjectMaterial(currentMaterial, currentObject.GetTotalAreaPerTextureByPath(currentMaterial.FullPath)));
+                }
+                else
+                {
+                    currentObjectMaterials[i] = new WorldObjectMaterial(currentMaterial, currentObjectMaterials[i].SurfaceNeeded);
+                }
+                
             }
             importedObject.Materials.Add(currentMaterial);
             InitializeMaterials();

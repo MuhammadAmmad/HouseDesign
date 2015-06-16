@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,6 +34,7 @@ namespace HouseDesign.UserControls
             textBoxTelephoneNumber.IsReadOnly = true;
             textBoxEmailAddress.IsReadOnly = true;
             textBoxWebsite.IsReadOnly = true;
+            btnLoadLogo.IsEnabled = false;
         }
 
         public void UnsetReadOnlyFields()
@@ -42,6 +44,25 @@ namespace HouseDesign.UserControls
             textBoxTelephoneNumber.IsReadOnly = false;
             textBoxEmailAddress.IsReadOnly = false;
             textBoxWebsite.IsReadOnly = false;
+            btnLoadLogo.IsEnabled = true;
+        }
+
+        private void btnLoadLogo_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Title = "Load logo";
+            dlg.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\Icons";
+            dlg.Filter = "Image files (*.png;*.jpeg;*.jpg;*.bmp)|*.png;*.jpeg;*.jpg;*.bmp";
+            dlg.FilterIndex = 2;
+            dlg.RestoreDirectory = true;
+            if (dlg.ShowDialog() == true)
+            {
+                groupBoxLogo.Visibility = Visibility.Visible;
+                string fullPath = System.IO.Path.GetFullPath(dlg.FileName);
+                imgLogo.Source = new BitmapImage(new Uri(fullPath));
+                imgLogo.Tag = fullPath;
+
+            }
         }
     }
 }

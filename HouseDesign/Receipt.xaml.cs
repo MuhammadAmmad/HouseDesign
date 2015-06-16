@@ -27,7 +27,8 @@ namespace HouseDesign
         private List<WorldObject> houseObjects;
         private Currency lastCurrency;
         private Currency currentCurrency;
-        public Receipt(List<WorldObject> houseObjects)
+        private Configuration configuration;
+        public Receipt(List<WorldObject> houseObjects, Configuration configuration)
         {
             InitializeComponent();
             this.houseObjects = houseObjects;
@@ -35,6 +36,7 @@ namespace HouseDesign
             lastCurrency = CurrencyHelper.GetProjectCurrency();
             InitializeTreeViewReceipt();
             InitializeComboBoxCurrentCurrency();
+            this.configuration = configuration;
         }
 
         private void InitializeTreeViewReceipt()
@@ -226,6 +228,19 @@ namespace HouseDesign
                 doc.AddTitle("RECEIPT");
                 PdfWriter writer = PdfWriter.GetInstance(doc, fs);
                 doc.Open();
+                iTextSharp.text.Paragraph para = new iTextSharp.text.Paragraph("RECEIPT");
+                para.Alignment = Element.ALIGN_CENTER;
+                doc.Add(para);
+                para = new iTextSharp.text.Paragraph();
+                para.Add(configuration.CurrentCompany.CompanyName + '\n');
+                para.Add(configuration.CurrentCompany.Address + '\n');
+                para.Add(configuration.CurrentCompany.TelephoneNumber.ToString() + '\n');
+                para.Add(configuration.CurrentCompany.EmailAddress + '\n');
+                para.Add(configuration.CurrentCompany.Website + '\n');
+                // Setting paragraph's text alignment using iTextSharp.text.Element class
+                para.Alignment = Element.ALIGN_RIGHT;
+                // Adding this 'para' to the Document object
+                doc.Add(para);
                 doc.Add(new iTextSharp.text.Paragraph("Hello World"));
                 doc.Close();
             }

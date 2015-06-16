@@ -478,7 +478,7 @@ namespace HouseDesign
                     currentCategory.StoredObjects.Add(importedMaterial);
                     SaveMaterials();
                 }
-                //(sender as ImportMaterial).SetImportedMaterial(null);
+                (sender as ImportMaterial).SetImportedMaterial(new Material());
             } 
         }
         //void MaterialimportObject_StatusUpdated(object sender, EventArgs e)
@@ -897,6 +897,7 @@ namespace HouseDesign
                 companyInformation.textBoxEmailAddress.Text = configuration.CurrentCompany.EmailAddress;
                 companyInformation.textBoxWebsite.Text = configuration.CurrentCompany.Website;
                 companyInformation.SetReadOnlyFields();
+                companyInformation.imgLogo.Source = new BitmapImage(new Uri(configuration.CurrentCompany.LogoPath));
             }
             else
             {
@@ -916,12 +917,13 @@ namespace HouseDesign
                     String email=companyInformation.textBoxEmailAddress.Text;
                     String website=companyInformation.textBoxWebsite.Text;
                     if(companyName.Length==0 || address.Length==0 || companyInformation.textBoxTelephoneNumber.Text.Length==0 
-                        || email.Length==0 || website.Length==0)
+                        || email.Length==0 || website.Length==0 || companyInformation.imgLogo.Tag==null)
                     {
                         MessageBox.Show("Complete all fields!");
                         return;
                     }
-                    Company company = new Company(companyName, address, telephoneNumber, email, website);
+                    Company company = new Company(companyName, address, telephoneNumber, email, website, 
+                        companyInformation.imgLogo.Tag.ToString());
                     configuration.CurrentCompany = company;
                 }
                 else
@@ -931,6 +933,7 @@ namespace HouseDesign
                     configuration.CurrentCompany.TelephoneNumber = Convert.ToInt64(companyInformation.textBoxTelephoneNumber.Text);
                     configuration.CurrentCompany.EmailAddress = companyInformation.textBoxEmailAddress.Text;
                     configuration.CurrentCompany.Website = companyInformation.textBoxWebsite.Text;
+                    configuration.CurrentCompany.LogoPath = companyInformation.imgLogo.Tag.ToString();
                 }
                 
                
