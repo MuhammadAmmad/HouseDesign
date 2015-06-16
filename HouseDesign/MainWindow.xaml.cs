@@ -88,6 +88,7 @@ namespace HouseDesign
             }
             else
             {
+                MessageBox.Show("Welcome to HouseDesign! Please setup your configuration!");
                 CurrencyHelper.SetCurrentCurrency(CurrencyHelper.GetDefaultCurrency());
                 SetupConfiguration setupConfiguration = new SetupConfiguration("Setup configuration", configuration);
                 setupConfiguration.ShowDialog();

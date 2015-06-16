@@ -1,7 +1,11 @@
 ﻿using HouseDesign.Classes;
 using HouseDesign.UserControls;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -206,6 +210,25 @@ namespace HouseDesign
         {
 
             comboBoxCurrencies.SelectedValue = currentCurrency.Name.ToString();
+        }
+
+        private void btnExport_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveProject = new SaveFileDialog();
+            saveProject.Filter = "PDF files (.pdf)|*.pdf";
+            saveProject.Title = "Export Receipt";
+            saveProject.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\Receipts";
+            if (saveProject.ShowDialog() == true)
+            {
+                String fileName = saveProject.FileName;
+                FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None);
+                Document doc = new Document(PageSize.A4, 36, 72, 108, 180);
+                doc.AddTitle("RECEIPT");
+                PdfWriter writer = PdfWriter.GetInstance(doc, fs);
+                doc.Open();
+                doc.Add(new iTextSharp.text.Paragraph("Hello World"));
+                doc.Close();
+            }
         }
     }
 }

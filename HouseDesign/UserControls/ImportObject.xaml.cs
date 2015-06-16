@@ -269,11 +269,11 @@ namespace HouseDesign.UserControls
                 Material material = new Material();
                 material = GenericCategory.GetMaterialByImagePath(materials, textures[i]);
                 double surfaceNeeded = currentObject.getTotalAreaPerTexture(i);
-                materialsPrice += Convert.ToDecimal(surfaceNeeded) * material.Price;
+                
                 CustomizeMaterial customizeMaterial;
                 if(material!=null)
                 {
-                    
+                    materialsPrice += Convert.ToDecimal(surfaceNeeded) * material.Price;
                     customizeMaterial = new CustomizeMaterial(i, material, surfaceNeeded, false, true);
                     currentObjectMaterials.Add(new WorldObjectMaterial(material, surfaceNeeded));
                     

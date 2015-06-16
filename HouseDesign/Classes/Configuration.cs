@@ -16,10 +16,13 @@ namespace HouseDesign.Classes
 
         public Currency CurrentCurrency { get; set; }
 
+        public Company CurrentCompany { get; set; }
+
         public Configuration()
         {
             Categories = new List<Category<FurnitureObject>>();
             Materials = new List<Category<Material>>();
+            CurrentCompany = new Company();
         }
 
         public void Reset()

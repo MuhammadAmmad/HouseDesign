@@ -15,8 +15,8 @@
             <TabItem Header="Categories">
                 <Grid >
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="2*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <TreeView Name="treeViewCategories" SelectedItemChanged="treeViewCategories_SelectedItemChanged" Grid.Column="0" 
                               TreeViewItem.Selected="treeViewCategories_Selected" MouseLeftButtonDown="treeView_MouseLeftButtonDown">
@@ -39,10 +39,10 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Currency">
-                <Grid >
+                <Grid Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="100"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="400"></RowDefinition>
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" HorizontalAlignment="Center">
                         <StackPanel Orientation="Horizontal">
@@ -51,11 +51,23 @@
                         </StackPanel>
                         <Button Name="btnChangeCurrency" Content="Change currency" Click="btnChangeCurrency_Click" Width="100"></Button>
                     </StackPanel>
-                    <GroupBox Name="groupBoxCurrencies" Width="600" Margin="10" Visibility="Collapsed" Grid.Row="1">
+                    <GroupBox Name="groupBoxCurrencies" Width="650" Margin="10" Visibility="Collapsed" Grid.Row="1">
                         <ListView Name="listViewCurrencies" SelectionChanged="listViewCurrencies_SelectionChanged"></ListView>
                     </GroupBox>
                     
                 </Grid>
+            </TabItem>
+            <TabItem Header="Company">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="40"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <GroupBox Grid.Row="0" Name="groupBoxCompany" Header="Company Information" Width="400">
+                        <ctrl:CompanyUserControl x:Name="companyInformation"></ctrl:CompanyUserControl>
+                    </GroupBox>
+                    <Button Grid.Row="1" Name="btnOK" Content="OK" HorizontalAlignment="Right" Margin="10" Click="btnOK_Click" Width="50"></Button>
+                </Grid>                
             </TabItem>
         </TabControl>
     </Grid>

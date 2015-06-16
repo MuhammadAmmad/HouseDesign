@@ -61,7 +61,10 @@ namespace HouseDesign
             InitializeTreeViewCategories();
             InitializeTreeViewMaterials();
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
-            //textBlockCurrentCurrency.Text = configuration.CurrentCurrency.Name.ToString();
+            if(configuration.CurrentCompany==null)
+            {
+                companyInformation.isEdited = true;
+            }
 
 
         }
@@ -225,6 +228,16 @@ namespace HouseDesign
 
         private void extendedMenuItemEdit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            TabItem item = mainTabControl.SelectedItem as TabItem;
+            if(item!=null)
+            {
+                if(item.Header.ToString()=="Company")
+                {
+                    companyInformation.UnsetReadOnlyFields();
+                    companyInformation.isEdited = true;
+                    return;
+                }
+            }
             if (selectedItemType==LastSelectedItemType.Category)
             {
                 Category<FurnitureObject> currentCategory = selectedTreeViewItem.Tag as Category<FurnitureObject>;
@@ -391,41 +404,51 @@ namespace HouseDesign
         private void extendedMenuItemImport_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             TabItem currentTabItem = (TabItem)mainTabControl.SelectedItem;
-            if(currentTabItem.Header.ToString()=="Categories")
+            if(currentTabItem!=null)
             {
-                if(selectedItemType==LastSelectedItemType.Category)
+                if (currentTabItem.Header.ToString() == "Categories")
                 {
-                    double tradeAllowance = (selectedTreeViewItem.Tag as Category<FurnitureObject>).TradeAllowance;
-                    ImportObject importObject = new ImportObject("Import Object", null, configuration.Materials, false, false, tradeAllowance);
-                    importObject.StatusUpdated += importObject_StatusUpdated;
-                    importObject.ImportMaterialStatusUpdated+=importObject_ImportMaterialStatusUpdated;
-                    Grid grid = new Grid();
-                    grid.Children.Add(importObject);
-                    groupBoxRightSide.Content = grid;
+                    if (selectedItemType == LastSelectedItemType.Category)
+                    {
+                        if(treeViewMaterials.Items.Count==0)
+                        {
+                            MessageBox.Show("Please define material categories!");
+                            mainTabControl.SelectedIndex = 1;
+                            return;
+                        }
+                        double tradeAllowance = (selectedTreeViewItem.Tag as Category<FurnitureObject>).TradeAllowance;
+                        ImportObject importObject = new ImportObject("Import Object", null, configuration.Materials, false, false, tradeAllowance);
+                        importObject.StatusUpdated += importObject_StatusUpdated;
+                        importObject.ImportMaterialStatusUpdated += importObject_ImportMaterialStatusUpdated;
+                        Grid grid = new Grid();
+                        grid.Children.Add(importObject);
+                        groupBoxRightSide.Content = grid;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Select a category!");
+                        return;
+                    }
+
                 }
                 else
                 {
-                    MessageBox.Show("Select a category!");
-                    return;
-                }
-                
-            }
-            else
-            {
-                if (selectedItemType == LastSelectedItemType.CategoryMaterial)
-                {
-                    ImportMaterial importMaterial = new ImportMaterial("Import Material", null, false, false);
-                    importMaterial.StatusUpdated += importMaterial_StatusUpdated;
-                    Grid grid = new Grid();
-                    grid.Children.Add(importMaterial);
-                    groupBoxPreviewMaterial.Content = grid;
-                }
-                else
-                {
-                    MessageBox.Show("Select a category!");
-                    return;
+                    if (selectedItemType == LastSelectedItemType.CategoryMaterial)
+                    {
+                        ImportMaterial importMaterial = new ImportMaterial("Import Material", null, false, false);
+                        importMaterial.StatusUpdated += importMaterial_StatusUpdated;
+                        Grid grid = new Grid();
+                        grid.Children.Add(importMaterial);
+                        groupBoxPreviewMaterial.Content = grid;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Select a category!");
+                        return;
+                    }
                 }
             }
+               
         }
         void importMaterial_StatusUpdated(object sender, EventArgs e)
         {
@@ -458,35 +481,35 @@ namespace HouseDesign
                 //(sender as ImportMaterial).SetImportedMaterial(null);
             } 
         }
-        void MaterialimportObject_StatusUpdated(object sender, EventArgs e)
-        {
-            FurnitureObject importedObject = (sender as ImportObject).GetImportedObject();
-            if((sender as ImportObject).IsEdited)
-            {
-                selectedTreeViewItem.Tag = importedObject;
-                SaveCategories();
-                InitializeTreeViewCategories();
-                TreeViewItem parent = selectedTreeViewItem.Parent as TreeViewItem;
-                if(parent!=null)
-                {
-                    parent.IsExpanded = true;
-                }
-            }
-            else
-            {
-                ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(importedObject.DefaultIconPath, importedObject.Name, importedObject.FullPath);
-                TreeViewItem item = new TreeViewItem();
-                item.Tag = importedObject;
-                item.Header = extendedItem;
-                if (selectedTreeViewItem != null)
-                {
-                    selectedTreeViewItem.Items.Add(item);
-                    Category<FurnitureObject> currentCategory = selectedTreeViewItem.Tag as Category<FurnitureObject>;
-                    currentCategory.StoredObjects.Add(importedObject);
-                    SaveCategories();
-                }
-            }           
-        }
+        //void MaterialimportObject_StatusUpdated(object sender, EventArgs e)
+        //{
+        //    FurnitureObject importedObject = (sender as ImportObject).GetImportedObject();
+        //    if((sender as ImportObject).IsEdited)
+        //    {
+        //        selectedTreeViewItem.Tag = importedObject;
+        //        SaveCategories();
+        //        InitializeTreeViewCategories();
+        //        TreeViewItem parent = selectedTreeViewItem.Parent as TreeViewItem;
+        //        if(parent!=null)
+        //        {
+        //            parent.IsExpanded = true;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        ExtendedTreeViewItem extendedItem = new ExtendedTreeViewItem(importedObject.DefaultIconPath, importedObject.Name, importedObject.FullPath);
+        //        TreeViewItem item = new TreeViewItem();
+        //        item.Tag = importedObject;
+        //        item.Header = extendedItem;
+        //        if (selectedTreeViewItem != null)
+        //        {
+        //            selectedTreeViewItem.Items.Add(item);
+        //            Category<FurnitureObject> currentCategory = selectedTreeViewItem.Tag as Category<FurnitureObject>;
+        //            currentCategory.StoredObjects.Add(importedObject);
+        //            SaveCategories();
+        //        }
+        //    }           
+        //}
         private void extendedMenuItemDelete_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if(selectedTreeViewItem!=null)
@@ -782,6 +805,12 @@ namespace HouseDesign
                 selectedTreeViewItem = null;
                 UnselectTreeViewItem(treeViewMaterials);
                 UnselectTreeViewItem(treeViewCategories);
+                groupBoxCurrencies.Visibility = Visibility.Collapsed;
+                TabItem item = (e.Source as TabControl).SelectedItem as TabItem;
+                if(item!=null && item.Header.ToString()=="Company")
+                {
+                    InitializeCompany();
+                }
             }            
         }        
         private void UnselectTreeViewItem(TreeView pTreeView)
@@ -855,6 +884,59 @@ namespace HouseDesign
                 InitializeTreeViewMaterials();
                 groupBoxPreviewMaterial.Content = null;
                 groupBoxRightSide.Content = null;
+            }
+        }
+
+        private void InitializeCompany()
+        {
+            if(configuration.CurrentCompany!=null)
+            {
+                companyInformation.textBoxCompanyName.Text = configuration.CurrentCompany.CompanyName;
+                companyInformation.textBoxAddress.Text = configuration.CurrentCompany.Address;
+                companyInformation.textBoxTelephoneNumber.Text = configuration.CurrentCompany.TelephoneNumber.ToString();
+                companyInformation.textBoxEmailAddress.Text = configuration.CurrentCompany.EmailAddress;
+                companyInformation.textBoxWebsite.Text = configuration.CurrentCompany.Website;
+                companyInformation.SetReadOnlyFields();
+            }
+            else
+            {
+                companyInformation.UnsetReadOnlyFields();
+            }
+            
+        }
+        private void btnOK_Click(object sender, RoutedEventArgs e)
+        {
+            if(companyInformation.isEdited)
+            {
+                if(configuration.CurrentCompany==null)
+                {
+                    String companyName=companyInformation.textBoxCompanyName.Text;
+                    String address=companyInformation.textBoxAddress.Text;
+                    long telephoneNumber=Convert.ToInt64(companyInformation.textBoxTelephoneNumber.Text);
+                    String email=companyInformation.textBoxEmailAddress.Text;
+                    String website=companyInformation.textBoxWebsite.Text;
+                    if(companyName.Length==0 || address.Length==0 || companyInformation.textBoxTelephoneNumber.Text.Length==0 
+                        || email.Length==0 || website.Length==0)
+                    {
+                        MessageBox.Show("Complete all fields!");
+                        return;
+                    }
+                    Company company = new Company(companyName, address, telephoneNumber, email, website);
+                    configuration.CurrentCompany = company;
+                }
+                else
+                {
+                    configuration.CurrentCompany.CompanyName = companyInformation.textBoxCompanyName.Text;
+                    configuration.CurrentCompany.Address = companyInformation.textBoxAddress.Text;
+                    configuration.CurrentCompany.TelephoneNumber = Convert.ToInt64(companyInformation.textBoxTelephoneNumber.Text);
+                    configuration.CurrentCompany.EmailAddress = companyInformation.textBoxEmailAddress.Text;
+                    configuration.CurrentCompany.Website = companyInformation.textBoxWebsite.Text;
+                }
+                
+               
+                MessageBox.Show("The company information was successfully edited!");
+                companyInformation.SetReadOnlyFields();
+                companyInformation.isEdited = false;
             }
         }
 

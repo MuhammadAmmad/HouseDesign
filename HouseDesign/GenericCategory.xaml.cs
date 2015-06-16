@@ -272,6 +272,7 @@ namespace HouseDesign
         {            
             GenericMaterial g = (sender as GenericMaterial);
             Material currentMaterial = g.GetCurrentMaterial();
+            //POSSIBLE BUG
             SelectedObject.SetTexture(g.Index, currentMaterial.FullPath, openGLControl.OpenGL);
             //InitializeMaterials();
             //InitializePrices();

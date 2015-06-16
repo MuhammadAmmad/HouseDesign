@@ -68,6 +68,7 @@
                 <ComboBoxItem Content="ZAR"></ComboBoxItem>
             </ComboBox>
             <Button Name="btnOK" Click="btnOK_Click" Content="OK" Margin="12" Width="50"></Button>
+            <Button Name="btnExport" Click="btnExport_Click" Content="Export" Margin="12"></Button>
         </StackPanel>
     </Grid>
 </Window>

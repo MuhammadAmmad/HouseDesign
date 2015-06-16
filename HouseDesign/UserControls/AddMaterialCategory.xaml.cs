@@ -53,7 +53,6 @@ namespace HouseDesign.UserControls
             {
                 textBoxName.IsReadOnly = true;
                 textBoxDescription.IsReadOnly = true;
-                textBoxTradeAllowance.IsReadOnly = true;
                 btnLoadIcon.IsEnabled = false;
                 btnCancel.IsEnabled = false;
                 btnOK.IsEnabled = false;
@@ -63,7 +62,6 @@ namespace HouseDesign.UserControls
             {
                 textBoxName.IsReadOnly = false;
                 textBoxDescription.IsReadOnly = false;
-                textBoxTradeAllowance.IsReadOnly = false;
                 btnLoadIcon.IsEnabled = true;
                 btnCancel.IsEnabled = true;
                 btnOK.IsEnabled = true;
@@ -79,7 +77,7 @@ namespace HouseDesign.UserControls
         }
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
-            if(textBoxName.Text.Length==0 || textBoxTradeAllowance.Text.Length==0)
+            if(textBoxName.Text.Length==0 )
             {
                 MessageBox.Show("Complete mandatory fields!");
                 return;
@@ -103,7 +101,7 @@ namespace HouseDesign.UserControls
                 
             }
 
-            CurrentCategory = new Category<Material>(textBoxName.Text, icon.Tag.ToString(), textBoxDescription.Text, Convert.ToDouble(textBoxTradeAllowance.Text));
+            CurrentCategory = new Category<Material>(textBoxName.Text, icon.Tag.ToString(), textBoxDescription.Text, 0);
             ClearAllFields();
             if (this.StatusUpdated != null)
             {
@@ -120,7 +118,6 @@ namespace HouseDesign.UserControls
         {
             textBoxName.Text = "";
             textBoxDescription.Text = "";
-            textBoxTradeAllowance.Text = "";
             listViewIcons.SelectedItem = null;
             customIcon = null;
         }
@@ -158,7 +155,6 @@ namespace HouseDesign.UserControls
         {
             textBoxName.Text = category.Name;
             textBoxDescription.Text = category.Description;
-            textBoxTradeAllowance.Text=category.TradeAllowance.ToString();
             InitializeIcon(ref customIcon, category.Path);
         }
 

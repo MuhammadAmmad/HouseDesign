@@ -107,6 +107,7 @@
     <Compile Include="Classes\Category.cs" />
     <Compile Include="Classes\Client.cs" />
     <Compile Include="Classes\Collision.cs" />
+    <Compile Include="Classes\Company.cs" />
     <Compile Include="Classes\Configuration.cs" />
     <Compile Include="Classes\Currency.cs" />
     <Compile Include="Classes\CurrencyHelper.cs" />
@@ -158,6 +159,9 @@
     </Compile>
     <Compile Include="UserControls\AddMaterialCategory.xaml.cs">
       <DependentUpon>AddMaterialCategory.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\CompanyUserControl.xaml.cs">
+      <DependentUpon>CompanyUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\CurrencyUserControl.xaml.cs">
       <DependentUpon>CurrencyUserControl.xaml</DependentUpon>
@@ -243,6 +247,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\AddMaterialCategory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\CompanyUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
