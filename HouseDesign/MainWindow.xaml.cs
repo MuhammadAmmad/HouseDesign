@@ -261,8 +261,15 @@ namespace HouseDesign
 
         private void menuItemDesign_Click(object sender, RoutedEventArgs e)
         {
-            addExtendedMenuItems("Design");
-            groupBoxExtendedMenu.Visibility = Visibility.Visible;
+            if(currentProject.Scene.IsEmpty()==false)
+            {
+                addExtendedMenuItems("Design");
+                groupBoxExtendedMenu.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                MessageBox.Show("Create a new project or open an existing one!");
+            }            
 
         }
 
@@ -294,6 +301,7 @@ namespace HouseDesign
                 if(currentProject.GetConfiguration().Equals(configuration))
                 {
                     TotalPrice = currentProject.ActualPrice;
+                    sceneHeight = currentProject.WallsHeight;
                     groupBoxCurrentProject.Visibility = Visibility.Visible;
                 }
                 else
@@ -404,15 +412,17 @@ namespace HouseDesign
 
         void menuItemDesign_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            
             Category<FurnitureObject> currentCategory = ((ExtendedMenuItem)sender).Tag as Category<FurnitureObject>;
-            GenericCategory wndDesign = new GenericCategory(currentCategory, configuration.Materials, sceneHeight, TotalPrice, currentProject.Budget);
+            GenericCategory wndDesign = new GenericCategory(currentCategory, configuration.Materials, sceneHeight, TotalPrice, currentProject.Budget, currentProject.MeasurementUnit);
             wndDesign.ShowDialog();
             if (currentProject.Scene.IsEmpty() == false)
             {
                 groupBoxCurrentProject.Visibility = Visibility.Visible;
                 sceneObject = wndDesign.SelectedObject;
             }
-            wndDesign.Dispose();
+            wndDesign.Dispose();            
+            
         }
 
         private void openGLControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

@@ -54,7 +54,7 @@
         <!-- The OpenGL control provides a OpenGL drawing surface. -->
         <Grid Grid.Row="2" Name="gridScene">
             <Grid.Background>
-                <ImageBrush ImageSource="Assets/background.jpg"/>
+                <ImageBrush ImageSource="Assets/background3.jpg"/>
             </Grid.Background>
             <GroupBox Name="groupBoxCurrentProject"  Visibility="Collapsed" >
                 <sharpGL:OpenGLControl

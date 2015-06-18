@@ -30,12 +30,12 @@ namespace HouseDesign
         private Decimal selectedObjectInitialPrice;
         private float sceneHeight;
         public float ChosenHeight { get; set; }
-        private DimensionType dimensionType;
         private Decimal currentTradeAllowance;
         private Decimal actualPrice;
         private Decimal projectBudget;
+        private Project.UnitOfMeasurement measurementUnit;
         public GenericCategory(Category<FurnitureObject> category, List<Category<Material>> materials, float sceneHeight, 
-            Decimal actualPrice, Decimal projectBudget)
+            Decimal actualPrice, Decimal projectBudget, Project.UnitOfMeasurement measurementUnit)
         {
             InitializeComponent();
             this.category = category;
@@ -52,6 +52,8 @@ namespace HouseDesign
             currentTradeAllowance = Convert.ToDecimal(category.TradeAllowance);
             this.actualPrice = actualPrice;
             this.projectBudget = projectBudget;
+            this.measurementUnit = measurementUnit;
+            textBlockMeasurementUnit.Text = measurementUnit.ToString();
         }
 
         public void PopulateTreeView(Category<FurnitureObject> mainCategory, TreeViewItem currentItem)
@@ -173,21 +175,21 @@ namespace HouseDesign
                 {
                     ChosenHeight = Convert.ToSingle(textBoxChosenHeight.Text);
                     float scaleFactor;
-                    if(dimensionType==DimensionType.cm)
+                    if(measurementUnit==Project.UnitOfMeasurement.cm)
                     {
-                        scaleFactor= 0.025f;
+                        scaleFactor= 0.022f;
                         realHeightScaleFactor = 0.01f;
                     }
                     else
                     {
-                        if(dimensionType==DimensionType.m)
+                        if (measurementUnit == Project.UnitOfMeasurement.m)
                         {
-                           scaleFactor= 2.5f;
+                           scaleFactor= 2.2f;
                            realHeightScaleFactor = 1;
                         }
                         else
                         {
-                            scaleFactor= 0.0025f;
+                            scaleFactor= 0.0022f;
                             realHeightScaleFactor = 0.001f;
                         }
                     }
@@ -205,6 +207,12 @@ namespace HouseDesign
             if (actualPrice + SelectedObject.Price > projectBudget)
             {
                 MessageBox.Show("The object can't be added! You are exceeding the budget!");
+                return;
+            }
+
+            if(SelectedObject.Height>sceneHeight)
+            {
+                MessageBox.Show("The object can't be added! Its height is exceeding the walls height!");
                 return;
             }
             SelectedObject.Translate = new Point3d(SelectedObject.Translate.X, ChosenHeight*realHeightScaleFactor*50, SelectedObject.Translate.Z);
@@ -298,6 +306,7 @@ namespace HouseDesign
                         InitializeMaterials();
                         selectedObjectInitialPrice=currentObject.InitialPrice;                   
                         InitializePrices();
+                        InitializeDimensions();
                     }                    
                 }
                 else
@@ -318,6 +327,41 @@ namespace HouseDesign
 
             textBlockTotalPrice.Text = string.Format("{0:0.000}", (actualMaterialsPrice + actualInitialPrice +
                 currentTradeAllowance/100*(actualMaterialsPrice + actualInitialPrice)));
+        }
+
+        public void InitializeDimensions()
+        {
+            textBlockDimensionHeight.Text = measurementUnit.ToString();
+            textBlockDimensionWidth.Text = measurementUnit.ToString();
+            textBlockDimensionLength.Text = measurementUnit.ToString();            
+
+            float height, width, length;
+
+            if (measurementUnit == Project.UnitOfMeasurement.cm)
+            {
+                height = SelectedObject.Height * (1 / 0.022f);
+                length = SelectedObject.Length * (1 / 0.022f);
+                width = SelectedObject.Width * (1 / 0.022f);
+            }
+            else
+            {
+                if (measurementUnit == Project.UnitOfMeasurement.m)
+                {
+                    height = SelectedObject.Height * (1 / 2.2f);
+                    length = SelectedObject.Length * (1 / 2.2f);
+                    width = SelectedObject.Width * (1 / 2.2f);
+                }
+                else
+                {
+                    height = SelectedObject.Height * (1/0.0022f);
+                    length = SelectedObject.Length * (1 / 0.0022f);
+                    width = SelectedObject.Width * (1 / 0.0022f);
+                }
+            }
+
+            textBlockLength.Text = Math.Round(length, 1).ToString();
+            textBlockHeight.Text = Math.Round(height, 1).ToString();
+            textBlockWidth.Text = Math.Round(width, 1).ToString();
         }
 
         private Decimal GetMaterialsPrice()
@@ -373,39 +417,6 @@ namespace HouseDesign
             textBoxChosenHeight.Text = "";
             stackPanelChosenHeight.Visibility = Visibility.Collapsed;
         }
-
-        private void comboBoxDimensionType_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            dimensionType = (DimensionType)comboBoxDimensionType.SelectedValue;
-        }
-
-        private enum DimensionType
-        {
-            m,
-            cm,
-            mm
-        };
-
-        private void comboBoxDimensionType_DropDownClosed(object sender, EventArgs e)
-        {
-            switch(comboBoxDimensionType.SelectionBoxItem.ToString())
-            {
-                case "m":
-                    {
-                        dimensionType = DimensionType.m;
-                        break;
-                    }
-                case"cm":
-                    {
-                        dimensionType = DimensionType.cm;
-                        break;
-                    }
-                case "mm":
-                    {
-                        dimensionType = DimensionType.mm;
-                        break;
-                    }
-            }
-        }
+                
     }
 }

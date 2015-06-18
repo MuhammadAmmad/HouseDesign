@@ -357,6 +357,13 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\background2.jpg" />
+    <Resource Include="Assets\background3.jpg" />
+    <Resource Include="Assets\background4.jpg" />
+    <Resource Include="Assets\background5.jpg" />
+    <Resource Include="Assets\background6.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

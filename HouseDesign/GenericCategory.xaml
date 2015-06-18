@@ -19,18 +19,44 @@
             <GroupBox Name="groupBoxObj" Grid.Column="1" Visibility="Collapsed">
                 <Grid >
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="200"></RowDefinition>
-                        <RowDefinition Height="110"></RowDefinition>
-                        <RowDefinition Height="260"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="130"></RowDefinition>
+                        <RowDefinition Height="240"></RowDefinition>
                         <RowDefinition Height="60"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <GroupBox Name="groupBoxCurrentObject" Header="Object" Height="200" Width="200" Grid.Row="0">
-                        <sharpGL:OpenGLControl 
+                    <Grid Grid.Row="0" Height="200" HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <GroupBox Grid.Column="0" Name="groupBoxCurrentObject" Header="Object"  Width="200" Margin="5">
+                            <sharpGL:OpenGLControl 
                     Name="openGLControl" OpenGLDraw="openGLControl_OpenGLDraw" 
                     OpenGLInitialized="openGLControl_OpenGLInitialized" Resized="openGLControl_Resized"
                     DrawFPS="True" RenderContextType="FBO" FrameRate="20"/>
-                    </GroupBox>
-                    <GroupBox Grid.Row="1" Name="groupBoxPrices" Visibility="Collapsed" Margin="5" Width="400">
+                        </GroupBox>
+                        <GroupBox Grid.Column="1" Name="groupBoxDimensions" Header="Dimensions"  Margin="5">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="5">
+                                    <Label Margin="5">Width:</Label>
+                                    <TextBlock Name="textBlockWidth" Margin="5"></TextBlock>
+                                    <TextBlock Name="textBlockDimensionWidth" Margin="5"></TextBlock>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Margin="5">Height:</Label>
+                                    <TextBlock Name="textBlockHeight" Margin="5"></TextBlock>
+                                    <TextBlock Name="textBlockDimensionHeight" Margin="5"></TextBlock>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Margin="5">Length:</Label>
+                                    <TextBlock Name="textBlockLength" Margin="5"></TextBlock>
+                                    <TextBlock Name="textBlockDimensionLength" Margin="5"></TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                    </Grid>
+                    
+                    <GroupBox Grid.Row="1" Name="groupBoxPrices" Header="Prices" Visibility="Collapsed" Margin="5" Width="400">
                         <Grid >
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="25"></RowDefinition>
@@ -67,11 +93,7 @@
                         <StackPanel Name="stackPanelChosenHeight" Visibility="Collapsed" Orientation="Horizontal">
                             <Label Margin="5">Height:</Label>
                             <TextBox Name="textBoxChosenHeight" Width="50" Margin="5"></TextBox>
-                            <ComboBox Name="comboBoxDimensionType" DataContextChanged="comboBoxDimensionType_DataContextChanged" DropDownClosed="comboBoxDimensionType_DropDownClosed" Margin="5" SelectedIndex="0">
-                                <ComboBoxItem Content="m"></ComboBoxItem>
-                                <ComboBoxItem Content="cm"></ComboBoxItem>
-                                <ComboBoxItem Content="mm"></ComboBoxItem>
-                            </ComboBox>
+                            <TextBlock Name="textBlockMeasurementUnit" Margin="5"></TextBlock>
                         </StackPanel>                        
                     </StackPanel>
                 </Grid>
