@@ -96,26 +96,7 @@ namespace HouseDesign.ImageProcessing
             return result;
         }
 
-        public static bool Intersect(Segment s1, Segment s2)
-        {
-            if (s2.Length > s1.Length)
-            {
-                return CheckIntersection(s1, s2);
-            }
-            else
-            {
-                return CheckIntersection(s2, s1);
-            }
-        }
-
-        public static bool CheckIntersection(Segment s1, Segment s2)
-        {
-            double min1 = GetDistanceBetweenPoints(s2.BeginPoint, s1.BeginPoint) < GetDistanceBetweenPoints(s2.BeginPoint, s1.EndPoint) ? GetDistanceBetweenPoints(s2.BeginPoint, s1.BeginPoint) : GetDistanceBetweenPoints(s2.BeginPoint, s1.EndPoint);
-            double min2 = GetDistanceBetweenPoints(s2.EndPoint, s1.BeginPoint) < GetDistanceBetweenPoints(s2.EndPoint, s1.EndPoint) ? GetDistanceBetweenPoints(s2.EndPoint, s1.BeginPoint) : GetDistanceBetweenPoints(s2.EndPoint, s1.EndPoint);
-            double max = min1 > min2 ? min1 : min2;
-
-            return max < s2.Length;
-        }
+       
 
         public static double GetDistanceBetweenPoints(System.Windows.Point p1, System.Windows.Point p2)
         {

@@ -654,30 +654,41 @@ namespace HouseDesign
 
         private void menuItemScreenshot_Click(object sender, RoutedEventArgs e)
         {
-            int width = (int)openGLControl.RenderSize.Width;
-            int height = (int)openGLControl.RenderSize.Height;
-            RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
-            renderTargetBitmap.Render(gridScene);
-            PngBitmapEncoder pngImage = new PngBitmapEncoder();
-            pngImage.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
-            MessageBoxResult result = MessageBox.Show("Do you want to take a screenshot of the current scene?", "Screenshot", MessageBoxButton.YesNo);
-            if(result==MessageBoxResult.Yes)
-            {
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.DefaultExt = ".png";
-                saveFileDialog.Filter = "HouseDesign Scenes (.png)|*.png";
-                saveFileDialog.Title = "Screenshot";
-                saveFileDialog.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\Screenshots";
-                if (saveFileDialog.ShowDialog() == true)
-                {
-                    using (Stream fileStream = File.Create(saveFileDialog.FileName))
-                    {
-                        pngImage.Save(fileStream);
-                    }
-                }
+            GenerateScreenshot();            
+        }
 
+        private void GenerateScreenshot()
+        {
+            if (currentProject.Scene.IsEmpty() == false)
+            {
+                int width = (int)openGLControl.RenderSize.Width;
+                int height = (int)openGLControl.RenderSize.Height;
+                RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
+                renderTargetBitmap.Render(openGLControl);
+                PngBitmapEncoder pngImage = new PngBitmapEncoder();
+                pngImage.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
+                MessageBoxResult result = MessageBox.Show("Do you want to take a screenshot of the current scene?", "Screenshot", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    SaveFileDialog saveFileDialog = new SaveFileDialog();
+                    saveFileDialog.DefaultExt = ".png";
+                    saveFileDialog.Filter = "HouseDesign Scenes (.png)|*.png";
+                    saveFileDialog.Title = "Screenshot";
+                    saveFileDialog.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\Screenshots";
+                    if (saveFileDialog.ShowDialog() == true)
+                    {
+                        using (Stream fileStream = File.Create(saveFileDialog.FileName))
+                        {
+                            pngImage.Save(fileStream);
+                        }
+                    }
+
+                }
             }
-            
+            else
+            {
+                MessageBox.Show("Screenshot not available! Create a new project or open an existing one!");
+            }
         }
 
         private void menuItemUpView_Click(object sender, RoutedEventArgs e)

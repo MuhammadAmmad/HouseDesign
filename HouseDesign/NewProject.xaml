@@ -18,7 +18,7 @@
         <GroupBox Grid.Row="0" Grid.Column="1" Name="groupBoxProjectProperties" Header="Project Properties" Margin="5">
             <ctrl:ProjectPropertiesUserControl x:Name="projectProperties"></ctrl:ProjectPropertiesUserControl>
         </GroupBox>        
-        <Button Grid.Row="1" Grid.Column="0" Name="btnImport" Content="Import" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Bottom"></Button>
+        <Button Grid.Row="1" Grid.Column="0" Name="btnImport" Content="Import" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Bottom" Click="btnImport_Click"></Button>
         <StackPanel Grid.Row="1" Grid.Column="1"  Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <Button Name="btnCreateProject" Click="btnCreateProject_Click" Content="Create Project" Margin="5"></Button>
             <Button Name="btnCancel" Click="btnCancel_Click" Content="Cancel" Margin="5"></Button>

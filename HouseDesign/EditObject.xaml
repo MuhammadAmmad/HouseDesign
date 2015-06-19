@@ -1,0 +1,97 @@
+﻿<Window x:Class="HouseDesign.EditObject"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
+        Title="Edit Object" Height="720" Width="500" >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <GroupBox Grid.Row="0" Name="groupBoxObj">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="130"></RowDefinition>
+                    <RowDefinition Height="240"></RowDefinition>
+                    <RowDefinition Height="60"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Height="200" HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Grid.Column="0" Name="groupBoxCurrentObject" Header="Object"  Width="200" Margin="5">
+                        <sharpGL:OpenGLControl 
+                    Name="openGLControl" OpenGLDraw="openGLControl_OpenGLDraw" 
+                    OpenGLInitialized="openGLControl_OpenGLInitialized" Resized="openGLControl_Resized"
+                    DrawFPS="True" RenderContextType="FBO" FrameRate="20"/>
+                    </GroupBox>
+                    <GroupBox Grid.Column="1" Name="groupBoxDimensions" Header="Dimensions"  Margin="5">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <Label Margin="5">Width:</Label>
+                                <TextBlock Name="textBlockWidth" Margin="5"></TextBlock>
+                                <TextBlock Name="textBlockDimensionWidth" Margin="5"></TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Margin="5">Height:</Label>
+                                <TextBlock Name="textBlockHeight" Margin="5"></TextBlock>
+                                <TextBlock Name="textBlockDimensionHeight" Margin="5"></TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Margin="5">Length:</Label>
+                                <TextBlock Name="textBlockLength" Margin="5"></TextBlock>
+                                <TextBlock Name="textBlockDimensionLength" Margin="5"></TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
+                <GroupBox Grid.Row="1" Name="groupBoxPrices" Header="Prices" Visibility="Collapsed" Margin="5" Width="400">
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition Height="25"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" Content="Initial Price:"></Label>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Name="textBlockInitialPrice"></TextBlock>
+                        <Label Grid.Row="2" Grid.Column="0" Content="Materials Price:"></Label>
+                        <TextBlock Grid.Row="3" Grid.Column="0" Name="textBlockMaterialsPrice"></TextBlock>
+                        <Label Grid.Row="1" Grid.Column="1" Content="Total Price"></Label>
+                        <TextBlock Grid.RowSpan="2" Grid.Row="2" Grid.Column="1" Name="textBlockTotalPrice" FontWeight="ExtraBold" FontSize="16"></TextBlock>
+                    </Grid>
+                </GroupBox>
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Button Name="btnCustomizeObject" Content="Customize Object"  Click="btnCustomizeObject_Click" Width="Auto" HorizontalAlignment="Right" Margin="5" Grid.Row="0"></Button>
+                    <GroupBox Name="groupBoxCustomizeCurrentObject" Header="Customize Object" Visibility="Collapsed" Width="400" Grid.Row="1">
+                        <ListView Name="listViewMaterials">
+                        </ListView>
+                    </GroupBox>
+                </Grid>
+                <StackPanel Orientation="Vertical" Grid.Row="3">
+                    <CheckBox Name="checkBoxIsSuspendable" Content="Is Suspendable" Checked="checkBoxIsSuspendable_Checked" Unchecked="checkBoxIsSuspendable_Unchecked">
+                    </CheckBox>
+                    <StackPanel Name="stackPanelChosenHeight" Visibility="Collapsed" Orientation="Horizontal">
+                        <Label Margin="5">Height:</Label>
+                        <TextBox Name="textBoxChosenHeight" Width="50" Margin="5"></TextBox>
+                        <TextBlock Name="textBlockMeasurementUnit" Margin="5"></TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
+            <Button Name="btnOK" Content="OK" Click="btnOK_Click" Margin="5"></Button>
+            <Button Name="btnCancel" Content="Cancel" Click="btnCancel_Click" Margin="5"></Button>
+        </StackPanel>
+    </Grid>
+</Window>

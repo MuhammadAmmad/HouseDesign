@@ -30,6 +30,7 @@ namespace HouseDesign
         private String housePlansDirectory;
         private Project currentProject;
         private Configuration configuration;
+        private String currentHousePlanName;
         public NewProject(String title, Configuration configuration)
         {
             InitializeComponent();
@@ -37,10 +38,10 @@ namespace HouseDesign
             housePlansDirectory = @"D:\Licenta\HouseDesign\HouseDesign\HousePlans";
             housePlans = new List<HousePlan>();
             InitializeHousePlans();
-            currentHousePlan = new HousePlan("Current");
+            //currentHousePlan = new HousePlan("Current");
             this.configuration = configuration;
             currentProject = new Project(new Scene());
-            
+
         }
 
         public void InitializeHousePlans()
@@ -52,11 +53,12 @@ namespace HouseDesign
                 {
                     String[] tokens = file.Split('.');
                     String[] currentDirectoryPath = tokens[0].Split('\\');
-                    String fileName = currentDirectoryPath[currentDirectoryPath.GetLength(0)-1];
+                    String fileName = currentDirectoryPath[currentDirectoryPath.GetLength(0) - 1];
                     HousePlan housePlan = new HousePlan(fileName);
                     housePlans.Add(housePlan);
                     HousePlanControl housePlanControl = new HousePlanControl(housePlan);
-                    
+                    housePlanControl.MouseLeftButtonDown += housePlanControl_MouseLeftButtonDown;
+
                     listViewHousePlans.Items.Add(housePlanControl);
                 }
             }
@@ -64,6 +66,14 @@ namespace HouseDesign
             {
                 Console.WriteLine("The process failed: {0}", e.ToString());
             }
+        }
+
+        void housePlanControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            currentHousePlan = (sender as HousePlanControl).GetCurrentHousePlan();
+            String imagePath = (sender as HousePlanControl).GetHousePlanImagePath();
+            PreviewPlan previewPlan = new PreviewPlan(imagePath);
+            previewPlan.ShowDialog();
         }
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
@@ -81,84 +91,39 @@ namespace HouseDesign
 
             if (fdlg.ShowDialog() == true)
             {
+                currentHousePlanName = System.IO.Path.GetFileNameWithoutExtension(fdlg.FileName);
+                currentHousePlan = new HousePlan(currentHousePlanName);
+                String currentHousePlanFileName = @"D:\Licenta\HouseDesign\HouseDesign\HousePlans" + "\\" + currentHousePlanName + ".hpl";
                 Image<Bgr, byte> image = new Image<Bgr, byte>(fdlg.FileName);
                 Image<Gray, byte> currentImage = image.Convert<Gray, byte>();
-                currentImage = StandardOperation.Binarize(currentImage, 127);
-                currentImage = StandardOperation.GetImageWithExtraPixels(currentImage, StandardOperation.BinaryColor.Black, 3);
-                currentImage = Dilation.GetDilation(currentImage, 3);
-                currentImage = Skeletation.GetProcessedImage(StandardOperation.Binarize(currentImage, 127), 0);
-                currentImage = StandardOperation.Binarize(currentImage, 127);
-                StandardOperation.Invert(currentImage);
+                List<Wall2D> walls = WallDetector.GetWalls(currentImage);
+                int width = currentImage.Width;
+                int height = currentImage.Height;
+                double factor = 20000 / width;
 
-                int halfWidth = currentImage.Width / 2;
-                int halfHeight = currentImage.Height / 2;
-                SortedList<double, Segment> segments = HoughLines.GetSegments(currentImage, 5);
-
-                for (int i = 0; i < segments.Count - 1; i++)
+                using (StreamWriter wr = new StreamWriter(currentHousePlanFileName))
                 {
-                    for (int j = i + 1; j < segments.Count; j++)
+                    for (int i = 0; i < walls.Count; i++)
                     {
-                        double value = segments.Values[i].GetDistance(segments.Values[j].BeginPoint);
-                        Vector v1 = segments.Values[i].EndPoint - segments.Values[i].BeginPoint;
-                        Vector v2 = segments.Values[j].EndPoint - segments.Values[j].BeginPoint;
-                        double angle = Math.Acos((v1.X * v2.X + v1.Y * v2.Y) / (v1.Length * v2.Length));
-                        if ((Math.Abs(Math.PI - angle) < 0.1 || Math.Abs(angle) < 0.1))
-                        {
-                            if (value > 5 && value < 12 && StandardOperation.Intersect(segments.Values[i], segments.Values[j]))
-                            {
-                                List<Point> topPoints = new List<Point>();
-                                topPoints.Add(segments.Values[i].BeginPoint);
-                                topPoints.Add(segments.Values[i].EndPoint);
-                                topPoints.Add(segments.Values[i].GetProjection(segments.Values[j].BeginPoint));
-                                topPoints.Add(segments.Values[i].GetProjection(segments.Values[j].EndPoint));
-
-                                List<Point> bottomPoints = new List<Point>();
-                                bottomPoints.Add(segments.Values[j].GetProjection(segments.Values[i].BeginPoint));
-                                bottomPoints.Add(segments.Values[j].GetProjection(segments.Values[i].EndPoint));
-                                bottomPoints.Add(segments.Values[j].BeginPoint);
-                                bottomPoints.Add(segments.Values[j].EndPoint);
-
-                                int bestI = -1;
-                                int bestJ = -1;
-                                double bestLength = 0;
-
-                                for (int k = 0; k < 3; k++)
-                                {
-                                    for (int p = k + 1; p < 4; p++)
-                                    {
-                                        double length = Math.Sqrt((topPoints[p].Y - topPoints[k].Y) * (topPoints[p].Y - topPoints[k].Y) + (topPoints[p].X - topPoints[k].X) * (topPoints[p].X - topPoints[k].X));
-                                        if (length > bestLength)
-                                        {
-                                            bestI = k;
-                                            bestJ = p;
-                                            bestLength = length;
-                                        }
-                                    }
-                                }
-                                Point3d p1 = new Point3d(Convert.ToSingle((topPoints[bestI].X - halfWidth) * 10), 0, Convert.ToSingle((topPoints[bestI].Y - halfHeight) * 10));
-                                Point3d p2 = new Point3d(Convert.ToSingle((topPoints[bestJ].X - halfWidth) * 10), 0, Convert.ToSingle((topPoints[bestJ].Y - halfHeight) * 10));
-                                Point3d p3 = new Point3d(Convert.ToSingle((bottomPoints[bestJ].X - halfWidth) * 10), 0, Convert.ToSingle((bottomPoints[bestJ].Y - halfHeight) * 10));
-                                Point3d p4 = new Point3d(Convert.ToSingle((bottomPoints[bestI].X - halfWidth) * 10), 0, Convert.ToSingle((bottomPoints[bestI].Y - halfHeight) * 10));
-                                Wall wall = new Wall(p1, p2, p3, p4);
-                                currentHousePlan.AddWall(wall);
-                                break;
-
-                            }
-                        }
-                        else
-                        {
-                            break;
-                        }
-
+                        Point3d p1 = new Point3d(Convert.ToSingle((walls[i].Corners[0].X - width / 2) * factor), 0, Convert.ToSingle((walls[i].Corners[0].Y - height / 2) * factor));
+                        Point3d p2 = new Point3d(Convert.ToSingle((walls[i].Corners[1].X - width / 2) * factor), 0, Convert.ToSingle((walls[i].Corners[1].Y - height / 2) * factor));
+                        Point3d p3 = new Point3d(Convert.ToSingle((walls[i].Corners[2].X - width / 2) * factor), 0, Convert.ToSingle((walls[i].Corners[2].Y - height / 2) * factor));
+                        Point3d p4 = new Point3d(Convert.ToSingle((walls[i].Corners[3].X - width / 2) * factor), 0, Convert.ToSingle((walls[i].Corners[3].Y - height / 2) * factor));
+                        Wall wall = new Wall(p1, p2, p3, p4);
+                        currentHousePlan.AddWall(wall);
+                        wr.WriteLine((int)p1.X + "," + (int)p1.Y + "," + (int)p1.Z + " " + (int)p2.X + "," + (int)p2.Y + "," + (int)p2.Z + " " +
+                            (int)p3.X + "," + (int)p3.Y + "," + (int)p3.Z + " " + (int)p4.X + "," + (int)p4.Y + "," + (int)p4.Z + " ");
                     }
 
                 }
+
             }
         }
 
+
         private void btnCreateProject_Click(object sender, RoutedEventArgs e)
         {
-            if(currentHousePlan.GetWalls().Count==0)
+            if (currentHousePlan.GetWalls().Count == 0)
             {
                 HousePlanControl currentHousePlanControl = listViewHousePlans.SelectedItem as HousePlanControl;
                 if (currentHousePlanControl == null)
@@ -166,46 +131,45 @@ namespace HouseDesign
                     MessageBox.Show("Select a house plan!");
                     return;
                 }
-                
-                if(projectProperties.CheckEmptyFields()==true)
+
+                if (projectProperties.CheckEmptyFields() == true)
                 {
                     MessageBox.Show("Complete mandatory fields!");
+                    return;
                 }
-                else
-                {
-                    currentHousePlan = currentHousePlanControl.GetCurrentHousePlan();
-                    List<Wall> walls = currentHousePlan.GetWalls();
-                    Project.UnitOfMeasurement measurementUnit = Project.UnitOfMeasurement.mm;
-                    float wallsHeight = Convert.ToSingle(projectProperties.textBoxWallsHeight.Text);
+                currentHousePlan = currentHousePlanControl.GetCurrentHousePlan();
+            }
 
-                    if (projectProperties.comboBoxMeasurementUnits.Text == Project.UnitOfMeasurement.m.ToString())
-                    {
-                        wallsHeight *= 1000;
-                        measurementUnit = Project.UnitOfMeasurement.m;
-                    }
-                    if (projectProperties.comboBoxMeasurementUnits.Text == Project.UnitOfMeasurement.cm.ToString())
-                    {
-                        wallsHeight *= 10;
-                        measurementUnit = Project.UnitOfMeasurement.cm;
-                    }
-                    Client client=new Client(projectProperties.textBoxClientName.Text, Convert.ToInt64(projectProperties.textBoxTelephoneNumber.Text),
-                        projectProperties.textBoxEmailAddress.Text);
-                    Decimal budget=Convert.ToDecimal(projectProperties.textBoxBudget.Text);
-                    String notes=projectProperties.textBoxNotes.Text;
-                    Scene scene=new Scene();
-                    scene.MainCamera.Translate = new Point3d(0, 500, 0);
-                    scene.MainCamera.Rotate = new Point3d(-90, 180, 0);
-                    for (int i = 0; i < walls.Count; i++)
-                    {
-                        WallObject wall = new WallObject(walls[i], wallsHeight);
-                        scene.AddWall(wall);
-                    }
-                    currentProject = new Project(client, scene, configuration, CurrencyHelper.GetProjectCurrency(), wallsHeight, budget, 
-                        notes, measurementUnit);
+            List<Wall> walls = currentHousePlan.GetWalls();
+            Project.UnitOfMeasurement measurementUnit = Project.UnitOfMeasurement.mm;
+            float wallsHeight = Convert.ToSingle(projectProperties.textBoxWallsHeight.Text);
 
-                    this.Close();
-                }               
-            }            
+            if (projectProperties.comboBoxMeasurementUnits.Text == Project.UnitOfMeasurement.m.ToString())
+            {
+                wallsHeight *= 1000;
+                measurementUnit = Project.UnitOfMeasurement.m;
+            }
+            if (projectProperties.comboBoxMeasurementUnits.Text == Project.UnitOfMeasurement.cm.ToString())
+            {
+                wallsHeight *= 10;
+                measurementUnit = Project.UnitOfMeasurement.cm;
+            }
+            Client client = new Client(projectProperties.textBoxClientName.Text, Convert.ToInt64(projectProperties.textBoxTelephoneNumber.Text),
+                projectProperties.textBoxEmailAddress.Text);
+            Decimal budget = Convert.ToDecimal(projectProperties.textBoxBudget.Text);
+            String notes = projectProperties.textBoxNotes.Text;
+            Scene scene = new Scene();
+            scene.MainCamera.Translate = new Point3d(0, 500, 0);
+            scene.MainCamera.Rotate = new Point3d(-90, 180, 0);
+            for (int i = 0; i < walls.Count; i++)
+            {
+                WallObject wall = new WallObject(walls[i], wallsHeight);
+                scene.AddWall(wall);
+            }
+            currentProject = new Project(client, scene, configuration, CurrencyHelper.GetProjectCurrency(), wallsHeight, budget,
+                notes, measurementUnit);
+
+            this.Close();
         }
 
         public Project GetCurrentProject()

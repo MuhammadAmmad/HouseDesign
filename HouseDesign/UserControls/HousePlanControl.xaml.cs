@@ -28,7 +28,7 @@ namespace HouseDesign.UserControls
             InitializeComponent();
             this.currentHousePlan = housePlan;
             imageHousePlanDirectory=@"D:\Licenta\HouseDesign\HouseDesign\HousePlansImages";
-            String iconPath = GetHousePlanImage();
+            String iconPath = GetHousePlanImagePath();
             if(iconPath!=null)
             {
                 imgHousePlan.Source = new BitmapImage(new Uri(iconPath));
@@ -39,11 +39,17 @@ namespace HouseDesign.UserControls
             }
         }
 
-        public String GetHousePlanImage()
+        public String GetHousePlanImagePath()
         {
             try
             {
-                string[] files = Directory.GetFiles(imageHousePlanDirectory, "*.jpg");
+
+                var allowedExtensions = new[] { "jpg", "jpeg", "bmp", "png"};
+                var files = Directory
+                    .GetFiles(imageHousePlanDirectory)
+                    .Where(file => allowedExtensions.Any(file.ToLower().EndsWith))
+                    .ToList();
+                //string[] files = Directory.GetFiles(imageHousePlanDirectory, "*.png*.jpeg*.jpg*.bmp");
                 foreach (string file in files)
                 {
                     String[] tokens = file.Split('.');

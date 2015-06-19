@@ -123,6 +123,9 @@
     <Compile Include="Classes\WallObject.cs" />
     <Compile Include="Classes\WorldObjectMaterial.cs" />
     <Compile Include="Converters\AddMessageConverter.cs" />
+    <Compile Include="EditObject.xaml.cs">
+      <DependentUpon>EditObject.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EditProperties.xaml.cs">
       <DependentUpon>EditProperties.xaml</DependentUpon>
     </Compile>
@@ -132,21 +135,24 @@
     <Compile Include="GenericMaterial.xaml.cs">
       <DependentUpon>GenericMaterial.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ImageProcessing\Dilation.cs" />
-    <Compile Include="ImageProcessing\HoughLines.cs" />
-    <Compile Include="ImageProcessing\HoughTableCalculator.cs" />
-    <Compile Include="ImageProcessing\ILineCrossable.cs" />
-    <Compile Include="ImageProcessing\LineSegmentator.cs" />
-    <Compile Include="ImageProcessing\Node.cs" />
+    <Compile Include="ImageProcessing\DirectionLine.cs" />
+    <Compile Include="ImageProcessing\DirectionLineSegment.cs" />
+    <Compile Include="ImageProcessing\Hough.cs" />
+    <Compile Include="ImageProcessing\LineSegments.cs" />
     <Compile Include="ImageProcessing\Point2d.cs" />
-    <Compile Include="ImageProcessing\Segment.cs" />
     <Compile Include="ImageProcessing\Skeletation.cs" />
     <Compile Include="ImageProcessing\StandardOperation.cs" />
+    <Compile Include="ImageProcessing\Vector2d.cs" />
+    <Compile Include="ImageProcessing\Wall2D.cs" />
+    <Compile Include="ImageProcessing\WallDetector.cs" />
     <Compile Include="ImportMaterialAutomatically.xaml.cs">
       <DependentUpon>ImportMaterialAutomatically.xaml</DependentUpon>
     </Compile>
     <Compile Include="NewProject.xaml.cs">
       <DependentUpon>NewProject.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PreviewPlan.xaml.cs">
+      <DependentUpon>PreviewPlan.xaml</DependentUpon>
     </Compile>
     <Compile Include="Receipt.xaml.cs">
       <DependentUpon>Receipt.xaml</DependentUpon>
@@ -196,6 +202,10 @@
     <Compile Include="UserControls\ProjectPropertiesUserControl.xaml.cs">
       <DependentUpon>ProjectPropertiesUserControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="EditObject.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EditProperties.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -231,6 +241,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="NewProject.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PreviewPlan.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
