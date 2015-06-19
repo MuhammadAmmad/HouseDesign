@@ -450,9 +450,9 @@ namespace HouseDesign.Classes
             return GetTotalAreaPerTexture(textureIndex);
         }
 
-        public List<Collision> CheckCollision(Point3d point, Point3d direction, bool isObjectCollision)
+        public List<Collision2D> CheckCollision2D(Point3d point, Point3d direction)
         {
-            List<Collision> collisions = new List<Collision>();
+            List<Collision2D> collisions = new List<Collision2D>();
             if (direction.X == 0)
             {
                 direction.X += 0.0000000001f;
@@ -461,26 +461,64 @@ namespace HouseDesign.Classes
             {
                 direction.Z += 0.0000000001f;
             }
-            if (direction.Y == 0)
-            {
-                direction.Y += 0.0000000001f;
-            }
-            Point3d[] vertices = boundingBox.ActualPoints;
+
+            Point3d[] vertices = boundingBox.GetTopPoints();
             Point3d result;
-            AddCollision(point, direction, vertices[0], vertices[4] - vertices[0], vertices[1] - vertices[0], out result,
-                isObjectCollision, collisions);
-            AddCollision(point, direction, vertices[1], vertices[5] - vertices[1], vertices[2] - vertices[1],
-                out result, isObjectCollision, collisions);
-            AddCollision(point, direction, vertices[2], vertices[6] - vertices[2], vertices[3] - vertices[2],
-                out result, isObjectCollision, collisions);
-            AddCollision(point, direction, vertices[3], vertices[7] - vertices[3], vertices[0] - vertices[3],
-                out result, isObjectCollision, collisions);
-            AddCollision(point, direction, vertices[7], vertices[4] - vertices[7], vertices[6] - vertices[7],
-               out result, isObjectCollision, collisions);
-            AddCollision(point, direction, vertices[3], vertices[0] - vertices[3], vertices[2] - vertices[3],
-                out result, isObjectCollision, collisions);
+
+            AddCollision2D(point, direction, vertices[0], vertices[1] - vertices[0], out result, collisions);
+            AddCollision2D(point, direction, vertices[1], vertices[2] - vertices[1], out result, collisions);
+            AddCollision2D(point, direction, vertices[2], vertices[3] - vertices[2], out result, collisions);
+            AddCollision2D(point, direction, vertices[3], vertices[0] - vertices[3], out result, collisions);
 
             return collisions;
+        }
+
+        private void AddCollision2D(Point3d p1, Point3d v1, Point3d p2, Point3d v2, out Point3d result, List<Collision2D> collisions)
+        {
+            if (v1.X == 0)
+            {
+                v1.X += 0.001f;
+            }
+            if (v1.Z == 0)
+            {
+                v1.Z += 0.001f;
+            }
+            if (v2.X == 0)
+            {
+                v2.X += 0.001f;
+            }
+            if (v2.Z == 0)
+            {
+                v2.Z += 0.001f;
+            }
+            Collision2D collision = CheckParticularCollision(p1, v1, p2, v2, out result);
+            if(collision != null)
+            {
+                collisions.Add(collision);
+            }
+        }
+
+        private Collision2D CheckParticularCollision(Point3d p1, Point3d v1, Point3d p2, Point3d v2, out Point3d result)
+        {
+            float[,] system = new float[2, 3];
+
+            system[0, 0] = v1.X;
+            system[0, 1] = -v2.X;
+            system[0, 2] = p2.X - p1.X;
+            system[1, 0] = v1.Z;
+            system[1, 1] = -v2.Z;
+            system[1, 2] = p2.Z - p1.Z;
+
+            float t1 = 0, t2 = 0;
+            GetSystem2DSolutions(system, ref t1, ref t2);
+
+            if(t1 > 0 && t1 < 1 && t2 > 0 && t2 < 1)
+            {
+                result = p1 + v1 * t1;
+                return new Collision2D(p1, v1, p2, v2);
+            }
+            result = new Point3d(0, 0, 0);
+            return null;
         }
 
         private void AddCollision(Point3d p1, Point3d v1, Point3d p2, Point3d v2, Point3d v3, out Point3d result, bool isObjectCollision,
@@ -515,6 +553,39 @@ namespace HouseDesign.Classes
             {
                 collisions.Add(currentCollision);
             }
+        }
+
+        public List<Collision> CheckCollision(Point3d point, Point3d direction, bool isObjectCollision)
+        {
+            List<Collision> collisions = new List<Collision>();
+            if (direction.X == 0)
+            {
+                direction.X += 0.0000000001f;
+            }
+            if (direction.Z == 0)
+            {
+                direction.Z += 0.0000000001f;
+            }
+            if (direction.Y == 0)
+            {
+                direction.Y += 0.0000000001f;
+            }
+            Point3d[] vertices = boundingBox.ActualPoints;
+            Point3d result;
+            AddCollision(point, direction, vertices[0], vertices[4] - vertices[0], vertices[1] - vertices[0], out result,
+                isObjectCollision, collisions);
+            AddCollision(point, direction, vertices[1], vertices[5] - vertices[1], vertices[2] - vertices[1],
+                out result, isObjectCollision, collisions);
+            AddCollision(point, direction, vertices[2], vertices[6] - vertices[2], vertices[3] - vertices[2],
+                out result, isObjectCollision, collisions);
+            AddCollision(point, direction, vertices[3], vertices[7] - vertices[3], vertices[0] - vertices[3],
+                out result, isObjectCollision, collisions);
+            AddCollision(point, direction, vertices[7], vertices[4] - vertices[7], vertices[6] - vertices[7],
+               out result, isObjectCollision, collisions);
+            AddCollision(point, direction, vertices[3], vertices[0] - vertices[3], vertices[2] - vertices[3],
+                out result, isObjectCollision, collisions);
+
+            return collisions;
         }
 
         private Collision CheckParticularCollision(Point3d p1, Point3d v1, Point3d p2, Point3d v2, Point3d v3, out Point3d result, bool isObjectCollision)
@@ -564,6 +635,11 @@ namespace HouseDesign.Classes
             return null;
         }
 
+        public static void GetSystem2DSolutions(float[,] system, ref float t1,ref float t2)
+        {
+            t1 = (system[0, 2] * system[1, 1] - system[0, 1] * system[1, 2]) / (system[0, 0] * system[1, 1] - system[0, 1] * system[1, 0]);
+            t2 = (system[0, 2] - system[0, 0] * t1) / system[0, 1];
+        }
         public static void GetSystem3DSolutions(float[,] system, ref float t1, ref float t2, ref float t3)
         {
             float aLID = system[0, 0] * system[2, 3] - system[2, 0] * system[0, 3];
@@ -581,7 +657,7 @@ namespace HouseDesign.Classes
         public bool CheckObjectCollision(WorldObject obj, Point3d d, out float td)
         {
             bool collision = false;
-            List<Collision> collisions = new List<Collision>();
+            List<ICollision> collisions = new List<ICollision>();
 
             collisions = GetCollisionsWithObject(obj);
             float minTD = 1;
@@ -611,47 +687,95 @@ namespace HouseDesign.Classes
 
             td = minTD;
 
-            if (collisions.Count > 0)
+            if( collisions.Count > 0)
             {
                 collision = true;
             }
-
             return collision;
         }
 
-        private List<Collision> GetCollisionsWithObject(WorldObject obj)
+        private List<ICollision> GetCollisionsWithObject(WorldObject obj)
         {
-            Point3d[] vertices = obj.boundingBox.ActualPoints;
-            List<Collision> collisions = new List<Collision>();
+            Point3d[] vertices = obj.boundingBox.GetTopPoints();
+            List<ICollision> collisions = new List<ICollision>();
 
-            collisions.AddRange(CheckCollision(vertices[0], vertices[1] - vertices[0], true));
+            Point3d[] selfBox = boundingBox.GetTopPoints();
+            collisions.AddRange(CheckPointsInObject(vertices[0], vertices[1] - vertices[0], vertices[3] - vertices[0]));
+            collisions.AddRange(obj.CheckPointsInObject(selfBox[0], selfBox[1] - selfBox[0], selfBox[3] - selfBox[0]));
 
-            collisions.AddRange(CheckCollision(vertices[1], vertices[2] - vertices[1], true));
-
-            collisions.AddRange(CheckCollision(vertices[2], vertices[3] - vertices[2], true));
-
-            collisions.AddRange(CheckCollision(vertices[3], vertices[0] - vertices[3], true));
-
-            collisions.AddRange(CheckCollision(vertices[4], vertices[5] - vertices[4], true));
-
-            collisions.AddRange(CheckCollision(vertices[5], vertices[6] - vertices[5], true));
-
-            collisions.AddRange(CheckCollision(vertices[5], vertices[6] - vertices[5], true));
-
-            collisions.AddRange(CheckCollision(vertices[6], vertices[7] - vertices[6], true));
-
-            collisions.AddRange(CheckCollision(vertices[7], vertices[4] - vertices[7], true));
-
-            collisions.AddRange(CheckCollision(vertices[4], vertices[0] - vertices[4], true));
-
-            collisions.AddRange(CheckCollision(vertices[5], vertices[1] - vertices[5], true));
-
-            collisions.AddRange(CheckCollision(vertices[6], vertices[2] - vertices[6], true));
-
-            collisions.AddRange(CheckCollision(vertices[7], vertices[3] - vertices[7], true));
+            collisions.AddRange(CheckCollision2D(vertices[0], vertices[1] - vertices[0]));
+            collisions.AddRange(CheckCollision2D(vertices[1], vertices[2] - vertices[1]));
+            collisions.AddRange(CheckCollision2D(vertices[2], vertices[3] - vertices[2]));
+            collisions.AddRange(CheckCollision2D(vertices[3], vertices[0] - vertices[3]));
 
             return collisions;
+        }
 
+        private List<ICollision> CheckPointsInObject(Point3d p2, Point3d v2, Point3d v3)
+        {
+            if (v2.X == 0)
+            {
+                v2.X += 0.0000000001f;
+            }
+            if (v2.Z == 0)
+            {
+                v2.Z += 0.0000000001f;
+            }
+            if (v3.X == 0)
+            {
+                v3.X += 0.0000000001f;
+            }
+            if (v3.Z == 0)
+            {
+                v3.Z += 0.0000000001f;
+            }
+
+            Point3d[] vertices = boundingBox.GetTopPoints();
+            List<ICollision> collisions = new List<ICollision>();
+
+            AddPointInObjectCollision( vertices[0], p2, v2, v3, collisions);
+            AddPointInObjectCollision( vertices[1], p2, v2, v3, collisions);
+            AddPointInObjectCollision( vertices[2], p2, v2, v3, collisions);
+            AddPointInObjectCollision( vertices[3], p2, v2, v3, collisions);
+
+            return collisions;
+        }
+
+        private void AddPointInObjectCollision(Point3d p1, Point3d p2, Point3d v2, Point3d v3, List<ICollision> collisions)
+        {
+            if (v2.X == 0)
+            {
+                v2.X += 0.001f;
+            }
+            if (v2.Z == 0)
+            {
+                v2.Z += 0.001f;
+            }
+            if (v3.X == 0)
+            {
+                v3.X += 0.001f;
+            }
+            if (v3.Z == 0)
+            {
+                v3.Z += 0.001f;
+            }
+
+            float[,] system = new float[2, 3];
+
+            system[0, 0] = v2.X; 
+            system[0, 1] = v3.X;
+            system[0, 2] = p1.X - p2.X;
+            system[1, 0] = v2.Z;
+            system[1, 1] = v3.Z;
+            system[1, 2] = p1.Z - p2.Z;
+
+            float t2 = 0, t3 = 0;
+            GetSystem2DSolutions(system,ref t2,ref t3);
+
+            if ( t2 > 0 && t2 < 1 && t3 > 0 && t3 < 1)
+            {
+                collisions.Add(new PointInObjectCollision2D(p1, p2, v2, v3));
+            }
         }
 
         public void AddMaterial(Material material, double surfaceNeeded)

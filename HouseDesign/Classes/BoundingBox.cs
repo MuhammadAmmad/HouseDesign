@@ -35,8 +35,13 @@ namespace HouseDesign.Classes
             obj.Translating += obj_RecalculateActualPoints;
             obj.Scaling += obj_RecalculateActualPoints;
             obj.Rotating += obj_RecalculateActualPoints;
-
         }
+
+        public Point3d[] GetTopPoints ()
+        {
+            return new Point3d[] { ActualPoints[0], ActualPoints[1], ActualPoints[2], ActualPoints[3] };
+        }
+
         void obj_RecalculateActualPoints(object sender, EventArgs e)
         {
             WorldObject obj=(sender as WorldObject);

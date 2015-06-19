@@ -26,6 +26,7 @@ namespace HouseDesign.Classes
         }
         public void AddHouseObject(WorldObject houseObject)
         {
+            //houseObject.Rotate = new Point3d(0, 360, 0);
             this.houseObjects.Add(houseObject);
         }
         public void ClearHouseObjects()
@@ -86,7 +87,6 @@ namespace HouseDesign.Classes
                     if(currentObject.CheckObjectCollision(houseObjects[i], d, out currentTD))
                     {
                         td = currentTD;
-                        Console.WriteLine("T " + td);
                         collision = true;
                     }
                 }
@@ -98,12 +98,11 @@ namespace HouseDesign.Classes
                 if (currentObject.CheckObjectCollision(walls[i], d, out currentTD))
                 {
                     td = currentTD;
-                    Console.WriteLine("TWALLS!!!!!!!!!!!!!! " + td);
                     collision = true;
                 }
             }
 
-                return collision;
+            return collision;
         }
 
         public void ConvertHouseObjectPrices(Currency lastCurrency, Currency currentCurrency)

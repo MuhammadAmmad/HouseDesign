@@ -62,7 +62,6 @@ namespace HouseDesign
         public MainWindow()
         {
             InitializeComponent();
-            currencies = CurrencyHelper.GetCurrencies();
 
             currentProject = new Project(new HouseDesign.Classes.Scene());
 

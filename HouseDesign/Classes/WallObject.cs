@@ -12,7 +12,6 @@ namespace HouseDesign.Classes
 
         public WallObject(Wall wall, float height): base()
         {
-            //Scale = new Point3d(0.05f, 0.05f, 0.05f);
             Point3d p1 = wall.P1 * 0.05f;
             Point3d p2 = wall.P2 * 0.05f;
             Point3d p3 = wall.P3 * 0.05f;
