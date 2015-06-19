@@ -454,16 +454,15 @@ namespace HouseDesign
             currentObject = currentProject.Scene.GetCollisionObject(currentProject.Scene.MainCamera.Translate, direction);
             if (currentObject != null)
             {
+                Decimal lastPrice = currentObject.Price;
                 EditObject wndEditObject = new EditObject(currentObject, configuration.Materials, currentProject.WallsHeight,
                     TotalPrice, currentProject.Budget, currentProject.MeasurementUnit);
-                wndEditObject.ShowDialog();
-                Decimal lastPrice = currentObject.Price;
+                wndEditObject.ShowDialog();                
                 currentObject = wndEditObject.GetCurrentObject();
                 if (currentObject.Price != lastPrice)
                 {
                     TotalPrice -= lastPrice;
                     TotalPrice += currentObject.Price;
-                    currentProject.ActualPrice = TotalPrice;
                 }
                 return;
             }

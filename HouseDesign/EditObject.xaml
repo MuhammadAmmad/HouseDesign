@@ -11,7 +11,7 @@
         <GroupBox Grid.Row="0" Name="groupBoxObj">
             <Grid >
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="200"></RowDefinition>
                     <RowDefinition Height="130"></RowDefinition>
                     <RowDefinition Height="240"></RowDefinition>
                     <RowDefinition Height="60"></RowDefinition>

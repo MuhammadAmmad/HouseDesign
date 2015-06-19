@@ -27,6 +27,7 @@ namespace HouseDesign.Classes
         private GLHolder currentGL;
         private BoundingBox boundingBox;
         private List<WorldObjectMaterial> materials;
+        public bool IsSuspendable { get; set; }
         public Decimal InitialPrice { get; set; }
         public Decimal MaterialsPrice { get; set; }
         public String Name { get; set; }
@@ -166,6 +167,7 @@ namespace HouseDesign.Classes
 
             this.textures.AddRange(textures);
             InitializeBoundingBoxAndDimensions();
+            IsSuspendable = false;
         }
 
         uint[] tex = null;
@@ -704,6 +706,8 @@ namespace HouseDesign.Classes
             clone.Translate = Translate;
             clone.Rotate = Rotate;
             clone.Scale = Scale;
+            clone.IsSuspendable = IsSuspendable;
+            //clone.currentGL = currentGL;
 
             return clone;
         }

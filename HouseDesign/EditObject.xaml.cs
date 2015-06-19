@@ -32,6 +32,8 @@ namespace HouseDesign
         private Decimal actualPrice;
         private Decimal projectBudget;
         private Project.UnitOfMeasurement measurementUnit;
+        private float realHeightScaleFactor;
+        private float scaleFactor;
         public EditObject(WorldObject currentObject, List<Category<Material>> materials, float sceneHeight,
             Decimal actualPrice, Decimal projectBudget, Project.UnitOfMeasurement measurementUnit)
         {
@@ -51,15 +53,45 @@ namespace HouseDesign
             currentTradeAllowance = GetTradeAllowance(currentObject);
 
             selectedObjectMaterials.AddRange(currentObject.GetMaterials());
-            if (currentObject != null)
-            {
+            InitializeScaleFactors();
+            if (currentObject != null)            {
                 groupBoxPrices.Visibility = Visibility.Visible;
                 InitializeMaterials();
                 InitializePrices();
                 InitializeDimensions();
-            }                    
+            }            
+            
+            if(currentObject.IsSuspendable)
+            {
+                checkBoxIsSuspendable_Checked(this, new RoutedEventArgs());
+                checkBoxIsSuspendable.IsChecked = true;
+                textBoxChosenHeight.Text=(currentObject.Translate.Y/(realHeightScaleFactor*50)).ToString();
+            }
         }
 
+        private void InitializeScaleFactors()
+        {
+            realHeightScaleFactor = 1;
+            if (measurementUnit == Project.UnitOfMeasurement.cm)
+            {
+                scaleFactor = 0.022f;
+                realHeightScaleFactor = 0.01f;
+            }
+            else
+            {
+                if (measurementUnit == Project.UnitOfMeasurement.m)
+                {
+                    scaleFactor = 2.2f;
+                    realHeightScaleFactor = 1;
+                }
+                else
+                {
+                    scaleFactor = 0.0022f;
+                    realHeightScaleFactor = 0.001f;
+                }
+            }
+
+        }
         private static Decimal GetTradeAllowance(WorldObject currentObject)
         {
             return (currentObject.Price / (currentObject.MaterialsPrice + currentObject.InitialPrice) - 1)*100;
@@ -220,27 +252,9 @@ namespace HouseDesign
 
             float height, width, length;
 
-            if (measurementUnit == Project.UnitOfMeasurement.cm)
-            {
-                height = currentObject.Height * (1 / 0.022f);
-                length = currentObject.Length * (1 / 0.022f);
-                width = currentObject.Width * (1 / 0.022f);
-            }
-            else
-            {
-                if (measurementUnit == Project.UnitOfMeasurement.m)
-                {
-                    height = currentObject.Height * (1 / 2.2f);
-                    length = currentObject.Length * (1 / 2.2f);
-                    width = currentObject.Width * (1 / 2.2f);
-                }
-                else
-                {
-                    height = currentObject.Height * (1 / 0.0022f);
-                    length = currentObject.Length * (1 / 0.0022f);
-                    width = currentObject.Width * (1 / 0.0022f);
-                }
-            }
+            height = currentObject.Height * (1 / scaleFactor);
+            length = currentObject.Length * (1 / scaleFactor);
+            width = currentObject.Width * (1 / scaleFactor);            
 
             textBlockLength.Text = Math.Round(length, 1).ToString();
             textBlockHeight.Text = Math.Round(height, 1).ToString();
@@ -272,7 +286,6 @@ namespace HouseDesign
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
-            float realHeightScaleFactor = 1;
             if (checkBoxIsSuspendable.IsChecked == true)
             {
                 if (textBoxChosenHeight.Text.Length == 0 || Convert.ToSingle(textBoxChosenHeight.Text) == 0)
@@ -283,25 +296,6 @@ namespace HouseDesign
                 else
                 {
                     ChosenHeight = Convert.ToSingle(textBoxChosenHeight.Text);
-                    float scaleFactor;
-                    if (measurementUnit == Project.UnitOfMeasurement.cm)
-                    {
-                        scaleFactor = 0.022f;
-                        realHeightScaleFactor = 0.01f;
-                    }
-                    else
-                    {
-                        if (measurementUnit == Project.UnitOfMeasurement.m)
-                        {
-                            scaleFactor = 2.2f;
-                            realHeightScaleFactor = 1;
-                        }
-                        else
-                        {
-                            scaleFactor = 0.0022f;
-                            realHeightScaleFactor = 0.001f;
-                        }
-                    }
 
                     if (currentObject.Height + ChosenHeight * scaleFactor > sceneHeight)
                     {
@@ -327,6 +321,10 @@ namespace HouseDesign
             }
             currentObject.Translate = new Point3d(currentObject.Translate.X, ChosenHeight * realHeightScaleFactor * 50, currentObject.Translate.Z);
             //InitializecurrentObjectMaterials();
+            if(ChosenHeight*realHeightScaleFactor*50 >0)
+            {
+                currentObject.IsSuspendable = true;
+            }
             currentObject.SetMaterials(selectedObjectMaterials);
             currentObject.MaterialsPrice = Convert.ToDecimal(textBlockMaterialsPrice.Text);
 
@@ -338,6 +336,7 @@ namespace HouseDesign
             }
                 oldObject.MaterialsPrice = currentObject.MaterialsPrice;
             oldObject.Price = currentObject.Price;
+            oldObject.IsSuspendable = currentObject.IsSuspendable;
             this.Close();
         }
 

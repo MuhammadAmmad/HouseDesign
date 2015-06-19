@@ -34,6 +34,8 @@ namespace HouseDesign
         private Decimal actualPrice;
         private Decimal projectBudget;
         private Project.UnitOfMeasurement measurementUnit;
+        private float realHeightScaleFactor;
+        private float scaleFactor;
         public GenericCategory(Category<FurnitureObject> category, List<Category<Material>> materials, float sceneHeight, 
             Decimal actualPrice, Decimal projectBudget, Project.UnitOfMeasurement measurementUnit)
         {
@@ -43,6 +45,7 @@ namespace HouseDesign
             selectedObjectMaterials = new List<WorldObjectMaterial>();
             TreeViewItem mainTreeViewItem = new TreeViewItem();
             mainTreeViewItem.IsExpanded = true;
+            InitializeScaleFactors();
             treeViewCategory.Items.Add(mainTreeViewItem);
             PopulateTreeView(category, mainTreeViewItem);
             ChosenHeight = 0;
@@ -56,6 +59,29 @@ namespace HouseDesign
             textBlockMeasurementUnit.Text = measurementUnit.ToString();
         }
 
+        private void InitializeScaleFactors()
+        {
+            realHeightScaleFactor = 1;
+            if (measurementUnit == Project.UnitOfMeasurement.cm)
+            {
+                scaleFactor = 0.022f;
+                realHeightScaleFactor = 0.01f;
+            }
+            else
+            {
+                if (measurementUnit == Project.UnitOfMeasurement.m)
+                {
+                    scaleFactor = 2.2f;
+                    realHeightScaleFactor = 1;
+                }
+                else
+                {
+                    scaleFactor = 0.0022f;
+                    realHeightScaleFactor = 0.001f;
+                }
+            }
+
+        }
         public void PopulateTreeView(Category<FurnitureObject> mainCategory, TreeViewItem currentItem)
         {
             foreach(FurnitureObject obj in mainCategory.StoredObjects)
@@ -163,7 +189,6 @@ namespace HouseDesign
 
         private void btnAddToScene_Click(object sender, RoutedEventArgs e)
         {
-            float realHeightScaleFactor=1;
             if(checkBoxIsSuspendable.IsChecked==true )
             {
                 if (textBoxChosenHeight.Text.Length == 0 || Convert.ToSingle(textBoxChosenHeight.Text) == 0)
@@ -173,27 +198,7 @@ namespace HouseDesign
                 }
                 else
                 {
-                    ChosenHeight = Convert.ToSingle(textBoxChosenHeight.Text);
-                    float scaleFactor;
-                    if(measurementUnit==Project.UnitOfMeasurement.cm)
-                    {
-                        scaleFactor= 0.022f;
-                        realHeightScaleFactor = 0.01f;
-                    }
-                    else
-                    {
-                        if (measurementUnit == Project.UnitOfMeasurement.m)
-                        {
-                           scaleFactor= 2.2f;
-                           realHeightScaleFactor = 1;
-                        }
-                        else
-                        {
-                            scaleFactor= 0.0022f;
-                            realHeightScaleFactor = 0.001f;
-                        }
-                    }
-                   
+                    ChosenHeight = Convert.ToSingle(textBoxChosenHeight.Text);                   
                     if(SelectedObject.Height+ChosenHeight*scaleFactor>sceneHeight)
                     {
                         MessageBox.Show("The chosen height is invalid! Type another!");
@@ -219,6 +224,11 @@ namespace HouseDesign
             //InitializeSelectedObjectMaterials();
             SelectedObject.SetMaterials(selectedObjectMaterials);
             SelectedObject.MaterialsPrice=Convert.ToDecimal(textBlockMaterialsPrice.Text);
+
+            if (ChosenHeight * realHeightScaleFactor * 50>0)
+            {
+                SelectedObject.IsSuspendable = true;
+            }
             
             this.Close();
             
@@ -336,28 +346,9 @@ namespace HouseDesign
             textBlockDimensionLength.Text = measurementUnit.ToString();            
 
             float height, width, length;
-
-            if (measurementUnit == Project.UnitOfMeasurement.cm)
-            {
-                height = SelectedObject.Height * (1 / 0.022f);
-                length = SelectedObject.Length * (1 / 0.022f);
-                width = SelectedObject.Width * (1 / 0.022f);
-            }
-            else
-            {
-                if (measurementUnit == Project.UnitOfMeasurement.m)
-                {
-                    height = SelectedObject.Height * (1 / 2.2f);
-                    length = SelectedObject.Length * (1 / 2.2f);
-                    width = SelectedObject.Width * (1 / 2.2f);
-                }
-                else
-                {
-                    height = SelectedObject.Height * (1/0.0022f);
-                    length = SelectedObject.Length * (1 / 0.0022f);
-                    width = SelectedObject.Width * (1 / 0.0022f);
-                }
-            }
+            height = SelectedObject.Height * (1 / scaleFactor);
+            length = SelectedObject.Length * (1 /scaleFactor);
+            width = SelectedObject.Width * (1 / scaleFactor);
 
             textBlockLength.Text = Math.Round(length, 1).ToString();
             textBlockHeight.Text = Math.Round(height, 1).ToString();
