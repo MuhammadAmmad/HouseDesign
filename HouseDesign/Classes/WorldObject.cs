@@ -8,9 +8,9 @@ using System.Windows;
 namespace HouseDesign.Classes
 {
     [Serializable]
-    public class WorldObject:IComparable<WorldObject>
+    public class WorldObject : IComparable<WorldObject>
     {
-        public delegate void Point3DEventHandler(object sender, EventArgs e); 
+        public delegate void Point3DEventHandler(object sender, EventArgs e);
         public event Point3DEventHandler Translating;
         public event Point3DEventHandler Scaling;
         public event Point3DEventHandler Rotating;
@@ -29,10 +29,10 @@ namespace HouseDesign.Classes
         private List<WorldObjectMaterial> materials;
         public Decimal InitialPrice { get; set; }
         public Decimal MaterialsPrice { get; set; }
-        public String Name { get; set; }        
+        public String Name { get; set; }
         public Decimal Price { get; set; }
-        public Point3d Translate 
-        { 
+        public Point3d Translate
+        {
             get
             {
                 return translate;
@@ -40,10 +40,10 @@ namespace HouseDesign.Classes
             set
             {
                 translate = value;
-                if(Translating!=null)
+                if (Translating != null)
                 {
                     Translating(this, new EventArgs());
-                }                
+                }
             }
         }
         public Point3d Scale
@@ -55,26 +55,27 @@ namespace HouseDesign.Classes
             set
             {
                 scale = value;
-                if(Scaling!=null)
+                if (Scaling != null)
                 {
                     Scaling(this, new EventArgs());
-                }               
+                }
             }
         }
 
-        public Point3d Rotate{ 
-            get 
+        public Point3d Rotate
+        {
+            get
             {
                 return rotate;
-            } 
-            set 
+            }
+            set
             {
                 rotate = value;
-                if(Rotating!=null)
+                if (Rotating != null)
                 {
                     Rotating(this, new EventArgs());
                 }
-            } 
+            }
         }
         public float Width
         {
@@ -87,32 +88,34 @@ namespace HouseDesign.Classes
                 width = value;
             }
         }
-        public float Height { 
-            get 
+        public float Height
+        {
+            get
             {
                 return height;
-            } 
-            set 
+            }
+            set
             {
                 height = value;
-            } 
+            }
         }
-        public float Length { 
-            get 
+        public float Length
+        {
+            get
             {
                 return length;
-            } 
+            }
             set
             {
                 length = value;
             }
-        }        
+        }
         public virtual Point3d Forward
         {
             get
             {
                 return new Point3d(0.0f, 0.0f, 1.0f).RotateY(Rotate.Y).RotateX(Rotate.X);
-            
+
             }
         }
 
@@ -132,7 +135,7 @@ namespace HouseDesign.Classes
                 return new Point3d(1.0f, 0.0f, 0.0f).RotateY(Rotate.Y).RotateX(Rotate.X);
 
             }
-        }     
+        }
         public WorldObject()
         {
             this.vertices = new List<Point3d>();
@@ -143,23 +146,24 @@ namespace HouseDesign.Classes
             currentGL = new GLHolder();
             materials = new List<WorldObjectMaterial>();
         }
-        public WorldObject(List<Point3d> vertices, List<Triangle> triangles, List<UV> uvs, List<String> textures):this()
+        public WorldObject(List<Point3d> vertices, List<Triangle> triangles, List<UV> uvs, List<String> textures)
+            : this()
         {
             this.vertices.AddRange(vertices);
-            
 
-            for (int i = 0; i < textures.Count;i++)
+
+            for (int i = 0; i < textures.Count; i++)
             {
-                this.triangles.Add( new List<Triangle>());
+                this.triangles.Add(new List<Triangle>());
             }
 
-            for (int i = 0; i < triangles.Count;i++ )
+            for (int i = 0; i < triangles.Count; i++)
             {
                 int index = triangles[i].TextureIndex;
                 this.triangles[index].Add(triangles[i]);
-            }            
+            }
             this.uvs.AddRange(uvs);
-            
+
             this.textures.AddRange(textures);
             InitializeBoundingBoxAndDimensions();
         }
@@ -175,7 +179,7 @@ namespace HouseDesign.Classes
             float minZ = float.MaxValue;
             float maxZ = float.MinValue;
 
-            for(int i=0;i<vertices.Count;i++)
+            for (int i = 0; i < vertices.Count; i++)
             {
                 CheckValues(ref minX, vertices[i], Criteria.less, Axis.OX);
                 CheckValues(ref maxX, vertices[i], Criteria.greater, Axis.OX);
@@ -193,11 +197,11 @@ namespace HouseDesign.Classes
 
         public void CheckValues(ref float currentValue, Point3d currentVertex, Criteria criteria, Axis axis)
         {
-            if(axis==Axis.OX)
+            if (axis == Axis.OX)
             {
-                if(criteria==Criteria.less)
+                if (criteria == Criteria.less)
                 {
-                    if(currentVertex.X<currentValue)
+                    if (currentVertex.X < currentValue)
                     {
                         currentValue = currentVertex.X;
                     }
@@ -212,7 +216,7 @@ namespace HouseDesign.Classes
             }
             else
             {
-                if(axis==Axis.OY)
+                if (axis == Axis.OY)
                 {
                     if (criteria == Criteria.less)
                     {
@@ -250,7 +254,7 @@ namespace HouseDesign.Classes
         }
         public void InitializeTextures(OpenGL gl)
         {
-            if(tex!=null)
+            if (tex != null)
             {
                 if (currentGL.Gl != null)
                 {
@@ -259,7 +263,7 @@ namespace HouseDesign.Classes
             }
             currentGL.Gl = gl;
             tex = new uint[textures.Count];
-            for(int i=0;i<textures.Count;i++)
+            for (int i = 0; i < textures.Count; i++)
             {
                 tex[i] = Texture.LoadTexture(textures[i], currentGL.Gl);
             }
@@ -274,11 +278,11 @@ namespace HouseDesign.Classes
 
         protected virtual void DrawObject(OpenGL gl)
         {
-            if(gl!=currentGL.Gl)
+            if (gl != currentGL.Gl)
             {
                 InitializeTextures(gl);
             }
-            for (int j = 0; j < textures.Count;j++ )
+            for (int j = 0; j < textures.Count; j++)
             {
                 gl.BindTexture(OpenGL.GL_TEXTURE_2D, tex[j]);
 
@@ -376,13 +380,13 @@ namespace HouseDesign.Classes
                 //    //gl.TexCoord(0, 1);
                 //    //gl.Vertex(vertices[3].X, vertices[3].Y, vertices[3].Z);
                 //}
-                
+
 
 
                 gl.End();
             }
             //gl.DeleteTextures((int)tex[0], tex);
-                
+
         }
 
         public List<String> GetTextures()
@@ -420,7 +424,7 @@ namespace HouseDesign.Classes
 
         public double GetArea(Point3d a, Point3d b, Point3d c)
         {
-            double area = Math.Abs((a.X*(b.Y-c.Y)+b.X*(c.Y-a.Y)+c.X*(a.Y-b.Y))/2);
+            double area = Math.Abs((a.X * (b.Y - c.Y) + b.X * (c.Y - a.Y) + c.X * (a.Y - b.Y)) / 2);
 
             return area;
         }
@@ -428,7 +432,7 @@ namespace HouseDesign.Classes
         public double GetTotalAreaPerTexture(int textureIndex)
         {
             double area = 0;
-            for(int i=0;i<triangles[textureIndex].Count;i++)
+            for (int i = 0; i < triangles[textureIndex].Count; i++)
             {
                 Point3d a = vertices[triangles[textureIndex][i].vertex1];
                 Point3d b = vertices[triangles[textureIndex][i].vertex2];
@@ -440,14 +444,14 @@ namespace HouseDesign.Classes
 
         public double GetTotalAreaPerTextureByPath(String texturePath)
         {
-            int textureIndex=textures.IndexOf(texturePath);
+            int textureIndex = textures.IndexOf(texturePath);
             return GetTotalAreaPerTexture(textureIndex);
         }
 
         public List<Collision> CheckCollision(Point3d point, Point3d direction, bool isObjectCollision)
         {
             List<Collision> collisions = new List<Collision>();
-            if(direction.X==0)
+            if (direction.X == 0)
             {
                 direction.X += 0.0000000001f;
             }
@@ -455,7 +459,7 @@ namespace HouseDesign.Classes
             {
                 direction.Z += 0.0000000001f;
             }
-            if(direction.Y==0)
+            if (direction.Y == 0)
             {
                 direction.Y += 0.0000000001f;
             }
@@ -503,7 +507,7 @@ namespace HouseDesign.Classes
             if (v3.Z == 0)
             {
                 v3.Z += 0.001f;
-            } 
+            }
             Collision currentCollision = CheckParticularCollision(p1, v1, p2, v2, v3, out result, isObjectCollision);
             if (currentCollision != null)
             {
@@ -513,7 +517,7 @@ namespace HouseDesign.Classes
 
         private Collision CheckParticularCollision(Point3d p1, Point3d v1, Point3d p2, Point3d v2, Point3d v3, out Point3d result, bool isObjectCollision)
         {
-            float[,] system=new float[3,4];
+            float[,] system = new float[3, 4];
             system[0, 0] = v1.X;
             system[0, 1] = -v2.X;
             system[0, 2] = -v3.X;
@@ -529,11 +533,11 @@ namespace HouseDesign.Classes
             system[2, 2] = -v3.Z;
             system[2, 3] = p2.Z - p1.Z;
 
-            
+
             //MessageBox.Show("t2 " + t2);
             //MessageBox.Show("t3 " + t3);
 
-            float t1=0, t2=0, t3=0;
+            float t1 = 0, t2 = 0, t3 = 0;
             GetSystem3DSolutions(system, ref t1, ref t2, ref t3);
 
             if (t2 > 0 && t2 < 1 && t3 > 0 && t3 < 1)
@@ -579,14 +583,14 @@ namespace HouseDesign.Classes
 
             collisions = GetCollisionsWithObject(obj);
             float minTD = 1;
-            for(int i=0;i<collisions.Count;i++)
+            for (int i = 0; i < collisions.Count; i++)
             {
                 float currentTD = collisions[i].GetMaxTD(d);
-                if(currentTD < minTD)
+                if (currentTD < minTD)
                 {
                     minTD = currentTD;
                 }
-                    
+
             }
 
             if (collisions.Count > 0)
@@ -608,7 +612,7 @@ namespace HouseDesign.Classes
             if (collisions.Count > 0)
             {
                 collision = true;
-            }                
+            }
 
             return collision;
         }
@@ -661,7 +665,7 @@ namespace HouseDesign.Classes
         public void SetMaterials(List<WorldObjectMaterial> materials)
         {
             this.materials.Clear();
-            this.materials.AddRange( materials);
+            this.materials.AddRange(materials);
         }
 
         public WorldObject Clone()
@@ -691,6 +695,15 @@ namespace HouseDesign.Classes
             }
 
             clone.SetMaterials(cloneMaterials);
+            clone.InitialPrice = InitialPrice;
+            clone.MaterialsPrice = MaterialsPrice;
+            clone.Price = Price;
+            clone.Height = Height;
+            clone.Width = Width;
+            clone.Length = Length;
+            clone.Translate = Translate;
+            clone.Rotate = Rotate;
+            clone.Scale = Scale;
 
             return clone;
         }
@@ -713,6 +726,6 @@ namespace HouseDesign.Classes
             OZ
         };
 
-        
+
     }
 }
