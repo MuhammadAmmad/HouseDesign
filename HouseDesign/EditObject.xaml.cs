@@ -40,6 +40,9 @@ namespace HouseDesign
             InitializeComponent();
             //is.currentObject = new WorldObject();
             this.currentObject = currentObject.Clone();
+
+            this.currentObject.Translate = new Point3d(0, 0, 0);
+            this.currentObject.Scale = new Point3d(1, 1, 1);
             this.oldObject = currentObject;
             selectedObjectMaterials = new List<WorldObjectMaterial>();
             this.materials = materials;
@@ -328,7 +331,7 @@ namespace HouseDesign
             currentObject.SetMaterials(selectedObjectMaterials);
             currentObject.MaterialsPrice = Convert.ToDecimal(textBlockMaterialsPrice.Text);
 
-            oldObject.Translate = currentObject.Translate;
+            oldObject.Translate = new Point3d(oldObject.Translate.X, currentObject.Translate.Y, oldObject.Translate.Z);
             oldObject.SetMaterials(selectedObjectMaterials);
             for (int i = 0; i < selectedObjectMaterials.Count;i++ )
             {

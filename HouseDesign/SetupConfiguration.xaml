@@ -6,7 +6,7 @@
         Closed="Window_Closed" Name="setupConfiguration">
     <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="65"></RowDefinition>
+                <RowDefinition Height="75"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <Menu Name="menuShortcuts" Grid.Row="0">

@@ -72,28 +72,36 @@ namespace HouseDesign
         public void InitializeExtendedMenuItems()
         {
             ExtendedMenuItem extendedMenuItemNew = new ExtendedMenuItem("D:\\Licenta\\HouseDesign\\HouseDesign\\Images\\new.png", "New");
+            extendedMenuItemNew.Margin = new Thickness(5, 5, 5, 5);
             menuShortcuts.Items.Add(extendedMenuItemNew);
             extendedMenuItemNew.MouseLeftButtonDown += extendedMenuItemNew_MouseLeftButtonDown;
             ExtendedMenuItem extendedMenuItemEdit = new ExtendedMenuItem("D:\\Licenta\\HouseDesign\\HouseDesign\\Images\\edit.png", "Edit");
+            extendedMenuItemEdit.Margin = new Thickness(5, 5, 5, 5);
             menuShortcuts.Items.Add(extendedMenuItemEdit);
             extendedMenuItemEdit.MouseLeftButtonDown += extendedMenuItemEdit_MouseLeftButtonDown;
             ExtendedMenuItem extendedMenuItemCut = new ExtendedMenuItem("D:\\Licenta\\HouseDesign\\HouseDesign\\Images\\cut.png", "Cut");
+            extendedMenuItemCut.Margin = new Thickness(5, 5, 5, 5);
             menuShortcuts.Items.Add(extendedMenuItemCut);
             extendedMenuItemCut.MouseLeftButtonDown += extendedMenuItemCut_MouseLeftButtonDown;
             ExtendedMenuItem extendedMenuItemCopy = new ExtendedMenuItem("D:\\Licenta\\HouseDesign\\HouseDesign\\Images\\copy.png", "Copy");
+            extendedMenuItemCopy.Margin = new Thickness(5, 5, 5, 5);
             menuShortcuts.Items.Add(extendedMenuItemCopy);
             extendedMenuItemCopy.MouseLeftButtonDown += extendedMenuItemCopy_MouseLeftButtonDown;
             ExtendedMenuItem extendedMenuItemPaste = new ExtendedMenuItem("D:\\Licenta\\HouseDesign\\HouseDesign\\Images\\paste.png", "Paste");
+            extendedMenuItemPaste.Margin = new Thickness(5, 5, 5, 5);
             menuShortcuts.Items.Add(extendedMenuItemPaste);
             extendedMenuItemPaste.MouseLeftButtonDown += extendedMenuItemPaste_MouseLeftButtonDown;
             ExtendedMenuItem extendedMenuItemImport = new ExtendedMenuItem("D:\\Licenta\\HouseDesign\\HouseDesign\\Images\\import.png", "Import");
+            extendedMenuItemImport.Margin = new Thickness(5, 5, 5, 5);
             menuShortcuts.Items.Add(extendedMenuItemImport);
             extendedMenuItemImport.MouseLeftButtonDown += extendedMenuItemImport_MouseLeftButtonDown;
             ExtendedMenuItem extendedMenuItemDelete = new ExtendedMenuItem("D:\\Licenta\\HouseDesign\\HouseDesign\\Images\\deleted.png", "Delete");
+            extendedMenuItemDelete.Margin = new Thickness(5, 5, 5, 5);
             menuShortcuts.Items.Add(extendedMenuItemDelete);
             extendedMenuItemDelete.MouseLeftButtonDown += extendedMenuItemDelete_MouseLeftButtonDown;
 
             ExtendedMenuItem extendedMenuItemSaveConfiguration = new ExtendedMenuItem("D:\\Licenta\\HouseDesign\\HouseDesign\\Images\\save.png", "Save");
+            extendedMenuItemSaveConfiguration.Margin = new Thickness(5, 5, 5, 5);
             menuShortcuts.Items.Add(extendedMenuItemSaveConfiguration);
             extendedMenuItemSaveConfiguration.MouseLeftButtonDown += extendedMenuItemSaveConfiguration_MouseLeftButtonDown;
         }
