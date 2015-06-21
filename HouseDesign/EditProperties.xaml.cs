@@ -32,26 +32,30 @@ namespace HouseDesign
 
         private void InitializeCurrentProject()
         {
-            projectProperties.textBoxClientName.Text = currentProject.Client.Name;
-            projectProperties.textBoxEmailAddress.Text = currentProject.Client.EmailAddress;
-            projectProperties.textBoxTelephoneNumber.Text = currentProject.Client.TelephoneNumber.ToString();
-            projectProperties.textBoxBudget.Text = currentProject.Budget.ToString();
-            projectProperties.textBoxNotes.Text = currentProject.Notes;            
-            projectProperties.comboBoxCurrencies.SelectedValue = currentProject.Currency.Name.ToString();
-            projectProperties.comboBoxMeasurementUnits.SelectedValue = currentProject.MeasurementUnit.ToString();
-            float wallsHeight= currentProject.WallsHeight;
-            if(currentProject.MeasurementUnit==Project.UnitOfMeasurement.cm)
+            if(currentProject.IsEmpty==false)
             {
-                wallsHeight /= 10;
-            }
-            else
-            {
-                if (currentProject.MeasurementUnit == Project.UnitOfMeasurement.m)
+                projectProperties.textBoxClientName.Text = currentProject.Client.Name;
+                projectProperties.textBoxEmailAddress.Text = currentProject.Client.EmailAddress;
+                projectProperties.textBoxTelephoneNumber.Text = currentProject.Client.TelephoneNumber.ToString();
+                projectProperties.textBoxBudget.Text = currentProject.Budget.ToString();
+                projectProperties.textBoxNotes.Text = currentProject.Notes;
+                projectProperties.comboBoxCurrencies.SelectedValue = currentProject.Currency.Name.ToString();
+                projectProperties.comboBoxMeasurementUnits.SelectedValue = currentProject.MeasurementUnit.ToString();
+                float wallsHeight = currentProject.WallsHeight;
+                if (currentProject.MeasurementUnit == Project.UnitOfMeasurement.cm)
                 {
-                    wallsHeight /= 1000;
+                    wallsHeight /= 10;
                 }
+                else
+                {
+                    if (currentProject.MeasurementUnit == Project.UnitOfMeasurement.m)
+                    {
+                        wallsHeight /= 1000;
+                    }
+                }
+                projectProperties.textBoxWallsHeight.Text = wallsHeight.ToString();
             }
-            projectProperties.textBoxWallsHeight.Text = wallsHeight.ToString();
+            
         }
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
