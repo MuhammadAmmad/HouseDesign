@@ -71,36 +71,38 @@ namespace HouseDesign
 
         public void InitializeExtendedMenuItems()
         {
-            ExtendedMenuItem extendedMenuItemNew = new ExtendedMenuItem("D:\\Licenta\\HouseDesign\\HouseDesign\\Images\\new.png", "New");
+            const string directory = "Images";
+            String imagesDirectoryPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", directory));
+            ExtendedMenuItem extendedMenuItemNew = new ExtendedMenuItem(string.Format(@"{0}\{1}", imagesDirectoryPath, "new.png"), "New");
             extendedMenuItemNew.Margin = new Thickness(5, 5, 5, 5);
             menuShortcuts.Items.Add(extendedMenuItemNew);
             extendedMenuItemNew.MouseLeftButtonDown += extendedMenuItemNew_MouseLeftButtonDown;
-            ExtendedMenuItem extendedMenuItemEdit = new ExtendedMenuItem("D:\\Licenta\\HouseDesign\\HouseDesign\\Images\\edit.png", "Edit");
+            ExtendedMenuItem extendedMenuItemEdit = new ExtendedMenuItem(string.Format(@"{0}\{1}", imagesDirectoryPath, "edit.png"), "Edit");
             extendedMenuItemEdit.Margin = new Thickness(5, 5, 5, 5);
             menuShortcuts.Items.Add(extendedMenuItemEdit);
             extendedMenuItemEdit.MouseLeftButtonDown += extendedMenuItemEdit_MouseLeftButtonDown;
-            ExtendedMenuItem extendedMenuItemCut = new ExtendedMenuItem("D:\\Licenta\\HouseDesign\\HouseDesign\\Images\\cut.png", "Cut");
+            ExtendedMenuItem extendedMenuItemCut = new ExtendedMenuItem(string.Format(@"{0}\{1}", imagesDirectoryPath, "cut.png"), "Cut");
             extendedMenuItemCut.Margin = new Thickness(5, 5, 5, 5);
             menuShortcuts.Items.Add(extendedMenuItemCut);
             extendedMenuItemCut.MouseLeftButtonDown += extendedMenuItemCut_MouseLeftButtonDown;
-            ExtendedMenuItem extendedMenuItemCopy = new ExtendedMenuItem("D:\\Licenta\\HouseDesign\\HouseDesign\\Images\\copy.png", "Copy");
+            ExtendedMenuItem extendedMenuItemCopy = new ExtendedMenuItem(string.Format(@"{0}\{1}", imagesDirectoryPath, "copy.png"), "Copy");
             extendedMenuItemCopy.Margin = new Thickness(5, 5, 5, 5);
             menuShortcuts.Items.Add(extendedMenuItemCopy);
             extendedMenuItemCopy.MouseLeftButtonDown += extendedMenuItemCopy_MouseLeftButtonDown;
-            ExtendedMenuItem extendedMenuItemPaste = new ExtendedMenuItem("D:\\Licenta\\HouseDesign\\HouseDesign\\Images\\paste.png", "Paste");
+            ExtendedMenuItem extendedMenuItemPaste = new ExtendedMenuItem(string.Format(@"{0}\{1}", imagesDirectoryPath, "paste.png"), "Paste");
             extendedMenuItemPaste.Margin = new Thickness(5, 5, 5, 5);
             menuShortcuts.Items.Add(extendedMenuItemPaste);
             extendedMenuItemPaste.MouseLeftButtonDown += extendedMenuItemPaste_MouseLeftButtonDown;
-            ExtendedMenuItem extendedMenuItemImport = new ExtendedMenuItem("D:\\Licenta\\HouseDesign\\HouseDesign\\Images\\import.png", "Import");
+            ExtendedMenuItem extendedMenuItemImport = new ExtendedMenuItem(string.Format(@"{0}\{1}", imagesDirectoryPath, "import.png"), "Import");
             extendedMenuItemImport.Margin = new Thickness(5, 5, 5, 5);
             menuShortcuts.Items.Add(extendedMenuItemImport);
             extendedMenuItemImport.MouseLeftButtonDown += extendedMenuItemImport_MouseLeftButtonDown;
-            ExtendedMenuItem extendedMenuItemDelete = new ExtendedMenuItem("D:\\Licenta\\HouseDesign\\HouseDesign\\Images\\deleted.png", "Delete");
+            ExtendedMenuItem extendedMenuItemDelete = new ExtendedMenuItem(string.Format(@"{0}\{1}", imagesDirectoryPath, "deleted.png"), "Delete");
             extendedMenuItemDelete.Margin = new Thickness(5, 5, 5, 5);
             menuShortcuts.Items.Add(extendedMenuItemDelete);
             extendedMenuItemDelete.MouseLeftButtonDown += extendedMenuItemDelete_MouseLeftButtonDown;
 
-            ExtendedMenuItem extendedMenuItemSaveConfiguration = new ExtendedMenuItem("D:\\Licenta\\HouseDesign\\HouseDesign\\Images\\save.png", "Save");
+            ExtendedMenuItem extendedMenuItemSaveConfiguration = new ExtendedMenuItem(string.Format(@"{0}\{1}", imagesDirectoryPath, "save.png"), "Save");
             extendedMenuItemSaveConfiguration.Margin = new Thickness(5, 5, 5, 5);
             menuShortcuts.Items.Add(extendedMenuItemSaveConfiguration);
             extendedMenuItemSaveConfiguration.MouseLeftButtonDown += extendedMenuItemSaveConfiguration_MouseLeftButtonDown;
@@ -109,10 +111,12 @@ namespace HouseDesign
         
         private void extendedMenuItemNew_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            const string iconsCategoryDirectory = @"Icons\IconsCategory";
+            const string iconsMaterialDirectory = @"Icons\IconsMaterialCategory";
             TabItem currentTabItem = (TabItem)mainTabControl.SelectedItem;
             if (currentTabItem.Header.ToString() == "Categories")
             {
-                AddCategory addCategory = new AddCategory("New Category", null, false, false, @"D:\Licenta\HouseDesign\HouseDesign\Icons\IconsCategory");
+                AddCategory addCategory = new AddCategory("New Category", null, false, false, System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", iconsCategoryDirectory)));
                 addCategory.StatusUpdated += addCategory_StatusUpdated;
                 Grid grid = new Grid();
                 grid.Children.Add(addCategory);
@@ -120,7 +124,7 @@ namespace HouseDesign
             }
             else
             {
-                AddMaterialCategory addMaterialCategory = new AddMaterialCategory("New Material Category", null, false, false, @"D:\Licenta\HouseDesign\HouseDesign\Icons\IconsMaterialCategory");
+                AddMaterialCategory addMaterialCategory = new AddMaterialCategory("New Material Category", null, false, false, System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\",iconsMaterialDirectory)));
                 addMaterialCategory.StatusUpdated += addMaterialCategory_StatusUpdated;
                 Grid grid = new Grid();
                 grid.Children.Add(addMaterialCategory);
@@ -235,7 +239,9 @@ namespace HouseDesign
         }
 
         private void extendedMenuItemEdit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
+        {         
+            const string iconsMaterialDirectory = @"Icons\IconsMaterialCategory";
+            const string iconsCategoryDirectory = @"Icons\IconsCategory";
             TabItem item = mainTabControl.SelectedItem as TabItem;
             if(item!=null)
             {
@@ -249,7 +255,7 @@ namespace HouseDesign
             if (selectedItemType==LastSelectedItemType.Category)
             {
                 Category<FurnitureObject> currentCategory = selectedTreeViewItem.Tag as Category<FurnitureObject>;
-                AddCategory addCategory = new AddCategory("Edit Category", currentCategory, false, true, @"D:\Licenta\HouseDesign\HouseDesign\Icons\IconsCategory");
+                AddCategory addCategory = new AddCategory("Edit Category", currentCategory, false, true, System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", iconsCategoryDirectory)));
                 addCategory.StatusUpdated += addCategory_StatusUpdated;
                 Grid grid = new Grid();
                 grid.Children.Add(addCategory);
@@ -274,7 +280,7 @@ namespace HouseDesign
                     if(selectedItemType==LastSelectedItemType.CategoryMaterial)
                     {
                         Category<Material> currentMaterialCategory = selectedTreeViewItem.Tag as Category<Material>;
-                        AddMaterialCategory addMaterialCategory = new AddMaterialCategory("Edit Material Category", currentMaterialCategory, false, true, @"D:\Licenta\HouseDesign\HouseDesign\Icons\IconsCategory");
+                        AddMaterialCategory addMaterialCategory = new AddMaterialCategory("Edit Material Category", currentMaterialCategory, false, true, System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", iconsMaterialDirectory)));
                         addMaterialCategory.StatusUpdated += addMaterialCategory_StatusUpdated;
                         Grid grid = new Grid();
                         grid.Children.Add(addMaterialCategory);
@@ -552,6 +558,8 @@ namespace HouseDesign
         }
         private void treeViewCategories_Selected(object sender, RoutedEventArgs e)
         {
+            const string iconsCategoryDirectory = @"Icons\IconsCategory";
+            
             lastSelectedTreeViewItem = selectedTreeViewItem;
             lastSelectedItemType = selectedItemType;
             selectedTreeViewItem = e.OriginalSource as TreeViewItem;
@@ -559,7 +567,7 @@ namespace HouseDesign
             {
                 selectedItemType = LastSelectedItemType.Category;
                 Category<FurnitureObject> currentCategory = selectedTreeViewItem.Tag as Category<FurnitureObject>;
-                AddCategory addCategory = new AddCategory(currentCategory.Name, currentCategory, true, false, @"D:\Licenta\HouseDesign\HouseDesign\Icons\IconsCategory");
+                AddCategory addCategory = new AddCategory(currentCategory.Name, currentCategory, true, false, System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", iconsCategoryDirectory)));
                 Grid grid = new Grid();
                 grid.Children.Add(addCategory);
                 groupBoxRightSide.Content = grid;
@@ -582,6 +590,7 @@ namespace HouseDesign
         }
         private void treeViewMaterials_Selected(object sender, RoutedEventArgs e)
         {
+            const string iconsMaterialDirectory = @"Icons\IconsMaterialCategory";
             if(selectedItemType==LastSelectedItemType.CategoryMaterial || selectedItemType==LastSelectedItemType.Material)
             {
                 lastSelectedTreeViewItem = selectedTreeViewItem;
@@ -593,7 +602,7 @@ namespace HouseDesign
             {
                 selectedItemType = LastSelectedItemType.CategoryMaterial;
                 Category<Material> currentCategory = selectedTreeViewItem.Tag as Category<Material>;
-                AddMaterialCategory addCategory = new AddMaterialCategory(currentCategory.Name, currentCategory, true, false, @"D:\Licenta\HouseDesign\HouseDesign\Icons\IconsMaterialCategory");
+                AddMaterialCategory addCategory = new AddMaterialCategory(currentCategory.Name, currentCategory, true, false, System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", iconsMaterialDirectory)));
                 Grid grid = new Grid();
                 grid.Children.Add(addCategory);
                 groupBoxPreviewMaterial.Content = grid;

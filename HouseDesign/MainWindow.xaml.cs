@@ -287,9 +287,10 @@ namespace HouseDesign
 
         private void menuItemOpenProject_Click(object sender, RoutedEventArgs e)
         {
+            const string directory = "SavedProjects";
             OpenFileDialog fdlg = new OpenFileDialog();
             fdlg.Title = "Open project";
-            fdlg.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\SavedProjects";
+            fdlg.InitialDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", directory));
             fdlg.Filter = "HouseDesign Projects (.hds)|*.hds";
             fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;
@@ -314,6 +315,7 @@ namespace HouseDesign
 
         private void menuItemSaveProject_Click(object sender, RoutedEventArgs e)
         {
+            const string directory = "SavedProjects";
             if (currentProject.IsEmpty)
             {
                 MessageBox.Show("There is no project to save!");
@@ -326,7 +328,7 @@ namespace HouseDesign
                 saveProject.DefaultExt = ".hds";
                 saveProject.Filter = "HouseDesign Projects (.hds)|*.hds";
                 saveProject.Title = "Save Project";
-                saveProject.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\SavedProjects";
+                saveProject.InitialDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", directory));
                 if (saveProject.ShowDialog() == true)
                 {
                     SerializeProject(saveProject.FileName);
@@ -340,6 +342,7 @@ namespace HouseDesign
         }
         private void menuItemSaveProjectAs_Click(object sender, RoutedEventArgs e)
         {
+            const string directory = "SavedProjects";
             if (currentProject.IsEmpty)
             {
                 MessageBox.Show("There is no project to save!");
@@ -350,7 +353,7 @@ namespace HouseDesign
             saveProject.DefaultExt = ".hds";
             saveProject.Filter = "HouseDesign Projects (.hds)|*.hds";
             saveProject.Title = "Save Project";
-            saveProject.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\SavedProjects";
+            saveProject.InitialDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", directory));
             if (saveProject.ShowDialog() == true)
             {
                 SerializeProject(saveProject.FileName);
@@ -676,6 +679,7 @@ namespace HouseDesign
 
         private void GenerateScreenshot()
         {
+            const string directory = "Screenshots";
             if (currentProject.Scene.IsEmpty() == false)
             {
                 int width = (int)openGLControl.RenderSize.Width;
@@ -691,7 +695,7 @@ namespace HouseDesign
                     saveFileDialog.DefaultExt = ".png";
                     saveFileDialog.Filter = "HouseDesign Scenes (.png)|*.png";
                     saveFileDialog.Title = "Screenshot";
-                    saveFileDialog.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\Screenshots";
+                    saveFileDialog.InitialDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", directory));
                     if (saveFileDialog.ShowDialog() == true)
                     {
                         using (Stream fileStream = File.Create(saveFileDialog.FileName))
@@ -714,9 +718,9 @@ namespace HouseDesign
             currentProject.Scene.MainCamera.Rotate = new Point3d(-90, 180, 0);
         }
 
-        private void menuItemReciept_Click(object sender, RoutedEventArgs e)
+        private void menuItemReceipt_Click(object sender, RoutedEventArgs e)
         {
-            Receipt receipt = new Receipt(currentProject.Scene.GetSortedHouseObjects(), configuration);
+            Receipt receipt = new Receipt(currentProject.Scene.GetSortedHouseObjects(), configuration, currentProject);
             receipt.ShowDialog();
         }
 

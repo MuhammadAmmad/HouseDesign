@@ -27,7 +27,9 @@ namespace HouseDesign.UserControls
         {
             InitializeComponent();
             this.currentHousePlan = housePlan;
-            imageHousePlanDirectory=@"D:\Licenta\HouseDesign\HouseDesign\HousePlansImages";
+
+            const string housePlansDirectory = "HousePlansImages";
+            imageHousePlanDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", housePlansDirectory));
             String iconPath = GetHousePlanImagePath();
             if(iconPath!=null)
             {

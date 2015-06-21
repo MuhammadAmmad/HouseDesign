@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{0DF52E36-AF0D-4D1A-B607-1BDBB2238510}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HouseDesign</RootNamespace>
     <AssemblyName>HouseDesign</AssemblyName>
@@ -115,6 +115,7 @@
     <Compile Include="Classes\FurnitureObject.cs" />
     <Compile Include="Classes\GLHolder.cs" />
     <Compile Include="Classes\HousePlan.cs" />
+    <Compile Include="Classes\ICollision.cs" />
     <Compile Include="Classes\Material.cs" />
     <Compile Include="Classes\Project.cs" />
     <Compile Include="Classes\Scene.cs" />
@@ -333,6 +334,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

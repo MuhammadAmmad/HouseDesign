@@ -1,0 +1,478 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="HouseDesign.App" Collapsed="true">
+    <Position X="10.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.EditObject" Collapsed="true">
+    <Position X="12.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgJAAABQIQABJiAAtAICwggAgQCIEAEAABAAAA=</HashCode>
+      <FileName>EditObject.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.EditProperties" Collapsed="true">
+    <Position X="14" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAAAMAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EditProperties.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.GenericCategory" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAgAgIACABQIQABJiAAlEJGwAAQgQIIEAMAABAAAA=</HashCode>
+      <FileName>GenericCategory.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="HouseDesign.GenericMaterial" Collapsed="true">
+    <Position X="7" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIACAAAAAAKAAEAAEQAAAAAAAAEAAABABAA=</HashCode>
+      <FileName>GenericMaterial.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.ImportMaterialAutomatically" Collapsed="true">
+    <Position X="7" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAIACAAAAAACAAAAAEAAAQAAgAAgAAABAAAA=</HashCode>
+      <FileName>ImportMaterialAutomatically.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.MainWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAESAAAIURAohA6AZCAhAkQIiciIwwBCQChBgMACNQE=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="HouseDesign.NewProject" Collapsed="true">
+    <Position X="15.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAACABAADAEoEAACAiAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>NewProject.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.PreviewPlan" Collapsed="true">
+    <Position X="5.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>PreviewPlan.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Receipt" Collapsed="true">
+    <Position X="10.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAgqEAAAECAQAIAAAAIAACACAAAIAABQAAAAAAAA=</HashCode>
+      <FileName>Receipt.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.SetupConfiguration" Collapsed="true">
+    <Position X="17.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QwAgAkBAiIAGBBCwAUEFAoAAkBiBAAiggwhCABIBAUI=</HashCode>
+      <FileName>SetupConfiguration.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.BoundingBox" Collapsed="true">
+    <Position X="12.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIACAAAAAABAABAAAAAAAAAAAAACIAAAAAEAAAAA=</HashCode>
+      <FileName>Classes\BoundingBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.Camera" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAAIAAAAIIAAAAAACAAAABAAI=</HashCode>
+      <FileName>Classes\Camera.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.Category&lt;T&gt;" Collapsed="true">
+    <Position X="14" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAIAAAAAAAQAAAAAAAIEAAAAAAAQAAA=</HashCode>
+      <FileName>Classes\Category.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.Client" Collapsed="true">
+    <Position X="15.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAQAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>Classes\Client.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.PointInObjectCollision2D" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAABAABQAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Collision.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="HouseDesign.Classes.Collision2D" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAABAABQAAAACAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Collision.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="HouseDesign.Classes.Collision" Collapsed="true">
+    <Position X="17.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAABAABQAAAACAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Collision.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.Company" Collapsed="true">
+    <Position X="7" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAgAAgAAAAAAAAAAAAAAACABAAAgAAAAA=</HashCode>
+      <FileName>Classes\Company.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.Configuration" Collapsed="true">
+    <Position X="10.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AkBAAAAAAAAEBAQAgAAAAAAAAAAAEAAgAAAAAEIAAAA=</HashCode>
+      <FileName>Classes\Configuration.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.Currency" Collapsed="true">
+    <Position X="12.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Classes\Currency.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.CurrencyHelper" Collapsed="true">
+    <Position X="14" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAgIKAASAAACQAIQgAAIACACAAQAAAIAKCAAAAACA=</HashCode>
+      <FileName>Classes\CurrencyHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.CurrencyInformation" Collapsed="true">
+    <Position X="15.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAQAQAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\CurrencyInformation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.FurnitureObject" Collapsed="true">
+    <Position X="2.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AkAAAAAABAAAAAAAAQAAAgAAAAAAAAAAAAAIAAgAAAA=</HashCode>
+      <FileName>Classes\FurnitureObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.GLHolder" Collapsed="true">
+    <Position X="8.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAgA=</HashCode>
+      <FileName>Classes\GLHolder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.HousePlan" Collapsed="true">
+    <Position X="14" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAIAAYAAAAAAAgAAIAAAAAAAAA=</HashCode>
+      <FileName>Classes\HousePlan.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.Importer" Collapsed="true">
+    <Position X="17.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AjAAAADhAE4AABYAIAAAAQAAAAAQAEAAABJgATCAAgA=</HashCode>
+      <FileName>Classes\Importer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.Material" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Material.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.Project" Collapsed="true">
+    <Position X="7" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABgCABAAAAQAAAAgACAAAAACACAAAAAgAAAAAAAgAQ=</HashCode>
+      <FileName>Classes\Project.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.Scene" Collapsed="true">
+    <Position X="14" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAABACQAAAEAAQgAQIAAEAAAAAAAJAAAAAAAAA=</HashCode>
+      <FileName>Classes\Scene.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.StoredObject" Collapsed="true">
+    <Position X="1.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAABAAAgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\StoredObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.Texture" Collapsed="true">
+    <Position X="8.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Texture.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.Triangle" Collapsed="true">
+    <Position X="10.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAADgAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>Classes\Triangle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.Wall" Collapsed="true">
+    <Position X="12.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAQAAAACAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>Classes\Wall.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.WallObject" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\WallObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.WorldObject" Collapsed="true">
+    <Position X="1.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAEAQJUEACkQQQcIQQURCkCoagAClAALEEEhADpI=</HashCode>
+      <FileName>Classes\WorldObject.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="HouseDesign.Classes.WorldObjectMaterial" Collapsed="true">
+    <Position X="17.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>Classes\WorldObjectMaterial.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Converters.AddMessageConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Converters\AddMessageConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="HouseDesign.ImageProcessing.DirectionLine" Collapsed="true">
+    <Position X="8.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAGAAEAAABAgBgAACAABAAAAAAAAAAQAAAAAAACQAA=</HashCode>
+      <FileName>ImageProcessing\DirectionLine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.ImageProcessing.DirectionLineSegment" Collapsed="true">
+    <Position X="10.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAQAAAAAAwAAAAAAAAAAAAAIAAAAAAAAAAAABACA=</HashCode>
+      <FileName>ImageProcessing\DirectionLineSegment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.ImageProcessing.Hough" Collapsed="true">
+    <Position X="10.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAACAQA0ACAAAAAEAAAIAAAAAEAAAiAACA=</HashCode>
+      <FileName>ImageProcessing\Hough.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.ImageProcessing.LineSegments" Collapsed="true">
+    <Position X="10.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAQAAAAAAAQIAAAAAAAAAAAgAAAACABABA=</HashCode>
+      <FileName>ImageProcessing\LineSegments.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.ImageProcessing.Skeletation" Collapsed="true">
+    <Position X="5.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAACAAAAAAAQAAAgAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ImageProcessing\Skeletation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.ImageProcessing.StandardOperation" Collapsed="true">
+    <Position X="7" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAIAAAAAAAAAAgAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>ImageProcessing\StandardOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.ImageProcessing.Wall2D" Collapsed="true">
+    <Position X="14" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAACAAAEAABAQAAACAAAIBAAAQAAA=</HashCode>
+      <FileName>ImageProcessing\Wall2D.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.ImageProcessing.WallDetector" Collapsed="true">
+    <Position X="15.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>ImageProcessing\WallDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Properties.Resources" Collapsed="true">
+    <Position X="12.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Properties.Settings" Collapsed="true">
+    <Position X="15.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.UserControls.AddCategory" Collapsed="true">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAgAgAAIARAAAAAAAgAAMAAAAAAEEAAABAAiAAABAA=</HashCode>
+      <FileName>UserControls\AddCategory.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.UserControls.AddMaterialCategory" Collapsed="true">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAgAgAAIARAAAAAAAgAAMAAAAAAEEAAABAAiAAABAA=</HashCode>
+      <FileName>UserControls\AddMaterialCategory.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.UserControls.CompanyUserControl" Collapsed="true">
+    <Position X="8.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAAAAAQAAQ=</HashCode>
+      <FileName>UserControls\CompanyUserControl.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.UserControls.CurrencyUserControl" Collapsed="true">
+    <Position X="17.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAIAAAAAAIEAAAAAAAABAAAIAAABAAAAgAAA=</HashCode>
+      <FileName>UserControls\CurrencyUserControl.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.UserControls.CustomizeHeader" Collapsed="true">
+    <Position X="5.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UserControls\CustomizeHeader.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.UserControls.CustomizeMaterial" Collapsed="true">
+    <Position X="7" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IBACAAIABAAAAACAAAKAIIAEAAAAQAAAAAEAEAEAJgA=</HashCode>
+      <FileName>UserControls\CustomizeMaterial.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.UserControls.ExtendedMenuItem" Collapsed="true">
+    <Position X="15.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAIAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UserControls\ExtendedMenuItem.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.UserControls.ExtendedTreeViewItem" Collapsed="true">
+    <Position X="17.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAAAAAAABAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UserControls\ExtendedTreeViewItem.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.UserControls.HouseObjectUserControl" Collapsed="true">
+    <Position X="12.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAABIAAQACAAQAAIAAAAAAAQAAAAAAAkAAAAAA=</HashCode>
+      <FileName>UserControls\HouseObjectUserControl.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.UserControls.HousePlanControl" Collapsed="true">
+    <Position X="15.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAKAAAAAAAAAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UserControls\HousePlanControl.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.UserControls.ImportMaterial" Collapsed="true">
+    <Position X="5.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAiAAAAAAAAAQAAIAAAAMABgBAAAAAAABCAAAAgBAA=</HashCode>
+      <FileName>UserControls\ImportMaterial.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.UserControls.ImportObject" Collapsed="true">
+    <Position X="8.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAgAkAAAAAAAASALIKAAtAAAQAQQgQCARAAAIFiBAA=</HashCode>
+      <FileName>UserControls\ImportObject.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.UserControls.MaterialUserControl" Collapsed="true">
+    <Position X="14" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IBAAAAAAAQAAAACAAAAAAAAEAAAAQAAAAAAAAAEAACA=</HashCode>
+      <FileName>UserControls\MaterialUserControl.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.UserControls.ProjectPropertiesUserControl" Collapsed="true">
+    <Position X="8.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAgAIAAAAAAACAAAAAAAAAQAAQAgAAA=</HashCode>
+      <FileName>UserControls\ProjectPropertiesUserControl.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="HouseDesign.Classes.Point3d" Collapsed="true">
+    <Position X="7" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAGAAAAAAAAAAEYAEAAAAAAAAAAAAgAAAAAAEAYiE=</HashCode>
+      <FileName>Classes\Point3d.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="HouseDesign.Classes.UV" Collapsed="true">
+    <Position X="8.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASAAA=</HashCode>
+      <FileName>Classes\UV.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="HouseDesign.ImageProcessing.Point2d" Collapsed="true">
+    <Position X="5.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAA=</HashCode>
+      <FileName>ImageProcessing\Point2d.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="HouseDesign.ImageProcessing.Vector2d" Collapsed="true">
+    <Position X="10.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAAAYAEAAAAAAAAAAAAAAAAAAAEAYAA=</HashCode>
+      <FileName>ImageProcessing\Vector2d.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Interface Name="HouseDesign.Classes.ICollision" Collapsed="true">
+    <Position X="5.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\ICollision.cs</FileName>
+      <NewMemberFileName>Classes\Collision.cs</NewMemberFileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

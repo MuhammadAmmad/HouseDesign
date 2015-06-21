@@ -92,7 +92,9 @@ namespace HouseDesign.UserControls
         {
             OpenFileDialog fdlg = new OpenFileDialog();
             fdlg.Title = "Import material";
-            fdlg.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\Assets";
+            
+            const string assetsDirectory = "Assets";
+            fdlg.InitialDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", assetsDirectory));
             fdlg.Filter = "Image files (*.png;*.jpeg;*.jpg;*.bmp)|*.png;*.jpeg;*.jpg;*.bmp";
             fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;

@@ -16,7 +16,9 @@ namespace HouseDesign.Classes
 
         public FurnitureObject()
         {
-            DefaultIconPath = @"D:\Licenta\HouseDesign\HouseDesign\Images\defaultObjectIcon.png";
+            const String directory=@"Images\defaultObjectIcon.png";
+
+            DefaultIconPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", directory));
             Materials = new List<Material>();
         }
         public FurnitureObject(String name, String fullPath, String description, Decimal initialPrice):this()

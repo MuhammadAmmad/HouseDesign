@@ -49,9 +49,10 @@ namespace HouseDesign.UserControls
 
         private void btnLoadLogo_Click(object sender, RoutedEventArgs e)
         {
+            const string iconsDirectory = "Icons";
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.Title = "Load logo";
-            dlg.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\Icons";
+            dlg.InitialDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", iconsDirectory));
             dlg.Filter = "Image files (*.png;*.jpeg;*.jpg;*.bmp)|*.png;*.jpeg;*.jpg;*.bmp";
             dlg.FilterIndex = 2;
             dlg.RestoreDirectory = true;

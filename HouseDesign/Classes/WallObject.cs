@@ -82,7 +82,8 @@ namespace HouseDesign.Classes
             uvs.Add(new UV(1, 1));
             uvs.Add(new UV(0, 1));
 
-            textures.Add(@"D:\Licenta\HouseDesign\HouseDesign\Assets\interiorWallTexture.jpg");
+            const string directory = @"Assets\interiorWallTexture.jpg";
+            textures.Add(System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", directory)));
             InitializeBoundingBoxAndDimensions();
         }
     }

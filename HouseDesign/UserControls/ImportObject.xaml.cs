@@ -185,7 +185,9 @@ namespace HouseDesign.UserControls
         {
             OpenFileDialog fdlg = new OpenFileDialog();
             fdlg.Title = "Import object";
-            fdlg.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\Exports";
+            
+            const string directory = "Exports";
+            fdlg.InitialDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", directory));
             fdlg.Filter = "FBX files (*.fbx;)|*.fbx;";
             fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;

@@ -5,11 +5,6 @@ using System.Text;
 
 namespace HouseDesign.Classes
 {
-    public interface ICollision
-    {
-        float GetMaxTD(Point3d d);
-    }
-
     public class PointInObjectCollision2D : ICollision
     {
         public Point3d P1 { get; set; }

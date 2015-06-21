@@ -35,12 +35,14 @@ namespace HouseDesign
         {
             InitializeComponent();
             this.Title = title;
-            housePlansDirectory = @"D:\Licenta\HouseDesign\HouseDesign\HousePlans";
+            const string directory = "HousePlans";
+            housePlansDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", directory));
             housePlans = new List<HousePlan>();
             InitializeHousePlans();
             //currentHousePlan = new HousePlan("Current");
             this.configuration = configuration;
             currentProject = new Project(new Scene());
+            currentHousePlan = null;
 
         }
 
@@ -74,6 +76,7 @@ namespace HouseDesign
             String imagePath = (sender as HousePlanControl).GetHousePlanImagePath();
             PreviewPlan previewPlan = new PreviewPlan(imagePath);
             previewPlan.ShowDialog();
+            btnCreateProject.IsEnabled = true;
         }
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
@@ -84,7 +87,10 @@ namespace HouseDesign
         {
             OpenFileDialog fdlg = new OpenFileDialog();
             fdlg.Title = "Import house plan";
-            fdlg.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\HousePlansImages";
+            
+            const string directory = "HousePlansImages";
+            const string housePlansDirectory = "HousePlans";
+            fdlg.InitialDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", directory));
             fdlg.Filter = "Image files (*.png;*.jpeg;*.jpg;*.bmp)|*.png;*.jpeg;*.jpg;*.bmp";
             fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;
@@ -93,7 +99,8 @@ namespace HouseDesign
             {
                 currentHousePlanName = System.IO.Path.GetFileNameWithoutExtension(fdlg.FileName);
                 currentHousePlan = new HousePlan(currentHousePlanName);
-                String currentHousePlanFileName = @"D:\Licenta\HouseDesign\HouseDesign\HousePlans" + "\\" + currentHousePlanName + ".hpl";
+                String currentHousePlanFileName = System.IO.Path.GetFullPath(string.Format(@"{0}\{1}.hpl",
+                    System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", housePlansDirectory), currentHousePlanName));
                 Image<Bgr, byte> image = new Image<Bgr, byte>(fdlg.FileName);
                 Image<Gray, byte> currentImage = image.Convert<Gray, byte>();
                 List<Wall2D> walls = WallDetector.GetWalls(currentImage);
@@ -117,59 +124,65 @@ namespace HouseDesign
 
                 }
 
+                btnCreateProject.IsEnabled = true;
+
             }
         }
 
 
         private void btnCreateProject_Click(object sender, RoutedEventArgs e)
         {
-            if (currentHousePlan.GetWalls().Count == 0)
+            if(currentHousePlan!=null)
             {
-                HousePlanControl currentHousePlanControl = listViewHousePlans.SelectedItem as HousePlanControl;
-                if (currentHousePlanControl == null)
+                if (currentHousePlan.GetWalls().Count == 0)
                 {
-                    MessageBox.Show("Select a house plan!");
-                    return;
+                    HousePlanControl currentHousePlanControl = listViewHousePlans.SelectedItem as HousePlanControl;
+                    if (currentHousePlanControl == null)
+                    {
+                        MessageBox.Show("Select a house plan!");
+                        return;
+                    }
+
+                    if (projectProperties.CheckEmptyFields() == true)
+                    {
+                        MessageBox.Show("Complete mandatory fields!");
+                        return;
+                    }
+                    currentHousePlan = currentHousePlanControl.GetCurrentHousePlan();
                 }
 
-                if (projectProperties.CheckEmptyFields() == true)
+                List<Wall> walls = currentHousePlan.GetWalls();
+                Project.UnitOfMeasurement measurementUnit = Project.UnitOfMeasurement.mm;
+                float wallsHeight = Convert.ToSingle(projectProperties.textBoxWallsHeight.Text);
+
+                if (projectProperties.comboBoxMeasurementUnits.Text == Project.UnitOfMeasurement.m.ToString())
                 {
-                    MessageBox.Show("Complete mandatory fields!");
-                    return;
+                    wallsHeight *= 1000;
+                    measurementUnit = Project.UnitOfMeasurement.m;
                 }
-                currentHousePlan = currentHousePlanControl.GetCurrentHousePlan();
-            }
+                if (projectProperties.comboBoxMeasurementUnits.Text == Project.UnitOfMeasurement.cm.ToString())
+                {
+                    wallsHeight *= 10;
+                    measurementUnit = Project.UnitOfMeasurement.cm;
+                }
+                Client client = new Client(projectProperties.textBoxClientName.Text, Convert.ToInt64(projectProperties.textBoxTelephoneNumber.Text),
+                    projectProperties.textBoxEmailAddress.Text);
+                Decimal budget = Convert.ToDecimal(projectProperties.textBoxBudget.Text);
+                String notes = projectProperties.textBoxNotes.Text;
+                Scene scene = new Scene();
+                scene.MainCamera.Translate = new Point3d(0, 500, 0);
+                scene.MainCamera.Rotate = new Point3d(-90, 180, 0);
+                for (int i = 0; i < walls.Count; i++)
+                {
+                    WallObject wall = new WallObject(walls[i], wallsHeight);
+                    scene.AddWall(wall);
+                }
+                currentProject = new Project(client, scene, configuration, CurrencyHelper.GetProjectCurrency(), wallsHeight, budget,
+                    notes, measurementUnit);
 
-            List<Wall> walls = currentHousePlan.GetWalls();
-            Project.UnitOfMeasurement measurementUnit = Project.UnitOfMeasurement.mm;
-            float wallsHeight = Convert.ToSingle(projectProperties.textBoxWallsHeight.Text);
-
-            if (projectProperties.comboBoxMeasurementUnits.Text == Project.UnitOfMeasurement.m.ToString())
-            {
-                wallsHeight *= 1000;
-                measurementUnit = Project.UnitOfMeasurement.m;
+                this.Close();
             }
-            if (projectProperties.comboBoxMeasurementUnits.Text == Project.UnitOfMeasurement.cm.ToString())
-            {
-                wallsHeight *= 10;
-                measurementUnit = Project.UnitOfMeasurement.cm;
-            }
-            Client client = new Client(projectProperties.textBoxClientName.Text, Convert.ToInt64(projectProperties.textBoxTelephoneNumber.Text),
-                projectProperties.textBoxEmailAddress.Text);
-            Decimal budget = Convert.ToDecimal(projectProperties.textBoxBudget.Text);
-            String notes = projectProperties.textBoxNotes.Text;
-            Scene scene = new Scene();
-            scene.MainCamera.Translate = new Point3d(0, 500, 0);
-            scene.MainCamera.Rotate = new Point3d(-90, 180, 0);
-            for (int i = 0; i < walls.Count; i++)
-            {
-                WallObject wall = new WallObject(walls[i], wallsHeight);
-                scene.AddWall(wall);
-            }
-            currentProject = new Project(client, scene, configuration, CurrencyHelper.GetProjectCurrency(), wallsHeight, budget,
-                notes, measurementUnit);
-
-            this.Close();
+           
         }
 
         public Project GetCurrentProject()
@@ -178,6 +191,11 @@ namespace HouseDesign
         }
 
         private void listViewHousePlans_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
 
         }

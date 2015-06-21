@@ -42,7 +42,8 @@ namespace HouseDesign.UserControls
             InitializeComponent();
             mainGroupBox.Header = title;            
             InitializeIcons(iconsDirectoryPath);
-            InitializeIcon(ref defaultIcon, @"D:\Licenta\HouseDesign\HouseDesign\Images\defaultIcon.png");
+            const string defaultIconPath = @"Images\defaultIcon.png";
+            InitializeIcon(ref defaultIcon, System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", defaultIconPath)));
             IsEdited = isEdited;
             if (category != null)
             {
@@ -160,9 +161,10 @@ namespace HouseDesign.UserControls
 
         private void btnLoadIcon_Click(object sender, RoutedEventArgs e)
         {
+            const string iconsDirectory = "Icons";
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.Title = "Load icon";
-            dlg.InitialDirectory = @"D:\Licenta\HouseDesign\HouseDesign\Icons";
+            dlg.InitialDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", iconsDirectory));
             dlg.Filter = "Image files (*.png;*.jpeg;*.jpg;*.bmp)|*.png;*.jpeg;*.jpg;*.bmp";
             dlg.FilterIndex = 2;
             dlg.RestoreDirectory = true;
