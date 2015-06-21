@@ -34,6 +34,7 @@ namespace HouseDesign
         public NewProject(String title, Configuration configuration)
         {
             InitializeComponent();
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             this.Title = title;
             const string directory = "HousePlans";
             housePlansDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", directory));
@@ -85,7 +86,7 @@ namespace HouseDesign
         {
             OpenFileDialog fdlg = new OpenFileDialog();
             fdlg.Title = "Import house plan";
-            
+
             const string directory = "HousePlansImages";
             const string housePlansDirectory = "HousePlans";
             fdlg.InitialDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", directory));
@@ -130,13 +131,18 @@ namespace HouseDesign
 
         private void btnCreateProject_Click(object sender, RoutedEventArgs e)
         {
-            if (currentHousePlan.GetWalls().Count == 0)
+            if (currentHousePlan != null)
             {
-                HousePlanControl currentHousePlanControl = listViewHousePlans.SelectedItem as HousePlanControl;
-                if (currentHousePlanControl == null)
+                if (currentHousePlan.GetWalls().Count == 0)
                 {
-                    MessageBox.Show("Select a house plan!");
-                    return;
+                    HousePlanControl currentHousePlanControl = listViewHousePlans.SelectedItem as HousePlanControl;
+                    if (currentHousePlanControl == null)
+                    {
+                        MessageBox.Show("Select a house plan!");
+                        return;
+                    }
+
+                    currentHousePlan = currentHousePlanControl.GetCurrentHousePlan();
                 }
 
                 if (projectProperties.CheckEmptyFields() == true)
@@ -144,40 +150,39 @@ namespace HouseDesign
                     MessageBox.Show("Complete mandatory fields!");
                     return;
                 }
-                currentHousePlan = currentHousePlanControl.GetCurrentHousePlan();
+
+                List<Wall> walls = currentHousePlan.GetWalls();
+                Project.UnitOfMeasurement measurementUnit = Project.UnitOfMeasurement.mm;
+                float wallsHeight = Convert.ToSingle(projectProperties.textBoxWallsHeight.Text);
+
+                if (projectProperties.comboBoxMeasurementUnits.Text == Project.UnitOfMeasurement.m.ToString())
+                {
+                    wallsHeight *= 1000;
+                    measurementUnit = Project.UnitOfMeasurement.m;
+                }
+                if (projectProperties.comboBoxMeasurementUnits.Text == Project.UnitOfMeasurement.cm.ToString())
+                {
+                    wallsHeight *= 10;
+                    measurementUnit = Project.UnitOfMeasurement.cm;
+                }
+                Client client = new Client(projectProperties.textBoxClientName.Text, Convert.ToInt64(projectProperties.textBoxTelephoneNumber.Text),
+                    projectProperties.textBoxEmailAddress.Text);
+                Decimal budget = Convert.ToDecimal(projectProperties.textBoxBudget.Text);
+                String notes = projectProperties.textBoxNotes.Text;
+                Scene scene = new Scene();
+                scene.MainCamera.Translate = new Point3d(0, 500, 0);
+                scene.MainCamera.Rotate = new Point3d(-90, 180, 0);
+                for (int i = 0; i < walls.Count; i++)
+                {
+                    WallObject wall = new WallObject(walls[i], wallsHeight);
+                    scene.AddWall(wall);
+                }
+                currentProject = new Project(client, scene, configuration, CurrencyHelper.GetProjectCurrency(), wallsHeight, budget,
+                    notes, measurementUnit);
+
+                this.Close();
             }
 
-            List<Wall> walls = currentHousePlan.GetWalls();
-            Project.UnitOfMeasurement measurementUnit = Project.UnitOfMeasurement.mm;
-            float wallsHeight = Convert.ToSingle(projectProperties.textBoxWallsHeight.Text);
-
-            if (projectProperties.comboBoxMeasurementUnits.Text == Project.UnitOfMeasurement.m.ToString())
-            {
-                wallsHeight *= 1000;
-                measurementUnit = Project.UnitOfMeasurement.m;
-            }
-            if (projectProperties.comboBoxMeasurementUnits.Text == Project.UnitOfMeasurement.cm.ToString())
-            {
-                wallsHeight *= 10;
-                measurementUnit = Project.UnitOfMeasurement.cm;
-            }
-            Client client = new Client(projectProperties.textBoxClientName.Text, Convert.ToInt64(projectProperties.textBoxTelephoneNumber.Text),
-                projectProperties.textBoxEmailAddress.Text);
-            Decimal budget = Convert.ToDecimal(projectProperties.textBoxBudget.Text);
-            String notes = projectProperties.textBoxNotes.Text;
-            Scene scene = new Scene();
-            scene.MainCamera.Translate = new Point3d(0, 500, 0);
-            scene.MainCamera.Rotate = new Point3d(-90, 180, 0);
-            for (int i = 0; i < walls.Count; i++)
-            {
-                WallObject wall = new WallObject(walls[i], wallsHeight);
-                scene.AddWall(wall);
-            }
-            currentProject = new Project(client, scene, configuration, CurrencyHelper.GetProjectCurrency(), wallsHeight, budget,
-                notes, measurementUnit);
-
-            this.Close();
-           
         }
 
         public Project GetCurrentProject()
