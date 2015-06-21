@@ -78,6 +78,7 @@ namespace HouseDesign
             TotalPrice = 0;
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             isCollision = false;
+            CurrencyHelper.InitializeCurrencies();
             CurrencyHelper.SetLastCurrency(CurrencyHelper.GetDefaultCurrency());
 
             if (IsEmptyConfiguration() == 0)

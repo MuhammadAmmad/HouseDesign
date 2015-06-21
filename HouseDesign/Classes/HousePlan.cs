@@ -21,7 +21,7 @@ namespace HouseDesign.Classes
         private void InitializeWalls()
         {
             const String directory = "HousePlans";
-            String fullPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", directory, Name, ".hpl"));
+            String fullPath = System.IO.Path.GetFullPath(string.Format(@"{0}\{1}.hpl",System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\", directory), Name));
             try
             {
                 using (StreamReader sr = new StreamReader(fullPath))

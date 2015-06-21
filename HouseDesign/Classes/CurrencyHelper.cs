@@ -20,7 +20,7 @@ namespace HouseDesign.Classes
         private static Currency defaultCurrency = new Currency(Currency.CurrencyName.RON, 1, 1);
         private static Currency projectCurrency;
 
-        public static List<Currency> GetCurrencies()
+        public static void InitializeCurrencies()
         {
             currencies = new List<Currency>();
             currencyInformation = new CurrencyInformation();
@@ -53,6 +53,9 @@ namespace HouseDesign.Classes
                 DeserializeCurrencyInformation();
                 currencies = currencyInformation.GetCurrencies();
             }   
+        }
+        public static List<Currency> GetCurrencies()
+        {            
             return currencies;
         }
 
