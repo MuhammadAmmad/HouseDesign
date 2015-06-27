@@ -1,0 +1,318 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="HouseDesign.Classes.BoundingBox">
+    <Position X="19.5" Y="4.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAIACAAAAAABAABAAAAAAAAAAAAACIAAAAAEAAAAA=</HashCode>
+      <FileName>Classes\BoundingBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.Camera">
+    <Position X="26" Y="3.75" Width="2.25" />
+    <Members>
+      <Method Name="ConvertToDegrees" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAAIAAAAIIAAAAAACAAAABAAI=</HashCode>
+      <FileName>Classes\Camera.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.HousePlan">
+    <Position X="57" Y="4.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAIAAYAAAAAAAgAAIAAAAAAAAA=</HashCode>
+      <FileName>Classes\HousePlan.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.Scene">
+    <Position X="28.75" Y="4.5" Width="2.75" />
+    <Members>
+      <Method Name="ConvertHouseObjectPrices" Hidden="true" />
+      <Method Name="GetSortedHouseObjects" Hidden="true" />
+      <Method Name="IsEmpty" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AABAAAAABACQAAAEAAQgAQIAAEAAAAAAAJAAAAAAAAA=</HashCode>
+      <FileName>Classes\Scene.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.Texture">
+    <Position X="19.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Texture.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.Triangle">
+    <Position X="16.75" Y="6.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAADgAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>Classes\Triangle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.Wall">
+    <Position X="57.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAQAAAACAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>Classes\Wall.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.WallObject">
+    <Position X="26.25" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\WallObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.WorldObject">
+    <Position X="22.75" Y="3.75" Width="2.5" />
+    <Members>
+      <Method Name="AddCollision2D" Hidden="true" />
+      <Method Name="AddMaterial" Hidden="true" />
+      <Method Name="AddPointInObjectCollision" Hidden="true" />
+      <Method Name="CheckCollision2D" Hidden="true" />
+      <Method Name="CheckParticularCollision" Hidden="true" />
+      <Method Name="CheckPointsInObject" Hidden="true" />
+      <Method Name="CheckValues" Hidden="true" />
+      <Method Name="Clone" Hidden="true" />
+      <Method Name="CompareTo" Hidden="true" />
+      <Field Name="currentGL" Hidden="true" />
+      <Method Name="GetArea" Hidden="true" />
+      <Method Name="GetMaterials" Hidden="true" />
+      <Method Name="GetSystem2DSolutions" Hidden="true" />
+      <Method Name="GetSystem3DSolutions" Hidden="true" />
+      <Method Name="GetTextures" Hidden="true" />
+      <Method Name="GetTotalAreaPerTexture" Hidden="true" />
+      <Method Name="GetTotalAreaPerTextureByPath" Hidden="true" />
+      <Method Name="InitializeBoundingBoxAndDimensions" Hidden="true" />
+      <Method Name="InitializeTextures" Hidden="true" />
+      <Field Name="materials" Hidden="true" />
+      <Method Name="ModifyPerspective" Hidden="true" />
+      <Method Name="ModifyPerspectiveBack" Hidden="true" />
+      <Event Name="Rotating" Hidden="true" />
+      <Event Name="Scaling" Hidden="true" />
+      <Method Name="SetMaterials" Hidden="true" />
+      <Method Name="SetTexture" Hidden="true" />
+      <Event Name="Translating" Hidden="true" />
+      <Method Name="WorldObject" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+      <Compartment Name="Events" Collapsed="true" />
+    </Compartments>
+    <NestedTypes>
+      <Delegate Name="HouseDesign.Classes.WorldObject.Point3DEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Classes\WorldObject.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Enum Name="HouseDesign.Classes.WorldObject.Criteria" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Classes\WorldObject.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="HouseDesign.Classes.WorldObject.Axis" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Classes\WorldObject.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>IAAAAEAQJUEACkQQQcIQQURCkCoagAClAALEEEhADpI=</HashCode>
+      <FileName>Classes\WorldObject.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="HouseDesign.ImageProcessing.DirectionLine">
+    <Position X="30" Y="10" Width="2" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAGAAEAAABAgBgAACAABAAAAAAAAAAQAAAAAAACQAA=</HashCode>
+      <FileName>ImageProcessing\DirectionLine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.ImageProcessing.DirectionLineSegment">
+    <Position X="40.25" Y="6" Width="2.25" />
+    <Members>
+      <Method Name="DirectionLineSegment" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AEAAAQAAAAAAwAAAAAAAAAAAAAIAAAAAAAAAAAABACA=</HashCode>
+      <FileName>ImageProcessing\DirectionLineSegment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.ImageProcessing.Hough">
+    <Position X="43.25" Y="6" Width="2.75" />
+    <Members>
+      <Field Name="cosValues" Hidden="true" />
+      <Field Name="height" Hidden="true" />
+      <Method Name="Hough" Hidden="true" />
+      <Method Name="InitializeTrigonometricValues" Hidden="true" />
+      <Field Name="numberOfColumns" Hidden="true" />
+      <Field Name="numberOfLines" Hidden="true" />
+      <Field Name="radianConverter" Hidden="true" />
+      <Field Name="sinValues" Hidden="true" />
+      <Field Name="width" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAACAQA0ACAAAAAEAAAIAAAAAEAAAiAACA=</HashCode>
+      <FileName>ImageProcessing\Hough.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.ImageProcessing.LineSegments">
+    <Position X="33.5" Y="12.25" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAQAAAAAAAQIAAAAAAAAAAAgAAAACABABA=</HashCode>
+      <FileName>ImageProcessing\LineSegments.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.ImageProcessing.Skeletation">
+    <Position X="49" Y="10.25" Width="3" />
+    <Members>
+      <Method Name="TestMask" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAQAACAAAAAAAQAAAgAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ImageProcessing\Skeletation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.ImageProcessing.StandardOperation">
+    <Position X="49" Y="12.75" Width="3.25" />
+    <NestedTypes>
+      <Enum Name="HouseDesign.ImageProcessing.StandardOperation.BinaryColor" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ImageProcessing\StandardOperation.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAIAAAAAAAAAAgAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>ImageProcessing\StandardOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.ImageProcessing.Wall2D">
+    <Position X="34.5" Y="5.75" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAACAAAEAABAQAAACAAAIBAAAQAAA=</HashCode>
+      <FileName>ImageProcessing\Wall2D.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.ImageProcessing.WallDetector">
+    <Position X="37" Y="6" Width="2.5" />
+    <Members>
+      <Field Name="tolerance" Hidden="true" />
+    </Members>
+    <NestedTypes>
+      <Class Name="HouseDesign.ImageProcessing.WallDetector.LineSortHelper" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ImageProcessing\WallDetector.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>ImageProcessing\WallDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseDesign.Classes.Importer">
+    <Position X="12.25" Y="4.25" Width="2.75" />
+    <Members>
+      <Method Name="Importer" Hidden="true" />
+      <Field Name="maxX" Hidden="true" />
+      <Field Name="maxY" Hidden="true" />
+      <Field Name="minX" Hidden="true" />
+      <Field Name="minY" Hidden="true" />
+      <Field Name="nextSet" Hidden="true" />
+      <Field Name="nextUV" Hidden="true" />
+      <Field Name="nextVertex" Hidden="true" />
+      <Method Name="SetUV1" Hidden="true" />
+      <Method Name="SetUV2" Hidden="true" />
+      <Method Name="SetVertex1" Hidden="true" />
+      <Method Name="SetVertex2" Hidden="true" />
+      <Method Name="SetVertex3" Hidden="true" />
+      <Method Name="SetX" Hidden="true" />
+      <Method Name="SetY" Hidden="true" />
+      <Method Name="SetZ" Hidden="true" />
+      <Field Name="u" Hidden="true" />
+      <Field Name="v" Hidden="true" />
+      <Field Name="vertex1" Hidden="true" />
+      <Field Name="vertex2" Hidden="true" />
+      <Field Name="vertex3" Hidden="true" />
+      <Field Name="x" Hidden="true" />
+      <Field Name="y" Hidden="true" />
+      <Field Name="z" Hidden="true" />
+    </Members>
+    <NestedTypes>
+      <Delegate Name="HouseDesign.Classes.Importer.operation" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Classes\Importer.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="HouseDesign.Classes.Importer.operationTriangle" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Classes\Importer.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="HouseDesign.Classes.Importer.operationUV" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Classes\Importer.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AjAAAADhAE4AABYAIAAAAQAAAAAQAEAAABJgATCAAgA=</HashCode>
+      <FileName>Classes\Importer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Struct Name="HouseDesign.Classes.Point3d">
+    <Position X="16.75" Y="3.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAGAAAAAAAAAAEYAEAAAAAAAAAAAAgAAAAAAEAYiE=</HashCode>
+      <FileName>Classes\Point3d.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="HouseDesign.Classes.UV">
+    <Position X="16.75" Y="9.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASAAA=</HashCode>
+      <FileName>Classes\UV.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="HouseDesign.ImageProcessing.Vector2d">
+    <Position X="31" Y="12.25" Width="2" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAAAYAEAAAAAAAAAAAAAAAAAAAEAYAA=</HashCode>
+      <FileName>ImageProcessing\Vector2d.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Interface Name="HouseDesign.Classes.IObjectImporter">
+    <Position X="9.5" Y="4.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\IObjectImporter.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

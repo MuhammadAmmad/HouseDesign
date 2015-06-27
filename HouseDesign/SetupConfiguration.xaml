@@ -3,26 +3,72 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ctrl="clr-namespace:HouseDesign.UserControls"
         Height="675"
-        Closed="Window_Closed" Name="setupConfiguration">
-    <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="75"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Menu Name="menuShortcuts" Grid.Row="0">
-            </Menu>
+        Closed="Window_Closed" Name="setupConfiguration" Icon="Assets/icon1b.png">
+    <Grid Opacity="0.8">
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                <GradientStop Color="#FF5876B6" Offset="0.026"/>
+                <GradientStop Color="#FF030517" Offset="0.309"/>
+                <GradientStop Color="#FF101B64" Offset="0.491"/>
+                <GradientStop Color="#FF8B919E" Offset="0.952"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Menu Name="menuShortcuts" Grid.Row="0">
+            <Menu.Background>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#FFD7E7F0" Offset="0"/>
+                    <GradientStop Color="#FFBECCDA" Offset="1"/>
+                    <GradientStop Color="#FEABC1DA" Offset="0.409"/>
+                    <GradientStop Color="#FED8E7F3" Offset="0.67"/>
+                </LinearGradientBrush>
+            </Menu.Background>
+        </Menu>
         <TabControl Grid.Row="1" Name="mainTabControl" Margin="5" SelectionChanged="mainTabControl_SelectionChanged">
+            <TabControl.Background>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#FF5876B6" Offset="0.026"/>
+                    <GradientStop Color="#FF030517" Offset="0.309"/>
+                    <GradientStop Color="#FF101B64" Offset="0.491"/>
+                    <GradientStop Color="#FF8B919E" Offset="0.952"/>
+                </LinearGradientBrush>
+            </TabControl.Background>
             <TabItem Header="Categories">
                 <Grid >
+                    <Grid.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                            <GradientStop Color="#FF5876B6" Offset="0.026"/>
+                            <GradientStop Color="#FF030517" Offset="0.309"/>
+                            <GradientStop Color="#FF101B64" Offset="0.491"/>
+                            <GradientStop Color="#FF8B919E" Offset="0.952"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <TreeView Name="treeViewCategories" SelectedItemChanged="treeViewCategories_SelectedItemChanged" Grid.Column="0" 
                               TreeViewItem.Selected="treeViewCategories_Selected" MouseLeftButtonDown="treeView_MouseLeftButtonDown">
+                        <TreeView.Background>
+                            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                <GradientStop Color="#FFB7BCD6" Offset="0.974"/>
+                                <GradientStop Color="#FF9CA7E6" Offset="0.4"/>
+                                <GradientStop Color="#FF5F82B6" Offset="0.552"/>
+                                <GradientStop Color="#FFCAD9E8" Offset="0.048"/>
+                            </LinearGradientBrush>
+                        </TreeView.Background>
                     </TreeView>
                     <GroupBox Name="groupBoxRightSide" Grid.Column="1">
-                    </GroupBox>                          
+                        <GroupBox.Background>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FF9CB8E0" Offset="0"/>
+                                <GradientStop Color="#FFB3AEE4" Offset="1"/>
+                            </LinearGradientBrush>
+                        </GroupBox.Background>
+                    </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Materials">
@@ -33,13 +79,33 @@
                     </Grid.ColumnDefinitions>
                     <TreeView Name="treeViewMaterials" SelectedItemChanged="treeViewMaterials_SelectedItemChanged"
                               MouseLeftButtonDown="treeView_MouseLeftButtonDown" Grid.Column="0" TreeViewItem.Selected="treeViewMaterials_Selected">
+                        <TreeView.Background>
+                            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                <GradientStop Color="#FFB7BCD6" Offset="0.974"/>
+                                <GradientStop Color="#FF9CA7E6" Offset="0.4"/>
+                                <GradientStop Color="#FF5F82B6" Offset="0.552"/>
+                                <GradientStop Color="#FFCAD9E8" Offset="0.048"/>
+                            </LinearGradientBrush>
+                        </TreeView.Background>
                     </TreeView>
-                    <GroupBox Name="groupBoxPreviewMaterial" Grid.Column="1">                        
-                    </GroupBox>               
+                    <GroupBox Name="groupBoxPreviewMaterial" Grid.Column="1">
+                        <GroupBox.Background>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FF9CB8E0" Offset="0"/>
+                                <GradientStop Color="#FFB3AEE4" Offset="1"/>
+                            </LinearGradientBrush>
+                        </GroupBox.Background>
+                    </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Currency">
                 <Grid Margin="10">
+                    <Grid.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF9CB8E0" Offset="0"/>
+                            <GradientStop Color="#FFB3AEE4" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="100"></RowDefinition>
                         <RowDefinition Height="400"></RowDefinition>
@@ -54,11 +120,17 @@
                     <GroupBox Name="groupBoxCurrencies" Width="650" Margin="10" Visibility="Collapsed" Grid.Row="1">
                         <ListView Name="listViewCurrencies" SelectionChanged="listViewCurrencies_SelectionChanged"></ListView>
                     </GroupBox>
-                    
+
                 </Grid>
             </TabItem>
             <TabItem Header="Company">
                 <Grid Margin="10">
+                    <Grid.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF9CB8E0" Offset="0"/>
+                            <GradientStop Color="#FFB3AEE4" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="40"></RowDefinition>
@@ -67,7 +139,7 @@
                         <ctrl:CompanyUserControl x:Name="companyInformation"></ctrl:CompanyUserControl>
                     </GroupBox>
                     <Button Grid.Row="1" Name="btnOK" Content="OK" HorizontalAlignment="Right" Margin="10" Click="btnOK_Click" Width="50"></Button>
-                </Grid>                
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

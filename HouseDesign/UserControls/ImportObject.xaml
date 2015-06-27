@@ -31,7 +31,7 @@
                     <sharpGL:OpenGLControl 
                         Name="openGLControl" OpenGLDraw="openGLControl_OpenGLDraw" 
                         OpenGLInitialized="openGLControl_OpenGLInitialized" Resized="openGLControl_Resized"
-                        DrawFPS="True" RenderContextType="FBO" FrameRate="20"/>
+                        DrawFPS="False" RenderContextType="FBO" FrameRate="20"/>
                 </GroupBox>
                 <Label Grid.Row="4" Grid.Column="0" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">Initial Price:</Label>
 
@@ -41,7 +41,8 @@
                 </StackPanel>
 
                 <GroupBox Grid.Row="1" Grid.Column="2" Grid.RowSpan="3"  Name="groupBoxMaterials" Header="Materials">
-                    <ListView Name="listViewMaterials"></ListView>
+                    <ListView Name="listViewMaterials">
+                    </ListView>
                 </GroupBox>
                 <StackPanel Name="stackPanelTotalPrice" Orientation="Horizontal" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center"  Height="30" Visibility="Collapsed">
                     <Label>Total Price:</Label>

@@ -54,6 +54,9 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon1b.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Emgu.CV, Version=2.4.10.1939, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -116,6 +119,7 @@
     <Compile Include="Classes\GLHolder.cs" />
     <Compile Include="Classes\HousePlan.cs" />
     <Compile Include="Classes\ICollision.cs" />
+    <Compile Include="Classes\IObjectImporter.cs" />
     <Compile Include="Classes\Material.cs" />
     <Compile Include="Classes\Project.cs" />
     <Compile Include="Classes\Scene.cs" />
@@ -334,7 +338,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="ClassDiagram1.cd" />
+    <None Include="GraphicsClassDiagram.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -379,6 +383,15 @@
     <Resource Include="Assets\background4.jpg" />
     <Resource Include="Assets\background5.jpg" />
     <Resource Include="Assets\background6.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\icon1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\icon1b.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon1b.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace HouseDesign.Classes
 {
-    public class Importer
+    public class Importer:IObjectImporter
     {
         private float x, y, z;
         operation nextSet;
