@@ -682,7 +682,6 @@ namespace HouseDesign.Classes
                 {
                     minTD = currentTD;
                 }
-
             }
 
             td = minTD;
@@ -696,8 +695,30 @@ namespace HouseDesign.Classes
 
         private List<ICollision> GetCollisionsWithObject(WorldObject obj)
         {
-            Point3d[] vertices = obj.boundingBox.GetTopPoints();
             List<ICollision> collisions = new List<ICollision>();
+            
+            double max1Y = obj.boundingBox.GetMaxY();
+            double min1Y = obj.boundingBox.GetMinY();
+
+            double max2Y = boundingBox.GetMaxY();
+            double min2Y = boundingBox.GetMinY();
+
+            if( max1Y > max2Y)
+            {
+                if (min1Y >= max2Y)
+                {
+                    return collisions;
+                }
+            }
+            else
+            {
+                if (min2Y >= max1Y)
+                {
+                    return collisions;
+                }
+            }
+
+            Point3d[] vertices = obj.boundingBox.GetTopPoints();
 
             Point3d[] selfBox = boundingBox.GetTopPoints();
             collisions.AddRange(CheckPointsInObject(vertices[0], vertices[1] - vertices[0], vertices[3] - vertices[0]));

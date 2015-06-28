@@ -47,8 +47,11 @@ namespace HouseDesign.ImageProcessing
         {
             houghMatrix = new int[numberOfLines, numberOfColumns];
 
+            double startValue = 10.38;
+            double step = (64.73 - startValue) / numberOfLines;
             for(int r=0;r<numberOfLines;r++)
             {
+                NewProject.ProgressValue = startValue + r * step;
                 for(int t=-90;t<180;t++)
                 {
                     if((t<-45) || (t>45 && t<135))

@@ -12,14 +12,26 @@ namespace HouseDesign.ImageProcessing
         private static int tolerance = 180;
         public static List<Wall2D> GetWalls(Image<Gray, byte> currentImage)
         {
+            NewProject.ProgressMessage = "Processing house plan";
             //currentImage = StandardOperation.Binarize(currentImage, 127);
             currentImage = StandardOperation.GetImageWithExtraPixels(currentImage, StandardOperation.BinaryColor.Black, 3);
+            NewProject.ProgressValue = 3.35;
+
             currentImage = Skeletation.GetProcessedImage(StandardOperation.Binarize(currentImage, 127), 0);
+            NewProject.ProgressValue = 5.51;
+            
             currentImage = StandardOperation.Binarize(currentImage, 127);
             StandardOperation.Invert(currentImage);
+            NewProject.ProgressValue = 10.38;
 
+
+            NewProject.ProgressMessage = "Detecting lines";
             Hough hough = new Hough(currentImage);
+            NewProject.ProgressValue = 64.73;
+
+            NewProject.ProgressMessage = "Generating walls";
             List<DirectionLine> lines = hough.GetLines(15);
+
             int width = currentImage.Width;
             int height = currentImage.Height;
             List<LineSortHelper> lineSortHelper = new List<LineSortHelper>();
@@ -34,8 +46,11 @@ namespace HouseDesign.ImageProcessing
                 }
             }
 
+            double startValue = 64.73;
+            double step = (99.58 - startValue) / lines.Count;
             for (int i = 0; i < lines.Count; i++)
             {
+                NewProject.ProgressValue = startValue + i * step;
                 LineSegments segmentedLine = new LineSegments(currentImage, lines[i], 2, 10);
 
                 List<DirectionLineSegment> segments = segmentedLine.GetSegments();
@@ -45,6 +60,7 @@ namespace HouseDesign.ImageProcessing
                     segments[j].MarkSegmentOnMap(segmentCounts, width, height);
                 }
             }
+            NewProject.ProgressValue = 99.58;
 
             auxLines = new List<DirectionLine>();
             List<DirectionLineSegment> directionSegments = new List<DirectionLineSegment>();

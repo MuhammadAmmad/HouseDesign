@@ -37,6 +37,16 @@ namespace HouseDesign.Classes
             obj.Rotating += obj_RecalculateActualPoints;
         }
 
+        public double GetMaxY()
+        {
+            return ActualPoints[7].Y;
+        }
+
+        public double GetMinY()
+        {
+            return ActualPoints[0].Y;
+        }
+
         public Point3d[] GetTopPoints ()
         {
             return new Point3d[] { ActualPoints[0], ActualPoints[1], ActualPoints[2], ActualPoints[3] };

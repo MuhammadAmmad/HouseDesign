@@ -533,11 +533,43 @@ namespace HouseDesign
                 sceneObject.Scale = new Point3d(20, 20, 20);
                 currentProject.Scene.AddHouseObject(sceneObject);
                 TotalPrice += Math.Round(sceneObject.Price, 2);
+                AdjustCollisionPositionOnPlace(sceneObject);
                 //lblTotalPrice.Content = "Total price is: " + TotalPrice + " " + currency.ToString();
                 sceneObject = null;
             }
-            
+        }
 
+        private void AdjustCollisionPositionOnPlace(WorldObject sceneObject)
+        {
+            double step = Math.PI/120;
+            float radius = 800;
+            List<Point3d> directions = new List<Point3d>();
+            for (double i = 0; i < Math.PI*2; i += step)
+            {
+                directions.Add(new Point3d((float)(radius * Math.Cos(i)), 0.0f, (float)(radius*Math.Sin(i))));
+            }
+
+            float td;
+            float maxTd = float.MinValue;
+            int maxIndex = -1;
+
+            for (int i = 0; i < directions.Count; ++i)
+            {
+                isCollision = currentProject.Scene.CheckCurrentObjectCollisions(sceneObject, directions[i], out td);
+                if (isCollision)
+                {
+                    if (td > maxTd)
+                    {
+                        maxTd = td;
+                        maxIndex = i;
+                    }
+                }
+            }
+
+            if (isCollision)
+            {
+                sceneObject.Translate = sceneObject.Translate - directions[maxIndex] * (1 - maxTd);
+            }
         }
 
         private void menutItemConfiguration_Click(object sender, RoutedEventArgs e)
@@ -619,9 +651,14 @@ namespace HouseDesign
 
                     if (isCollision)
                     {
-                        //td *= 0.9f;
-                        //currentObject.Translate = lastValidObjectPosition + d * td;
-                        currentObject.Translate = lastValidObjectPosition;
+                        //td *= 0.8f;
+                        currentObject.Translate = lastValidObjectPosition + d * td;
+
+                        isCollision = currentProject.Scene.CheckCurrentObjectCollisions(currentObject, d, out td);
+                        if (isCollision)
+                        {
+                            currentObject.Translate = lastValidObjectPosition;
+                        }
                     }
                 }
 

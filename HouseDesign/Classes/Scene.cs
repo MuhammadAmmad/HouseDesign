@@ -86,7 +86,8 @@ namespace HouseDesign.Classes
                     float currentTD;
                     if(currentObject.CheckObjectCollision(houseObjects[i], d, out currentTD))
                     {
-                        td = currentTD;
+                        if(currentTD < td)
+                            td = currentTD;
                         collision = true;
                     }
                 }
@@ -97,7 +98,8 @@ namespace HouseDesign.Classes
                 float currentTD;
                 if (currentObject.CheckObjectCollision(walls[i], d, out currentTD))
                 {
-                    td = currentTD;
+                    if (currentTD < td)
+                        td = currentTD;
                     collision = true;
                 }
             }
