@@ -76,6 +76,12 @@ namespace HouseDesign.UserControls
                 MessageBox.Show("Complete mandatory fields!");
                 return;
             }
+
+            if(FieldValidation.IsValidDoubleNumericField(textBoxTradeAllowance.Text)==false)
+            {
+                MessageBox.Show("Invalid value for trade allowance! Type another!");
+                return;
+            }
             Image icon;
             
             if (listViewIcons.SelectedItem != null)

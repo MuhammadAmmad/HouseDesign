@@ -31,6 +31,7 @@ namespace HouseDesign
         private Project currentProject;
         private Configuration configuration;
         private String currentHousePlanName;
+        private ProjectPropertiesUserControl projectProperties;
         public NewProject(String title, Configuration configuration)
         {
             InitializeComponent();
@@ -42,6 +43,11 @@ namespace HouseDesign
             InitializeHousePlans();
             this.configuration = configuration;
             currentProject = new Project(new Scene());
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            projectProperties = new ProjectPropertiesUserControl(false);
+            Grid grid = new Grid();
+            grid.Children.Add(projectProperties);
+            groupBoxProjectProperties.Content = grid;
 
         }
 
@@ -148,6 +154,11 @@ namespace HouseDesign
                 if (projectProperties.CheckEmptyFields() == true)
                 {
                     MessageBox.Show("Complete mandatory fields!");
+                    return;
+                }
+                
+                if(projectProperties.CheckValidFields()==false)
+                {
                     return;
                 }
 

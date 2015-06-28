@@ -68,6 +68,7 @@ namespace HouseDesign.UserControls
             this.materials=materials;
             this.currentObjectMaterials = new List<WorldObjectMaterial>();
             this.currentTradeAllowance = currentTradeAllowance;
+            groupBoxPreviewObject.Visibility = Visibility.Visible;
             if(isReadOnly)
             {
                 textBoxName.IsReadOnly = true;
@@ -76,7 +77,7 @@ namespace HouseDesign.UserControls
                 btnCancel.IsEnabled = false;
                 btnLoadObject.IsEnabled = false;
                 btnOK.IsEnabled = false;
-                groupBoxPreviewObject.Visibility = Visibility.Visible;
+                
                 stackPanelTotalPrice.Visibility = Visibility.Visible;
             }
             if(importedObject!=null)
@@ -205,6 +206,11 @@ namespace HouseDesign.UserControls
             if(textBoxName.Text.Length==0 || textBoxInitialPrice.Text.Length==0)
             {
                 MessageBox.Show("Complete mandatory fields!");
+                return;
+            }
+            if (FieldValidation.IsValidDecimalNumericField(textBoxInitialPrice.Text)==false)
+            {
+                MessageBox.Show("Invalid value typed for price! Type another!");
                 return;
             }
             else

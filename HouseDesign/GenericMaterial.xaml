@@ -3,21 +3,45 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="GenericMaterial" Icon="Assets/icon1b.png">
     <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                <GradientStop Color="#FFB7BCD6" Offset="0.974"/>
+                <GradientStop Color="#FF9CA7E6" Offset="0.4"/>
+                <GradientStop Color="#FF5F82B6" Offset="0.552"/>
+                <GradientStop Color="#FFCAD9E8" Offset="0.048"/>
+            </LinearGradientBrush>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="40"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Margin="10">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TreeView Name="treeViewMaterials" Grid.Column="0" TreeViewItem.Selected="treeViewMaterials_Selected"></TreeView>
-            <GroupBox Name="groupBoxPreviewMaterial" Grid.Column="1"></GroupBox>
+            <TreeView Name="treeViewMaterials" Grid.Column="0" TreeViewItem.Selected="treeViewMaterials_Selected">
+                <TreeView.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                        <GradientStop Color="#FFB7BCD6" Offset="0.974"/>
+                        <GradientStop Color="#FF9CA7E6" Offset="0.4"/>
+                        <GradientStop Color="#FF5F82B6" Offset="0.552"/>
+                        <GradientStop Color="#FFCAD9E8" Offset="0.048"/>
+                    </LinearGradientBrush>
+                </TreeView.Background>
+            </TreeView>
+            <GroupBox Name="groupBoxPreviewMaterial" Grid.Column="1">
+                <GroupBox.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF9CB8E0" Offset="0"/>
+                        <GradientStop Color="#FFB3AEE4" Offset="1"/>
+                    </LinearGradientBrush>
+                </GroupBox.Background>
+            </GroupBox>
         </Grid>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5" Grid.Row="1">
-            <Button Name="btnAddMaterial" Content="Add Material" Click="btnAddMaterial_Click" Margin="5"></Button>
-            <Button Name="btnCancel" Content="Cancel" Click="btnCancel_Click" Margin="5"></Button>
+            <Button Name="btnAddMaterial" Content="Add Material" Click="btnAddMaterial_Click" Margin="5" Width="80" Height="20"></Button>
+            <Button Name="btnCancel" Content="Cancel" Click="btnCancel_Click" Margin="5" Width="60" Height="20"></Button>
         </StackPanel>
     </Grid>
 </Window>

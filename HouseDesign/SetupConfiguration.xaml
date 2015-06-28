@@ -47,7 +47,7 @@
                         </LinearGradientBrush>
                     </Grid.Background>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="200"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <TreeView Name="treeViewCategories" SelectedItemChanged="treeViewCategories_SelectedItemChanged" Grid.Column="0" 
@@ -74,8 +74,8 @@
             <TabItem Header="Materials">
                 <Grid >
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="2*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <TreeView Name="treeViewMaterials" SelectedItemChanged="treeViewMaterials_SelectedItemChanged"
                               MouseLeftButtonDown="treeView_MouseLeftButtonDown" Grid.Column="0" TreeViewItem.Selected="treeViewMaterials_Selected">
@@ -112,10 +112,10 @@
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" HorizontalAlignment="Center">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Margin="5" Text="The current currency is:"></TextBlock>
-                            <TextBlock Name="textBlockCurrentCurrency" Margin="5" Text="{Binding ElementName=setupConfiguration, Path=CurrentCurrency}"></TextBlock>
+                            <TextBlock Margin="10" Text="The current currency is:" FontSize="16"></TextBlock>
+                            <TextBlock Name="textBlockCurrentCurrency" Margin="10" Text="{Binding ElementName=setupConfiguration, Path=CurrentCurrency}"></TextBlock>
                         </StackPanel>
-                        <Button Name="btnChangeCurrency" Content="Change currency" Click="btnChangeCurrency_Click" Width="100"></Button>
+                        <Button Name="btnChangeCurrency" Content="Change currency" Click="btnChangeCurrency_Click" Width="120" Height="20" Margin="10"></Button>
                     </StackPanel>
                     <GroupBox Name="groupBoxCurrencies" Width="650" Margin="10" Visibility="Collapsed" Grid.Row="1">
                         <ListView Name="listViewCurrencies" SelectionChanged="listViewCurrencies_SelectionChanged"></ListView>

@@ -105,6 +105,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="About Box.xaml.cs">
+      <DependentUpon>About Box.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Classes\BoundingBox.cs" />
     <Compile Include="Classes\Camera.cs" />
     <Compile Include="Classes\Category.cs" />
@@ -115,6 +118,7 @@
     <Compile Include="Classes\Currency.cs" />
     <Compile Include="Classes\CurrencyHelper.cs" />
     <Compile Include="Classes\CurrencyInformation.cs" />
+    <Compile Include="Classes\FieldValidation.cs" />
     <Compile Include="Classes\FurnitureObject.cs" />
     <Compile Include="Classes\GLHolder.cs" />
     <Compile Include="Classes\HousePlan.cs" />
@@ -207,6 +211,10 @@
     <Compile Include="UserControls\ProjectPropertiesUserControl.xaml.cs">
       <DependentUpon>ProjectPropertiesUserControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="About Box.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EditObject.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

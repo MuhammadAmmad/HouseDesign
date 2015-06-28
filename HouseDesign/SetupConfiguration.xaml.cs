@@ -215,6 +215,7 @@ namespace HouseDesign
                 {
                     parent.IsExpanded = true;
                 }
+                groupBoxRightSide.Content = null;
             }
             else
             {
@@ -477,6 +478,7 @@ namespace HouseDesign
                 {
                     parent.IsExpanded = true;
                 }
+                groupBoxPreviewMaterial.Content = null;
                 //(sender as ImportMaterial).SetImportedMaterial(null);
             }
             else
@@ -528,24 +530,28 @@ namespace HouseDesign
         {
             if(selectedTreeViewItem!=null)
             {
-                TreeViewItem parent = selectedTreeViewItem.Parent as TreeViewItem;
-                if(parent==null)
+                MessageBoxResult result = MessageBox.Show("Do you really want to delete the selected item?", "Delete", MessageBoxButton.YesNo);
+                if(result==MessageBoxResult.Yes)
                 {
-                     if (selectedItemType==LastSelectedItemType.Category || selectedItemType==LastSelectedItemType.FurnitureObject)
-                     {
-                         treeViewCategories.Items.Remove(selectedTreeViewItem);
-                     }
-                     else
-                     {
-                         treeViewMaterials.Items.Remove(selectedTreeViewItem);
-                     }
-                }
-                else
-                {
-                    parent.Items.Remove(selectedTreeViewItem);
+                    TreeViewItem parent = selectedTreeViewItem.Parent as TreeViewItem;
+                    if (parent == null)
+                    {
+                        if (selectedItemType == LastSelectedItemType.Category || selectedItemType == LastSelectedItemType.FurnitureObject)
+                        {
+                            treeViewCategories.Items.Remove(selectedTreeViewItem);
+                        }
+                        else
+                        {
+                            treeViewMaterials.Items.Remove(selectedTreeViewItem);
+                        }
+                    }
+                    else
+                    {
+                        parent.Items.Remove(selectedTreeViewItem);
+                    }
+                    SaveCategories();
+                    SaveMaterials();
                 }                
-                SaveCategories();
-                SaveMaterials();
             }
             else
             {
@@ -867,6 +873,7 @@ namespace HouseDesign
 
         public void InitializeCurrencies()
         {
+            listViewCurrencies.Items.Clear();
             List<Currency> currencies = CurrencyHelper.GetCurrencies();
             Currency defaultCurrency=CurrencyHelper.GetDefaultCurrency();
             CurrencyUserControl headers = new CurrencyUserControl("CURRENCY", "NAME", "VALUE", "RELATIVE CURRENCY");

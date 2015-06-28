@@ -3,19 +3,40 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="ImportMaterialAutomatically" Height="600" Icon="Assets/icon1b.png">
     <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FF9CB8E0" Offset="0"/>
+                <GradientStop Color="#FFB3AEE4" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="40"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TreeView Name="treeViewMaterials" Grid.Row="0" Grid.Column="0" TreeViewItem.Selected="treeViewMaterials_Selected"></TreeView>
+        <TreeView Name="treeViewMaterials" Grid.Row="0" Grid.Column="0" TreeViewItem.Selected="treeViewMaterials_Selected">
+            <TreeView.Background>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#FFB7BCD6" Offset="0.974"/>
+                    <GradientStop Color="#FF9CA7E6" Offset="0.4"/>
+                    <GradientStop Color="#FF5F82B6" Offset="0.552"/>
+                    <GradientStop Color="#FFCAD9E8" Offset="0.048"/>
+                </LinearGradientBrush>
+            </TreeView.Background>
+        </TreeView>
         <GroupBox Name="groupBoxPreviewMaterial" Grid.Row="0" Grid.Column="1">
+            <GroupBox.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF9CB8E0" Offset="0"/>
+                    <GradientStop Color="#FFB3AEE4" Offset="1"/>
+                </LinearGradientBrush>
+            </GroupBox.Background>
         </GroupBox>
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Name="btnClose" Content="Close" Margin="5" Click="btnClose_Click"></Button>
+            <Button Name="btnClose" Content="Close" Margin="5" Click="btnClose_Click" Height="20" Width="60"></Button>
         </StackPanel>
     </Grid>
 </Window>

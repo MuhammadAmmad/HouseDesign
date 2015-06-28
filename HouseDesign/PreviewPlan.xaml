@@ -3,6 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="PreviewPlan" Height="530" Width="600" Icon="Assets/icon1b.png">
     <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FF9CB8E0" Offset="0"/>
+                <GradientStop Color="#FFB3AEE4" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="450"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
@@ -10,6 +16,6 @@
         <GroupBox Grid.Row="0" Name="gridPreviewPlan" Header="Current House Plan" Margin="10">
             <Image Name="imgCurrentHousePlan" Width="550" Height="400"></Image>
         </GroupBox>
-        <Button Grid.Row="1" Name="btnOK" Content="OK" HorizontalAlignment="Right" Width="50" Height="20" Click="btnOK_Click" Margin="5"></Button>
+        <Button Grid.Row="1" Name="btnOK" Content="OK" HorizontalAlignment="Right" Width="40" Height="20" Click="btnOK_Click" Margin="5"></Button>
     </Grid>
 </Window>

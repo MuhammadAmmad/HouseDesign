@@ -39,6 +39,7 @@ namespace HouseDesign
             InitializeComboBoxCurrentCurrency();
             this.configuration = configuration;
             this.currentProject = project;
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
         }
 
         private void InitializeTreeViewReceipt()

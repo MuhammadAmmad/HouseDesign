@@ -37,6 +37,7 @@ namespace HouseDesign
             grid.Children.Add(importMaterial);
             groupBoxPreviewMaterial.Content = grid;
             InitializeTreeViewMaterials();
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
         }
 
         void importMaterial_StatusUpdated(object sender, EventArgs e)

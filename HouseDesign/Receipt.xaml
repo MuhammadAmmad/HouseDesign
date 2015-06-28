@@ -12,7 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="60"></RowDefinition>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Margin="5" FontSize="18" FontWeight="Bold"> Your receipt is:</Label>
         <Grid Grid.Row="1">
@@ -44,10 +44,10 @@
             </TreeView>
         </Grid>
        
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" >
-            <Label Margin="10" FontSize="18" FontWeight="Bold">Total Price:</Label>
-            <TextBlock Name="textBlockTotalPrice" Margin="12" Width="100" FontSize="18" FontWeight="Bold"></TextBlock>
-            <ComboBox Name="comboBoxCurrencies" Margin="12" SelectionChanged="comboBoxCurrencies_SelectionChanged" SelectedValuePath="Content">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" >
+            <Label Margin="5" FontSize="18" FontWeight="Bold">Total Price:</Label>
+            <TextBlock Name="textBlockTotalPrice" Margin="5" Width="100" FontSize="18" FontWeight="Bold" Height="30"></TextBlock>
+            <ComboBox Name="comboBoxCurrencies" Margin="12" SelectionChanged="comboBoxCurrencies_SelectionChanged" SelectedValuePath="Content" Height="20" Width="50">
                 <ComboBoxItem Content="AED"></ComboBoxItem>
                 <ComboBoxItem Content="AUD"></ComboBoxItem>
                 <ComboBoxItem Content="BGN"></ComboBoxItem>
@@ -80,8 +80,8 @@
                 <ComboBoxItem Content="XDR"></ComboBoxItem>
                 <ComboBoxItem Content="ZAR"></ComboBoxItem>
             </ComboBox>
-            <Button Name="btnOK" Click="btnOK_Click" Content="OK" Margin="12" Width="50"></Button>
-            <Button Name="btnExport" Click="btnExport_Click" Content="Export" Margin="12"></Button>
+            <Button Name="btnOK" Click="btnOK_Click" Content="OK" Margin="12" Width="40" Height="20"></Button>
+            <Button Name="btnExport" Click="btnExport_Click" Content="Export" Margin="12" Height="20" Width="60"></Button>
         </StackPanel>
     </Grid>
 </Window>

@@ -17,22 +17,22 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Grid.Column="0" Margin="10">Name:</Label>
-        <TextBox Grid.Row="0" Grid.Column="1" Name="textBoxCompanyName" Width="200" Margin="10"></TextBox>
-        <Label Grid.Row="1" Grid.Column="0" Margin="10">Address:</Label>
+        <Label Grid.Row="0" Grid.Column="0" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center">Name:</Label>
+        <TextBox Grid.Row="0" Grid.Column="1" Name="textBoxCompanyName" Width="200" Height="20"  Margin="10"></TextBox>
+        <Label Grid.Row="1" Grid.Column="0" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center">Address:</Label>
         <TextBox Grid.Row="1" Grid.Column="1" Name="textBoxAddress" Width="200" Height="50" Margin="10"></TextBox>
-        <Label Grid.Row="2" Grid.Column="0" Margin="10">Telephone Number:</Label>
-        <TextBox Grid.Row="2" Grid.Column="1" Name="textBoxTelephoneNumber" Width="200" Margin="10"></TextBox>
-        <Label Grid.Row="3" Grid.Column="0" Margin="10">E-mail:</Label>
-        <TextBox Grid.Row="3" Grid.Column="1" Name="textBoxEmailAddress" Width="200" Margin="10"></TextBox>
-        <Label Grid.Row="4" Grid.Column="0" Margin="10">Website:</Label>
-        <TextBox Grid.Row="4" Grid.Column="1" Name="textBoxWebsite" Width="200" Margin="10"></TextBox>
-        <Label Grid.Row="5" Grid.Column="0" Margin="10" VerticalAlignment="Center">Logo:</Label>
+        <Label Grid.Row="2" Grid.Column="0" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center">Telephone Number:</Label>
+        <TextBox Grid.Row="2" Grid.Column="1" Name="textBoxTelephoneNumber" Width="200" Height="20" Margin="10"></TextBox>
+        <Label Grid.Row="3" Grid.Column="0" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center">E-mail:</Label>
+        <TextBox Grid.Row="3" Grid.Column="1" Name="textBoxEmailAddress" Width="200" Height="20" Margin="10"></TextBox>
+        <Label Grid.Row="4" Grid.Column="0" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center">Website:</Label>
+        <TextBox Grid.Row="4" Grid.Column="1" Name="textBoxWebsite" Width="200" Margin="10" Height="20"></TextBox>
+        <Label Grid.Row="5" Grid.Column="0" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center">Logo:</Label>
         <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="1" Margin="10" HorizontalAlignment="Center">
             <GroupBox Name="groupBoxLogo" Width="100" Height="100" Margin="5">
                 <Image Name="imgLogo" Width="100" Height="100"></Image>
             </GroupBox>
-            <Button Name="btnLoadLogo" Content="Load" Width="80" Height="30" Margin="10" Click="btnLoadLogo_Click"></Button>
+            <Button Name="btnLoadLogo" Content="Load" Width="60" Height="20" Margin="10" Click="btnLoadLogo_Click"></Button>
             
         </StackPanel>        
     </Grid>

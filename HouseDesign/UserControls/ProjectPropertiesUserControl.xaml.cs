@@ -33,10 +33,14 @@ namespace HouseDesign.UserControls
             DependencyProperty.Register("CurrencyName", typeof(String), typeof(ProjectPropertiesUserControl));
 
     
-        public ProjectPropertiesUserControl()
+        public ProjectPropertiesUserControl(bool isEdited)
         {
             InitializeComponent();         
             
+            if(isEdited)
+            {
+                groupBoxWallsHeight.Visibility = Visibility.Hidden;
+            }
             CurrencyHelper.SetProjectCurrency(CurrencyHelper.GetCurrentCurrency());
             InitializeComboBoxCurrentCurrency();
         }        
@@ -77,6 +81,33 @@ namespace HouseDesign.UserControls
             }
 
             return false;
+        }
+
+        public bool CheckValidFields()
+        {
+            if (FieldValidation.IsValidDecimalNumericField(textBoxBudget.Text)==false)
+            {
+                MessageBox.Show("Invalid value typed for budget! Type another!");
+                return false;
+            }
+            if (FieldValidation.IsValidFloatNumericField(textBoxWallsHeight.Text)==false)
+            {
+                MessageBox.Show("Invalid value typed for walls height! Type another!");
+                return false;
+            }
+            if (FieldValidation.IsValidLongNumericField(textBoxTelephoneNumber.Text)==false)
+            {
+                MessageBox.Show("Invalid value typed for telephone number! Type another!");
+                return false;
+            }
+            if (FieldValidation.IsValidEmail(textBoxEmailAddress.Text)==false)
+            {
+                MessageBox.Show("Invalid value typed for email! Type another!");
+                return false;
+            }
+
+            return true;
+
         }
     }
 }

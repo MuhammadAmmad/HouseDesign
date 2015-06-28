@@ -278,9 +278,16 @@ namespace HouseDesign
             NewProject project = new NewProject("New Project", configuration);
             project.ShowDialog();
             currentProject = project.GetCurrentProject();
-            if (currentProject != null)
+            //if (currentProject != null)
+            //{
+            //    groupBoxCurrentProject.Visibility = Visibility.Visible;
+            //    sceneHeight = currentProject.WallsHeight;
+            //}
+
+            if (currentProject.Scene.IsEmpty()==false)
             {
                 groupBoxCurrentProject.Visibility = Visibility.Visible;
+                groupBoxCurrentProject.Background = Brushes.Black;
                 sceneHeight = currentProject.WallsHeight;
             }
 
@@ -304,6 +311,7 @@ namespace HouseDesign
                     TotalPrice = currentProject.ActualPrice;
                     sceneHeight = currentProject.WallsHeight;
                     groupBoxCurrentProject.Visibility = Visibility.Visible;
+                    groupBoxCurrentProject.Background = Brushes.Black;
                 }
                 else
                 {
@@ -422,6 +430,7 @@ namespace HouseDesign
             if (currentProject.Scene.IsEmpty() == false)
             {
                 groupBoxCurrentProject.Visibility = Visibility.Visible;
+                groupBoxCurrentProject.Background = Brushes.Black;
                 sceneObject = wndDesign.SelectedObject;
             }
             wndDesign.Dispose();
@@ -527,6 +536,8 @@ namespace HouseDesign
                 //lblTotalPrice.Content = "Total price is: " + TotalPrice + " " + currency.ToString();
                 sceneObject = null;
             }
+            
+
         }
 
         private void menutItemConfiguration_Click(object sender, RoutedEventArgs e)
@@ -727,7 +738,8 @@ namespace HouseDesign
 
         private void menuItemAbout_Click(object sender, RoutedEventArgs e)
         {
-
+            About_Box about = new About_Box();
+            about.Show();
         }
 
         private void menuItemEditProperties_Click(object sender, RoutedEventArgs e)

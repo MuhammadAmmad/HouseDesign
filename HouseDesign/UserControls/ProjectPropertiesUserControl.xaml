@@ -3,36 +3,37 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" Name="projectProperties">
+             mc:Ignorable="d" Name="projectProperties" Height="450">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="3*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="140"></RowDefinition>
+            <RowDefinition Height="70"></RowDefinition>
+            <RowDefinition Height="70"></RowDefinition>
+            <RowDefinition Height="70"></RowDefinition>
+            <RowDefinition Height="100"></RowDefinition>
         </Grid.RowDefinitions>
         <GroupBox Grid.Row="0" Name="groupBoxClientInformation" Header="Client Information" Margin="5">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="40"></RowDefinition>
-                    <RowDefinition Height="40"></RowDefinition>
-                    <RowDefinition Height="40"></RowDefinition>
+                    <RowDefinition Height="35"></RowDefinition>
+                    <RowDefinition Height="35"></RowDefinition>
+                    <RowDefinition Height="35"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition  Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Margin="5">Name:</Label>
-                <TextBox Grid.Row="0" Grid.Column="1" Name="textBoxClientName" Width="200" Margin="5"></TextBox>
+                <TextBox Grid.Row="0" Grid.Column="1" Name="textBoxClientName" Width="200" Margin="5" Height="25"></TextBox>
                 <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Margin="5">Telephone Number:</Label>
-                <TextBox Grid.Row="1" Grid.Column="1" Name="textBoxTelephoneNumber" Width="120" Margin="5"></TextBox>
+                <TextBox Grid.Row="1" Grid.Column="1" Name="textBoxTelephoneNumber" Width="120" Margin="5" Height="25"></TextBox>
                 <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Margin="5">E-mail Address:</Label>
-                <TextBox Grid.Row="2" Grid.Column="1" Name="textBoxEmailAddress" Width="200" Margin="5"></TextBox>
+                <TextBox Grid.Row="2" Grid.Column="1" Name="textBoxEmailAddress" Width="200" Margin="5" Height="25"></TextBox>
             </Grid>
         </GroupBox> 
         <GroupBox Grid.Row="1" Name="groupBoxCurrency" Header="Currency" Margin="5" VerticalAlignment="Bottom">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Button Name="btnSetCurrency" Click="btnSetCurrency_Click" Content="SetCurrency" Width="100" Margin="5"></Button>
                 <ComboBox Name="comboBoxCurrencies" SelectionChanged="comboBoxCurrencies_SelectionChanged" Visibility="Collapsed" SelectedValuePath="Content" Margin="5">
                     <ComboBoxItem Content="AED"></ComboBoxItem>
                     <ComboBoxItem Content="AUD"></ComboBoxItem>
@@ -66,21 +67,21 @@
                     <ComboBoxItem Content="XDR"></ComboBoxItem>
                     <ComboBoxItem Content="ZAR"></ComboBoxItem>
                 </ComboBox>
-                <Button Name="btnSetCurrency" Click="btnSetCurrency_Click" Content="SetCurrency" Width="100" Margin="5"></Button>   
+                   
             </StackPanel>
         </GroupBox>
         <GroupBox Grid.Row="2" Name="groupBoxBudget" Header="Budget" Margin="5">
             <StackPanel Orientation="Horizontal">
-                <Label Margin="5">The project budget is:</Label>
-                <TextBox Name="textBoxBudget" Margin="5" Width="100"></TextBox>
+                <Label Margin="5" VerticalAlignment="Center">The project budget is:</Label>
+                <TextBox Name="textBoxBudget" Margin="5" Width="100" Height="25"></TextBox>
                 <TextBlock Name="textBlockCurrency" Text="{Binding ElementName=projectProperties, Path=CurrencyName}" Margin="5"></TextBlock>
             </StackPanel>
         </GroupBox>
         <GroupBox Grid.Row="3" Name="groupBoxWallsHeight" Header="Walls Height" Margin="5">
             <StackPanel Orientation="Horizontal">
                 <Label Margin="5">The walls height is:</Label>
-                <TextBox Name="textBoxWallsHeight" Width="100" Margin="5"></TextBox>
-                <ComboBox Name="comboBoxMeasurementUnits" Margin="5" SelectedValuePath="Content">
+                <TextBox Name="textBoxWallsHeight" Width="100" Margin="5" Height="25"></TextBox>
+                <ComboBox Name="comboBoxMeasurementUnits" Margin="5" SelectedValuePath="Content" Height="25">
                     <ComboBoxItem Content="mm"></ComboBoxItem>
                     <ComboBoxItem Content="cm"></ComboBoxItem>
                     <ComboBoxItem Content="m" IsSelected="True"></ComboBoxItem>

@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ctrl="clr-namespace:HouseDesign.UserControls"
-        Width="750" Height="650" Closing="Window_Closing" Icon="Assets/icon1b.png">
+        Width="750" Height="580" Closing="Window_Closing" Icon="Assets/icon1b.png">
     <Grid>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
@@ -24,12 +24,12 @@
             <ListView Name="listViewHousePlans" SelectionChanged="listViewHousePlans_SelectionChanged"></ListView>
         </GroupBox>
         <GroupBox Grid.Row="0" Grid.Column="1" Name="groupBoxProjectProperties" Header="Project Properties" Margin="5">
-            <ctrl:ProjectPropertiesUserControl x:Name="projectProperties"></ctrl:ProjectPropertiesUserControl>
+            
         </GroupBox>        
-        <Button Grid.Row="1" Grid.Column="0" Name="btnImport" Content="Import" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Bottom" Click="btnImport_Click"></Button>
+        <Button Grid.Row="1" Grid.Column="0" Name="btnImport" Content="Import" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Bottom" Click="btnImport_Click" Height="20" Width="50"></Button>
         <StackPanel Grid.Row="1" Grid.Column="1"  Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <Button Name="btnCreateProject" Click="btnCreateProject_Click" Content="Create Project" Margin="5" IsEnabled="False"></Button>
-            <Button Name="btnCancel" Click="btnCancel_Click" Content="Cancel" Margin="5"></Button>
+            <Button Name="btnCreateProject" Click="btnCreateProject_Click" Content="Create Project" Margin="5" IsEnabled="False" Height="20" Width="90"></Button>
+            <Button Name="btnCancel" Click="btnCancel_Click" Content="Cancel" Margin="5" Height="20" Width="60"></Button>
         </StackPanel>
     </Grid>
 </Window>

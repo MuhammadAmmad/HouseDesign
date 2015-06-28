@@ -114,6 +114,12 @@ namespace HouseDesign.UserControls
                 MessageBox.Show("Complete mandatory fields!");
                 return;
             }
+            
+            if(FieldValidation.IsValidDecimalNumericField(textBoxPrice.Text)==false)
+            {
+                MessageBox.Show("Invalid value typed price! Type another!");
+                return;
+            }
             else
             {
                 importedMaterial.Name = textBoxName.Text;

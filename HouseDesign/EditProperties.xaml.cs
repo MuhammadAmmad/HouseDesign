@@ -1,4 +1,5 @@
 ﻿using HouseDesign.Classes;
+using HouseDesign.UserControls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,14 +21,21 @@ namespace HouseDesign
     public partial class EditProperties : Window
     {
         private Project currentProject;
+        private ProjectPropertiesUserControl projectProperties;
         public EditProperties(Project currentProject)
         {
             InitializeComponent();
             this.currentProject = currentProject;
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            Grid grid = new Grid();
+            projectProperties = new ProjectPropertiesUserControl(true);
+            grid.Children.Add(projectProperties);
+            groupBoxProjectProperties.Content = grid;
             if (currentProject != null)
             {
                 InitializeCurrentProject();
             }
+            
         }
 
         private void InitializeCurrentProject()

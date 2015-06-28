@@ -70,6 +70,8 @@ namespace HouseDesign
                 checkBoxIsSuspendable.IsChecked = true;
                 textBoxChosenHeight.Text=(currentObject.Translate.Y/(realHeightScaleFactor*50)).ToString();
             }
+
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
         }
 
         private void InitializeScaleFactors()

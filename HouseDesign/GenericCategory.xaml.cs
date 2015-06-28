@@ -196,6 +196,11 @@ namespace HouseDesign
                     MessageBox.Show("Type a height for the suspended object!");
                     return;
                 }
+                if(FieldValidation.IsValidFloatNumericField(textBoxChosenHeight.Text)==false)
+                {
+                    MessageBox.Show("Invalid value typed for walls height! Type another!");
+                    return;
+                }
                 else
                 {
                     ChosenHeight = Convert.ToSingle(textBoxChosenHeight.Text);                   

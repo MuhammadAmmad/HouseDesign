@@ -80,7 +80,7 @@
                         <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Button Name="btnCustomizeObject" Content="Customize Object"  Click="btnCustomizeObject_Click" Width="Auto" HorizontalAlignment="Right" Margin="5" Grid.Row="0"></Button>
+                    <Button Name="btnCustomizeObject" Content="Customize Object"  Click="btnCustomizeObject_Click" Width="Auto" HorizontalAlignment="Right" Margin="5" Grid.Row="0" Height="20"></Button>
                     <GroupBox Name="groupBoxCustomizeCurrentObject" Header="Customize Object" Visibility="Collapsed" Width="400" Grid.Row="1">
                         <ListView Name="listViewMaterials">
                         </ListView>
@@ -91,15 +91,15 @@
                     </CheckBox>
                     <StackPanel Name="stackPanelChosenHeight" Visibility="Collapsed" Orientation="Horizontal">
                         <Label Margin="5">Height:</Label>
-                        <TextBox Name="textBoxChosenHeight" Width="50" Margin="5"></TextBox>
-                        <TextBlock Name="textBlockMeasurementUnit" Margin="5"></TextBlock>
+                        <TextBox Name="textBoxChosenHeight" Width="50" Margin="5" Height="25"></TextBox>
+                        <TextBlock Name="textBlockMeasurementUnit" Margin="5" Height="25"></TextBlock>
                     </StackPanel>
                 </StackPanel>
             </Grid>
         </GroupBox>
         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
-            <Button Name="btnOK" Content="OK" Click="btnOK_Click" Margin="5"></Button>
-            <Button Name="btnCancel" Content="Cancel" Click="btnCancel_Click" Margin="5"></Button>
+            <Button Name="btnOK" Content="OK" Click="btnOK_Click" Margin="5" Height="20" Width="40"></Button>
+            <Button Name="btnCancel" Content="Cancel" Click="btnCancel_Click" Margin="5" Height="20" Width="60"></Button>
         </StackPanel>
     </Grid>
 </Window>

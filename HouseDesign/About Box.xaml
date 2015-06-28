@@ -1,0 +1,35 @@
+﻿<Window x:Class="HouseDesign.About_Box"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="About" Height="420" Width="400" Icon="Assets/icon1b.png">
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                <GradientStop Color="#FFB7BCD6" Offset="0.974"/>
+                <GradientStop Color="#FF9CA7E6" Offset="0.4"/>
+                <GradientStop Color="#FF5F82B6" Offset="0.552"/>
+                <GradientStop Color="#FFCAD9E8" Offset="0.048"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="150"></RowDefinition>
+            <RowDefinition Height="70"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Name="textBlockTitle" 
+                   Text="House Design" HorizontalAlignment="Center" VerticalAlignment="Center"
+                   FontSize="24" FontStyle="Italic" FontWeight="Bold"></TextBlock>
+        <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16">Author:</Label>
+        <TextBlock Grid.Row="1" Grid.Column="1" Name="textBlockAuthor" Text="Negrea Maria" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Bold"></TextBlock>
+        <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16">Version:</Label>
+        <TextBlock Grid.Row="2" Grid.Column="1" Name="textBlockVersion" Text="1.0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Bold"></TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Name="textBlockDescription" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"></TextBlock>
+        <Button Grid.Row="4" Grid.Column="1" Content="OK" Name="btnOK" Click="btnOK_Click" HorizontalAlignment="Right" Height="20" Margin="5" Width="50"></Button>
+    </Grid>
+</Window>

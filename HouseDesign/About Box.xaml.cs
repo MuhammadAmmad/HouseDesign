@@ -14,14 +14,16 @@ using System.Windows.Shapes;
 namespace HouseDesign
 {
     /// <summary>
-    /// Interaction logic for PreviewPlan.xaml
+    /// Interaction logic for About_Box.xaml
     /// </summary>
-    public partial class PreviewPlan : Window
+    public partial class About_Box : Window
     {
-        public PreviewPlan(String imagePath)
+        private String description;
+        public About_Box()
         {
             InitializeComponent();
-            imgCurrentHousePlan.Source = new BitmapImage(new Uri(imagePath));
+            description = "House Design is a 3D software used for Interior Design. Its main purpose is to improve the quality of a furnishing process.";
+            textBlockDescription.Text = description;
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
         }
 

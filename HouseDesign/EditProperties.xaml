@@ -4,11 +4,18 @@
         xmlns:ctrl="clr-namespace:HouseDesign.UserControls"
         Title="EditProperties" Width="550" Height="600" Icon="Assets/icon1b.png">
     <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FF9CB8E0" Offset="0"/>
+                <GradientStop Color="#FFB3AEE4" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="40"></RowDefinition>
         </Grid.RowDefinitions>
-        <ctrl:ProjectPropertiesUserControl x:Name="projectProperties" Grid.Row="0"></ctrl:ProjectPropertiesUserControl>
+        <GroupBox Name="groupBoxProjectProperties" Grid.Row="0"></GroupBox>
+        
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
             <Button Name="btnOK" Content="OK" Width="50" Click="btnOK_Click" Margin="5"></Button>
             <Button Name="btnCancel" Content="Cancel" Width="50" Click="btnCancel_Click" Margin="5"></Button>
