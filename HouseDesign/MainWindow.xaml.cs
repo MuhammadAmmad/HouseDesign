@@ -468,7 +468,7 @@ namespace HouseDesign
             {
                 Decimal lastPrice = currentObject.Price;
                 EditObject wndEditObject = new EditObject(currentObject, configuration.Materials, currentProject.WallsHeight,
-                    TotalPrice, currentProject.Budget, currentProject.MeasurementUnit);
+                    TotalPrice, currentProject.Budget, currentProject.MeasurementUnit, currentProject.Scene);
                 wndEditObject.ShowDialog();                
                 currentObject = wndEditObject.GetCurrentObject();
                 if (currentObject.Price != lastPrice)
@@ -531,46 +531,57 @@ namespace HouseDesign
                 sceneObject.Translate = destination;
                 sceneObject.Rotate = new Point3d(0, 180, 0);
                 sceneObject.Scale = new Point3d(20, 20, 20);
-                currentProject.Scene.AddHouseObject(sceneObject);
                 TotalPrice += Math.Round(sceneObject.Price, 2);
-                AdjustCollisionPositionOnPlace(sceneObject);
-                //lblTotalPrice.Content = "Total price is: " + TotalPrice + " " + currency.ToString();
-                sceneObject = null;
-            }
-        }
 
-        private void AdjustCollisionPositionOnPlace(WorldObject sceneObject)
-        {
-            double step = Math.PI/120;
-            float radius = 800;
-            List<Point3d> directions = new List<Point3d>();
-            for (double i = 0; i < Math.PI*2; i += step)
-            {
-                directions.Add(new Point3d((float)(radius * Math.Cos(i)), 0.0f, (float)(radius*Math.Sin(i))));
-            }
-
-            float td;
-            float maxTd = float.MinValue;
-            int maxIndex = -1;
-
-            for (int i = 0; i < directions.Count; ++i)
-            {
-                isCollision = currentProject.Scene.CheckCurrentObjectCollisions(sceneObject, directions[i], out td);
-                if (isCollision)
+                float td;
+                if(currentProject.Scene.CheckCurrentObjectCollisions(sceneObject,new Point3d(1,1,0),out td))
                 {
-                    if (td > maxTd)
-                    {
-                        maxTd = td;
-                        maxIndex = i;
-                    }
+                    MessageBox.Show("The object can't be added at the desired locations!");
                 }
-            }
+                else
+                {
+                    currentProject.Scene.AddHouseObject(sceneObject);
+                    sceneObject = null;
+                }
 
-            if (isCollision)
-            {
-                sceneObject.Translate = sceneObject.Translate - directions[maxIndex] * (1 - maxTd);
+                //AdjustCollisionPositionOnPlace(sceneObject);
+                //lblTotalPrice.Content = "Total price is: " + TotalPrice + " " + currency.ToString();
             }
         }
+
+
+        //private void AdjustCollisionPositionOnPlace(WorldObject sceneObject)
+        //{
+        //    double step = Math.PI/120;
+        //    float radius = 800;
+        //    List<Point3d> directions = new List<Point3d>();
+        //    for (double i = 0; i < Math.PI*2; i += step)
+        //    {
+        //        directions.Add(new Point3d((float)(radius * Math.Cos(i)), 0.0f, (float)(radius*Math.Sin(i))));
+        //    }
+
+        //    float td;
+        //    float maxTd = float.MinValue;
+        //    int maxIndex = -1;
+
+        //    for (int i = 0; i < directions.Count; ++i)
+        //    {
+        //        isCollision = currentProject.Scene.CheckCurrentObjectCollisions(sceneObject, directions[i], out td);
+        //        if (isCollision)
+        //        {
+        //            if (td > maxTd)
+        //            {
+        //                maxTd = td;
+        //                maxIndex = i;
+        //            }
+        //        }
+        //    }
+
+        //    if (isCollision)
+        //    {
+        //        sceneObject.Translate = sceneObject.Translate - directions[maxIndex] * (1 - maxTd);
+        //    }
+        //}
 
         private void menutItemConfiguration_Click(object sender, RoutedEventArgs e)
         {
@@ -803,7 +814,11 @@ namespace HouseDesign
                 }
             }
 
-        }
+        }
+
+
+
+
 
 
 

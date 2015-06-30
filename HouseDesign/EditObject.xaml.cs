@@ -34,12 +34,14 @@ namespace HouseDesign
         private Project.UnitOfMeasurement measurementUnit;
         private float realHeightScaleFactor;
         private float scaleFactor;
+        private HouseDesign.Classes.Scene scene;
         public EditObject(WorldObject currentObject, List<Category<Material>> materials, float sceneHeight,
-            Decimal actualPrice, Decimal projectBudget, Project.UnitOfMeasurement measurementUnit)
+            Decimal actualPrice, Decimal projectBudget, Project.UnitOfMeasurement measurementUnit, HouseDesign.Classes.Scene scene)
         {
             InitializeComponent();
             //is.currentObject = new WorldObject();
             this.currentObject = currentObject.Clone();
+            this.scene = scene;
 
             this.currentObject.Translate = new Point3d(0, 0, 0);
             this.currentObject.Scale = new Point3d(1, 1, 1);
@@ -324,16 +326,30 @@ namespace HouseDesign
                 MessageBox.Show("The object can't be edited! Its height is exceeding the walls height!");
                 return;
             }
-            currentObject.Translate = new Point3d(currentObject.Translate.X, ChosenHeight * realHeightScaleFactor * 50, currentObject.Translate.Z);
+
+           
+            //currentObject.Translate = new Point3d(currentObject.Translate.X, ChosenHeight * realHeightScaleFactor * 50, currentObject.Translate.Z);
+            float objectHeight = ChosenHeight * realHeightScaleFactor * 50;
+            
             //InitializecurrentObjectMaterials();
-            if(ChosenHeight*realHeightScaleFactor*50 >0)
+            if (objectHeight > 0)
             {
                 currentObject.IsSuspendable = true;
             }
             currentObject.SetMaterials(selectedObjectMaterials);
             currentObject.MaterialsPrice = Convert.ToDecimal(textBlockMaterialsPrice.Text);
+            Point3d validPosition = oldObject.Translate;
 
-            oldObject.Translate = new Point3d(oldObject.Translate.X, currentObject.Translate.Y, oldObject.Translate.Z);
+            oldObject.Translate = new Point3d(oldObject.Translate.X, objectHeight, oldObject.Translate.Z);
+
+
+            float td;
+            if (scene.CheckCurrentObjectCollisions(oldObject, new Point3d(0, -1, 0), out td))
+            {
+                oldObject.Translate = validPosition;
+                MessageBox.Show("The chosen height is invalid! Type another!");
+                return;
+            }
             oldObject.SetMaterials(selectedObjectMaterials);
             for (int i = 0; i < selectedObjectMaterials.Count;i++ )
             {
