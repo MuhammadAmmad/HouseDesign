@@ -54,7 +54,7 @@
             <MenuItem Name="menuItemProject" Header="Project">
                 <MenuItem Name="menuItemResetHousePlan" Header="Reset House plan" Click="menuItemResetHousePlan_Click"></MenuItem>
                 <MenuItem Name="menuItemResetObjects" Header="Reset Objects" Click="menuItemResetObjects_Click"></MenuItem>
-                <MenuItem Name="menuItemReceipt" Header="Receipt" Click="menuItemReceipt_Click"></MenuItem>
+                <MenuItem Name="menuItemReceipt" Header="Invoice" Click="menuItemReceipt_Click"></MenuItem>
                 <MenuItem Name="menuItemEditProperties" Header="Edit Properties" Click="menuItemEditProperties_Click"></MenuItem>
             </MenuItem>
             <MenuItem Name="menutItemConfiguration" Header="Configuration">

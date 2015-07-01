@@ -45,6 +45,7 @@ namespace HouseDesign
         private void InitializeTreeViewReceipt()
         {
             treeViewReceipt.Items.Clear();
+            comboBoxCurrencies.IsEnabled = false;
             int count;
             Decimal totalPrice = 0;
             for (int i = 0; i < houseObjects.Count; i++)
@@ -59,8 +60,14 @@ namespace HouseDesign
                 i=j-1;
                 totalPrice += count * houseObjects[i].Price;
                 TreeViewItem item = new TreeViewItem();
-                HouseObjectUserControl houseObject = new HouseObjectUserControl(count, houseObjects[i].Name, ConvertValueToDisplay(houseObjects[i].InitialPrice),
-                    ConvertValueToDisplay(houseObjects[i].MaterialsPrice), ConvertValueToDisplay(houseObjects[i].Price));
+                Decimal initialPrice = CurrencyHelper.FromCurrencyToCurrency(CurrencyHelper.GetDefaultCurrency(),
+                    houseObjects[i].InitialPrice, currentCurrency);
+                //initialPrice = CurrencyHelper.FromCurrencyToCurrency(lastCurrency, initialPrice, currentCurrency);
+                Decimal materialsPrice = CurrencyHelper.FromCurrencyToCurrency(CurrencyHelper.GetProjectCurrency(), houseObjects[i].MaterialsPrice, currentCurrency);
+                Decimal totalObjectPrice = CurrencyHelper.FromCurrencyToCurrency(CurrencyHelper.GetProjectCurrency(), houseObjects[i].Price, currentCurrency);
+
+                HouseObjectUserControl houseObject = new HouseObjectUserControl(count, houseObjects[i].Name, ConvertValueToDisplay(initialPrice),
+                    ConvertValueToDisplay(materialsPrice), ConvertValueToDisplay(totalObjectPrice));
                 houseObject.Tag = houseObjects[i];
                 item.Header = houseObject;
                 List<WorldObjectMaterial> currentObjectMaterials = houseObjects[i].GetMaterials();
@@ -69,8 +76,12 @@ namespace HouseDesign
                 {
                     TreeViewItem materialItem = new TreeViewItem();
                     Decimal totalPriceMaterial=Convert.ToDecimal(currentObjectMaterials[k].SurfaceNeeded) * currentObjectMaterials[k].Material.Price;
+                    totalPriceMaterial = CurrencyHelper.FromCurrencyToCurrency(CurrencyHelper.GetDefaultCurrency(), totalPriceMaterial,
+                        currentCurrency);
+                    Decimal materialPrice = CurrencyHelper.FromCurrencyToCurrency(CurrencyHelper.GetDefaultCurrency(), 
+                        currentObjectMaterials[k].Material.Price, currentCurrency);
                     MaterialUserControl material = new MaterialUserControl(currentObjectMaterials[k].Material.FullPath,
-                        currentObjectMaterials[k].Material.Name, ConvertValueToDisplay(currentObjectMaterials[k].Material.Price),
+                        currentObjectMaterials[k].Material.Name, ConvertValueToDisplay(materialPrice),
                         ConvertValueToDisplay(Convert.ToDecimal(currentObjectMaterials[k].SurfaceNeeded)), 
                         ConvertValueToDisplay(totalPriceMaterial));
                     materialItem.Header = material;
@@ -195,10 +206,12 @@ namespace HouseDesign
                 Currency.CurrencyName currencyName = (Currency.CurrencyName)Enum.Parse(typeof(Currency.CurrencyName), currentItem.Content.ToString());
                 if(currencyName!=Currency.CurrencyName.RON)
                 {
+                    lastCurrency = currentCurrency;
                     currentCurrency = CurrencyHelper.GetCurrencyByName(currencyName);
                 }
                 else
                 {
+                    lastCurrency = currentCurrency;
                     currentCurrency = CurrencyHelper.GetDefaultCurrency();
                 }
 
@@ -231,7 +244,7 @@ namespace HouseDesign
                 FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None);
                 Document doc = new Document(PageSize.A4, 36, 72, 108, 180);
                 doc.SetMargins(70f, 70f, 50f, 50f);
-                doc.AddTitle("RECEIPT");
+                doc.AddTitle("INVOICE");
                 PdfWriter writer = PdfWriter.GetInstance(doc, fs);
                 doc.Open();
 

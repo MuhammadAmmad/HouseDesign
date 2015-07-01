@@ -40,7 +40,12 @@ namespace HouseDesign.UserControls
             
             if(isEdited)
             {
-                groupBoxWallsHeight.Visibility = Visibility.Hidden;
+                textBoxWallsHeight.IsEnabled = false;
+                comboBoxMeasurementUnits.IsEnabled = false;
+                //groupBoxWallsHeight.Visibility = Visibility.Collapsed;
+                btnSetCurrency.Visibility = Visibility.Collapsed;
+                comboBoxCurrencies.IsEnabled = false;
+                comboBoxCurrencies.Visibility = Visibility.Visible;
             }
             else
             {
