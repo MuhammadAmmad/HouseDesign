@@ -288,6 +288,10 @@ namespace HouseDesign
                 groupBoxCurrentProject.Visibility = Visibility.Visible;
                 groupBoxCurrentProject.Background = Brushes.Black;
                 sceneHeight = currentProject.WallsHeight;
+                TotalPrice = 0;
+                textBlockProjectCurrency.Visibility = Visibility.Collapsed;
+                textBlockProjectCurrency.Text = Enum.GetName(typeof(Currency.CurrencyName),
+                        CurrencyHelper.GetProjectCurrency().Name);
             }
 
         }
@@ -312,6 +316,12 @@ namespace HouseDesign
                     groupBoxCurrentProject.Visibility = Visibility.Visible;
                     groupBoxCurrentProject.Background = Brushes.Black;
                     CurrencyHelper.SetProjectCurrency(currentProject.Currency);
+                    textBlockProjectCurrency.Text = Enum.GetName(typeof(Currency.CurrencyName),
+                        CurrencyHelper.GetProjectCurrency().Name);
+                    if(TotalPrice>0)
+                    {
+                        textBlockProjectCurrency.Visibility = Visibility.Visible;
+                    }
                 }
                 else
                 {
@@ -469,7 +479,7 @@ namespace HouseDesign
                 Decimal lastPrice = currentObject.Price;
                 EditObject wndEditObject = new EditObject(currentObject, configuration.Materials, currentProject.WallsHeight,
                     TotalPrice, currentProject.Budget, currentProject.MeasurementUnit, currentProject.Scene);
-                wndEditObject.ShowDialog();                
+                wndEditObject.ShowDialog();
                 currentObject = wndEditObject.GetCurrentObject();
                 if (currentObject.Price != lastPrice)
                 {
@@ -478,6 +488,11 @@ namespace HouseDesign
                 }
                 return;
             }
+            else
+            {
+                currentProject.Scene.MainCamera.Translate = new Point3d(80, 540, 560);
+                currentProject.Scene.MainCamera.Rotate = new Point3d(-40, 180, 0);
+            }           
 
         }
         private Point3d GetClickDirection(Point clickPoint)
@@ -523,6 +538,10 @@ namespace HouseDesign
                 else
                 {
                     TotalPrice += Math.Round(sceneObject.Price, 2);
+                    if(TotalPrice>0)
+                    {
+                        textBlockProjectCurrency.Visibility = Visibility.Visible;
+                    }
                     currentProject.Scene.AddHouseObject(sceneObject);
                     sceneObject = null;
                 }
@@ -705,6 +724,11 @@ namespace HouseDesign
                         currentProject.Scene.DeleteHouseObject(currentObject);
                         //lblTotalPrice.Content = "Total price is: " + totalPrice + " " + currency.ToString();
                         currentObject = null;
+                        if(TotalPrice<0)
+                        {
+                            TotalPrice = 0;
+                            textBlockProjectCurrency.Visibility = Visibility.Collapsed;
+                        }
 
                     }
                     e.Handled = true;

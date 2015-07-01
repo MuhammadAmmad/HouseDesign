@@ -108,7 +108,11 @@
             OpenGLInitialized="openGLControl_OpenGLInitialized" Resized="openGLControl_Resized" 
             RenderContextType="FBO" FrameRate="15" MouseDown="openGLControl_MouseLeftButtonDown"/>
             </GroupBox>
-            <Label Name="lblTotalPrice" Foreground="White" FontSize="18" FontWeight="ExtraBold" Content="{Binding ElementName=window, Path=TotalPrice, Converter={StaticResource ResourceKey=addMessageConverter}}" Grid.ColumnSpan="2" ></Label>
+            <StackPanel Orientation="Horizontal">
+                <Label Name="lblTotalPrice" Foreground="White" FontSize="18" FontWeight="ExtraBold" Content="{Binding ElementName=window, Path=TotalPrice, Converter={StaticResource ResourceKey=addMessageConverter}}" ></Label>
+                <TextBlock Name="textBlockProjectCurrency" Visibility="Collapsed" Foreground="White" FontSize="18" FontWeight="ExtraBold" Margin="5"></TextBlock>
+            </StackPanel>
+            
         </Grid>
     </Grid>
 </Window>

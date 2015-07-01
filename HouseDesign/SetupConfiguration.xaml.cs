@@ -937,7 +937,7 @@ namespace HouseDesign
                 {
                     String companyName=companyInformation.textBoxCompanyName.Text;
                     String address=companyInformation.textBoxAddress.Text;
-                    long telephoneNumber=Convert.ToInt64(companyInformation.textBoxTelephoneNumber.Text);
+                    String telephoneNumber=companyInformation.textBoxTelephoneNumber.Text;
                     String email=companyInformation.textBoxEmailAddress.Text;
                     String website=companyInformation.textBoxWebsite.Text;
                     if(companyName.Length==0 || address.Length==0 || companyInformation.textBoxTelephoneNumber.Text.Length==0 
@@ -954,7 +954,7 @@ namespace HouseDesign
                 {
                     configuration.CurrentCompany.CompanyName = companyInformation.textBoxCompanyName.Text;
                     configuration.CurrentCompany.Address = companyInformation.textBoxAddress.Text;
-                    configuration.CurrentCompany.TelephoneNumber = Convert.ToInt64(companyInformation.textBoxTelephoneNumber.Text);
+                    configuration.CurrentCompany.TelephoneNumber = companyInformation.textBoxTelephoneNumber.Text;
                     configuration.CurrentCompany.EmailAddress = companyInformation.textBoxEmailAddress.Text;
                     configuration.CurrentCompany.Website = companyInformation.textBoxWebsite.Text;
                     configuration.CurrentCompany.LogoPath = companyInformation.imgLogo.Tag.ToString();

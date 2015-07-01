@@ -10,7 +10,7 @@ namespace HouseDesign.Classes
     {
         public String CompanyName { get; set; }
         public String Address { get; set; }
-        public long TelephoneNumber { get; set; }
+        public String TelephoneNumber { get; set; }
         public String EmailAddress { get; set; }
         public String Website { get; set; }
         public String LogoPath { get; set; }
@@ -18,7 +18,7 @@ namespace HouseDesign.Classes
         {
 
         }
-        public Company(String companyName, String address, long telephoneNumber, String emailAddress, String website, String logoPath)
+        public Company(String companyName, String address, String telephoneNumber, String emailAddress, String website, String logoPath)
         {
             this.CompanyName = companyName;
             this.Address = address;
