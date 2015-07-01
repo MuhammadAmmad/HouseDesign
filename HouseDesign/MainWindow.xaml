@@ -6,7 +6,7 @@
         xmlns:converter="clr-namespace:HouseDesign.Converters"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
         MouseWheel="Window_MouseWheel" KeyDown="Window_KeyDown"
-        MouseDown="Window_MouseDown" WindowState="Maximized" ResizeMode="NoResize"
+        MouseDown="Window_MouseDown" WindowState="Maximized" ResizeMode="CanMinimize"
         Name="window" Closed="window_Closed"
         MouseRightButtonDown="Window_MouseRightButtonDown" MouseDoubleClick="Window_MouseDoubleClick" 
         MouseUp="Window_MouseUp" MouseMove="Window_MouseMove" Icon="Assets/icon1b.png">
@@ -64,6 +64,7 @@
             <MenuItem Name="menuItemDesign" Header="Design" Click="menuItemDesign_Click"></MenuItem>
             <MenuItem Name="menuItemScene" Header="Scene">
                 <MenuItem Name="menuItemScreenshot" Header="Screenshot" Click="menuItemScreenshot_Click"></MenuItem>
+                <MenuItem Name="menuItemPerspectiveView" Header="Perspective View" Click="menuItemPerspectiveView_Click"></MenuItem>
                 <MenuItem Name="menuItemUpView" Header="Up View" Click="menuItemUpView_Click"></MenuItem>
             </MenuItem>
             <MenuItem Name="menuItemHelp" Header="Help">

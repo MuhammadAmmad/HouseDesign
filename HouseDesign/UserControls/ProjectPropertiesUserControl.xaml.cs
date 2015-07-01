@@ -22,6 +22,7 @@ namespace HouseDesign.UserControls
     {
 
         private Project currentProject;
+        private Currency lastCurrency;
         public String CurrencyName
         {
             get { return (String)GetValue(CurrencyNameProperty); }
@@ -41,7 +42,11 @@ namespace HouseDesign.UserControls
             {
                 groupBoxWallsHeight.Visibility = Visibility.Hidden;
             }
-            CurrencyHelper.SetProjectCurrency(CurrencyHelper.GetCurrentCurrency());
+            else
+            {
+                CurrencyHelper.SetProjectCurrency(CurrencyHelper.GetCurrentCurrency());
+                lastCurrency = CurrencyHelper.GetProjectCurrency();
+            }            
             InitializeComboBoxCurrentCurrency();
         }        
 
@@ -50,11 +55,20 @@ namespace HouseDesign.UserControls
             comboBoxCurrencies.Visibility = Visibility.Visible;
         }
 
+        private void InitializeBudget()
+        {
+            if(textBoxBudget.Text.Length>0)
+            {
+                Decimal budget = CurrencyHelper.FromCurrencyToCurrency(lastCurrency, Convert.ToDecimal(textBoxBudget.Text), CurrencyHelper.GetProjectCurrency());
+                textBoxBudget.Text = Math.Round(budget, 2).ToString();
+            }            
+        }
         private void comboBoxCurrencies_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBoxItem currentItem = comboBoxCurrencies.SelectedItem as ComboBoxItem;
             if (currentItem.Content != null)
             {
+                lastCurrency = CurrencyHelper.GetProjectCurrency();
                 Currency.CurrencyName currencyName = (Currency.CurrencyName)Enum.Parse(typeof(Currency.CurrencyName), currentItem.Content.ToString());
                 if (currencyName == Currency.CurrencyName.RON)
                 {
@@ -64,6 +78,7 @@ namespace HouseDesign.UserControls
                 {
                     CurrencyHelper.SetProjectCurrency(CurrencyHelper.GetCurrencyByName(currencyName));
                 }
+                //InitializeBudget();
 
             }            
         }

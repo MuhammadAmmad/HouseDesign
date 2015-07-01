@@ -13,7 +13,10 @@ namespace HouseDesign.Classes
             long number;
             if(long.TryParse(text, out number))
             {
-                return true;
+                if (number >= 0)
+                {
+                    return true;
+                }
             }
             return false;
         }
@@ -23,7 +26,11 @@ namespace HouseDesign.Classes
             decimal number;
             if (decimal.TryParse(text, out number))
             {
-                return true;
+                if (number >= 0)
+                {
+                    return true;
+                }
+                
             }
             return false;
         }
@@ -33,7 +40,10 @@ namespace HouseDesign.Classes
             float number;
             if (float.TryParse(text, out number))
             {
-                return true;
+                if (number >= 0)
+                {
+                    return true;
+                }
             }
             return false;
         }
@@ -42,7 +52,10 @@ namespace HouseDesign.Classes
             double number;
             if (double.TryParse(text, out number))
             {
-                return true;
+                if (number >= 0)
+                {
+                    return true;
+                }
             }
             return false;
         }

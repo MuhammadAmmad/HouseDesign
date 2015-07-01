@@ -62,7 +62,6 @@ namespace HouseDesign
         public MainWindow()
         {
             InitializeComponent();
-
             currentProject = new Project(new HouseDesign.Classes.Scene());
 
             DispatcherTimer timer = new DispatcherTimer();
@@ -312,6 +311,7 @@ namespace HouseDesign
                     sceneHeight = currentProject.WallsHeight;
                     groupBoxCurrentProject.Visibility = Visibility.Visible;
                     groupBoxCurrentProject.Background = Brushes.Black;
+                    CurrencyHelper.SetProjectCurrency(currentProject.Currency);
                 }
                 else
                 {
@@ -479,23 +479,6 @@ namespace HouseDesign
                 return;
             }
 
-            if (isZoomedIn == false)
-            {
-                //Point3d direction = GetClickDirection(e.GetPosition(openGLControl));
-                float alpha = -(currentProject.Scene.MainCamera.Translate.Y) / direction.Y;
-                Point3d destination = new Point3d(currentProject.Scene.MainCamera.Translate.X + direction.X * alpha, 0,
-                    currentProject.Scene.MainCamera.Translate.Z + direction.Z * alpha);
-                currentProject.Scene.MainCamera.Translate = destination;
-                currentProject.Scene.MainCamera.Rotate = new Point3d(0, 180, 0);
-                isZoomedIn = true;
-            }
-            else
-            {
-                currentProject.Scene.MainCamera.Translate = new Point3d(80, 540, 560);
-                currentProject.Scene.MainCamera.Rotate = new Point3d(-40, 180, 0);
-                isZoomedIn = false;
-            }
-
         }
         private Point3d GetClickDirection(Point clickPoint)
         {
@@ -530,8 +513,7 @@ namespace HouseDesign
                 }
                 sceneObject.Translate = destination;
                 sceneObject.Rotate = new Point3d(0, 180, 0);
-                sceneObject.Scale = new Point3d(20, 20, 20);
-                TotalPrice += Math.Round(sceneObject.Price, 2);
+                sceneObject.Scale = new Point3d(20, 20, 20);                
 
                 float td;
                 if(currentProject.Scene.CheckCurrentObjectCollisions(sceneObject,new Point3d(1,1,0),out td))
@@ -540,6 +522,7 @@ namespace HouseDesign
                 }
                 else
                 {
+                    TotalPrice += Math.Round(sceneObject.Price, 2);
                     currentProject.Scene.AddHouseObject(sceneObject);
                     sceneObject = null;
                 }
@@ -814,6 +797,13 @@ namespace HouseDesign
                 }
             }
 
+        }
+
+        private void menuItemPerspectiveView_Click(object sender, RoutedEventArgs e)
+        {
+            //currentProject.Scene.MainCamera.Translate = new Point3d(80, 540, 560);
+            currentProject.Scene.MainCamera.Translate = new Point3d(80, 540, 560);
+            currentProject.Scene.MainCamera.Rotate = new Point3d(-40, 180, 0);
         }
 
 

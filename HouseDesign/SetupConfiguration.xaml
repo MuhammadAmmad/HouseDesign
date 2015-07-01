@@ -113,7 +113,7 @@
                     <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" HorizontalAlignment="Center">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Margin="10" Text="The current currency is:" FontSize="16"></TextBlock>
-                            <TextBlock Name="textBlockCurrentCurrency" Margin="10" Text="{Binding ElementName=setupConfiguration, Path=CurrentCurrency}"></TextBlock>
+                            <TextBlock Name="textBlockCurrentCurrency" Margin="10" FontSize="16" Text="{Binding ElementName=setupConfiguration, Path=CurrentCurrency}"></TextBlock>
                         </StackPanel>
                         <Button Name="btnChangeCurrency" Content="Change currency" Click="btnChangeCurrency_Click" Width="120" Height="20" Margin="10"></Button>
                     </StackPanel>

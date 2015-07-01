@@ -39,7 +39,6 @@ namespace HouseDesign
             Decimal actualPrice, Decimal projectBudget, Project.UnitOfMeasurement measurementUnit, HouseDesign.Classes.Scene scene)
         {
             InitializeComponent();
-            //is.currentObject = new WorldObject();
             this.currentObject = currentObject.Clone();
             this.scene = scene;
 
@@ -101,7 +100,9 @@ namespace HouseDesign
         }
         private static Decimal GetTradeAllowance(WorldObject currentObject)
         {
-            return (currentObject.Price / (currentObject.MaterialsPrice + currentObject.InitialPrice) - 1)*100;
+            Decimal initialPrice=CurrencyHelper.FromCurrencyToCurrency(CurrencyHelper.GetCurrentCurrency(), currentObject.InitialPrice,
+                CurrencyHelper.GetProjectCurrency());
+            return (currentObject.Price / (currentObject.MaterialsPrice + initialPrice) - 1)*100;
         }
 
         private void openGLControl_OpenGLDraw(object sender, OpenGLEventArgs args)
@@ -288,6 +289,7 @@ namespace HouseDesign
         private void checkBoxIsSuspendable_Unchecked(object sender, RoutedEventArgs e)
         {
             textBoxChosenHeight.Text = "";
+            currentObject.IsSuspendable = false;
             stackPanelChosenHeight.Visibility = Visibility.Collapsed;
         }
 
@@ -317,6 +319,7 @@ namespace HouseDesign
             currentObject.Price = Convert.ToDecimal(textBlockTotalPrice.Text);
             if (actualPrice- lastPrice + currentObject.Price > projectBudget)
             {
+                currentObject.Price = lastPrice;
                 MessageBox.Show("The object can't be edited! You are exceeding the budget!");
                 return;
             }

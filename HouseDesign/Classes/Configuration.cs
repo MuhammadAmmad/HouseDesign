@@ -29,6 +29,7 @@ namespace HouseDesign.Classes
         {
             Categories.Clear();
             Materials.Clear();
+            CurrentCompany = null;
         }
 
         public void ConvertAllPrices(Currency lastCurrency, Currency currentCurrency)

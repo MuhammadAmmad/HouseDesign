@@ -330,6 +330,8 @@ namespace HouseDesign
                         selectedObjectInitialPrice=currentObject.InitialPrice;                   
                         InitializePrices();
                         InitializeDimensions();
+                        checkBoxIsSuspendable.IsChecked = false;
+                        textBoxChosenHeight.Text = "";
                     }                    
                 }
                 else
