@@ -31,7 +31,7 @@ namespace HouseDesign
             this.materials = materials;
             selectedTreeViewItem = null;
             currentMaterial = new Material("", imagePath, 0);
-            ImportMaterial importMaterial = new ImportMaterial("Import Material", currentMaterial, false, false);
+            ImportMaterial importMaterial = new ImportMaterial("Import Material", currentMaterial, false, false, false);
             importMaterial.StatusUpdated += importMaterial_StatusUpdated;
             Grid grid = new Grid();
             grid.Children.Add(importMaterial);
@@ -52,7 +52,7 @@ namespace HouseDesign
             }
             else
             {
-                ImportMaterial importMaterial = new ImportMaterial("Import Material", currentMaterial, false, false);
+                ImportMaterial importMaterial = new ImportMaterial("Import Material", currentMaterial, false, false, false);
                 importMaterial.StatusUpdated += importMaterial_StatusUpdated;
                 Grid grid = new Grid();
                 grid.Children.Add(importMaterial);

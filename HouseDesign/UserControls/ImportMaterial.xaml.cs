@@ -38,8 +38,10 @@ namespace HouseDesign.UserControls
         public static readonly DependencyProperty CurrencyNameProperty =
             DependencyProperty.Register("CurrencyName", typeof(String), typeof(ImportMaterial));
 
+        private Currency currency;
+
         
-        public ImportMaterial(String title, Material currentMaterial, bool isReadOnly, bool isEdited)
+        public ImportMaterial(String title, Material currentMaterial, bool isReadOnly, bool isEdited, bool isProjectState)
         {
             InitializeComponent();
             mainGroupBox.Header = title;
@@ -54,6 +56,18 @@ namespace HouseDesign.UserControls
                 btnOK.IsEnabled = false;
                 groupBoxPreviewMaterial.Visibility = Visibility.Collapsed;
             }
+
+            if (isProjectState)
+            {
+                currency = CurrencyHelper.GetProjectCurrency();
+            }
+            else
+            {
+                currency = CurrencyHelper.GetCurrentCurrency();
+            }
+
+            CurrencyName = currency.Name.ToString();
+
             if (currentMaterial != null)
             {
                 this.importedMaterial = currentMaterial;
@@ -64,14 +78,17 @@ namespace HouseDesign.UserControls
                 importedMaterial = new Material();
             }
 
-            CurrencyName = CurrencyHelper.GetCurrentCurrency().Name.ToString();
+            
+            
         }
         public void InitializeCurrentMaterial()
         {
             groupBoxPreviewMaterial.Visibility = Visibility.Visible;
             textBoxName.Text = importedMaterial.Name;
             textBoxDescription.Text = importedMaterial.Description;
-            textBoxPrice.Text = Math.Round(importedMaterial.Price, 2).ToString();
+            Decimal price = CurrencyHelper.FromCurrencyToCurrency(CurrencyHelper.GetCurrentCurrency(), importedMaterial.Price,
+                currency);
+            textBoxPrice.Text = Math.Round(price, 2).ToString();
             String imagePath = importedMaterial.FullPath;
             InitializeImage(imagePath);
         }

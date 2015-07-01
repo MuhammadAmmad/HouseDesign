@@ -204,7 +204,7 @@ namespace HouseDesign
         {
             int index = (sender as CustomizeMaterial).Index;
             Material oldMaterial = (sender as CustomizeMaterial).GetCurrentMaterial();
-            GenericMaterial genericMaterial = new GenericMaterial(materials, index);
+            GenericMaterial genericMaterial = new GenericMaterial(materials, index, true);
             genericMaterial.StatusUpdated += genericMaterial_StatusUpdated;
             genericMaterial.ShowDialog();
             Material currentMaterial = genericMaterial.GetCurrentMaterial();

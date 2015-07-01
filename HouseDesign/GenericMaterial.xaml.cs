@@ -24,12 +24,14 @@ namespace HouseDesign
         private List<Category<Material>> materials;
         private Material currentMaterial;
         public int Index { get; set; }
-        public GenericMaterial(List<Category<Material>> materials, int index)
+        private bool isProjectState;
+        public GenericMaterial(List<Category<Material>> materials, int index, bool isProjectState)
         {
             InitializeComponent();
             this.materials = new List<Category<Material>>();            
             this.materials.AddRange(materials);
             this.Index = index;
+            this.isProjectState=isProjectState;
             InitializeTreeViewMaterials();
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
         }
@@ -91,7 +93,7 @@ namespace HouseDesign
             if(material!=null)
             {
                 currentMaterial = material;
-                ImportMaterial previewMaterial = new ImportMaterial(material.Name, material, true, false);
+                ImportMaterial previewMaterial = new ImportMaterial(material.Name, material, true, false, isProjectState);
                 Grid grid = new Grid();
                 grid.Children.Add(previewMaterial);
                 groupBoxPreviewMaterial.Content = grid;

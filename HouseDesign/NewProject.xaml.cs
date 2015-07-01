@@ -60,6 +60,7 @@ namespace HouseDesign
             InitializeHousePlans();
             this.configuration = configuration;
             currentProject = new Project(new Scene());
+            currentProject.MeasurementUnit = Project.UnitOfMeasurement.m;
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             projectProperties = new ProjectPropertiesUserControl(false);
             Grid grid = new Grid();
@@ -119,6 +120,7 @@ namespace HouseDesign
 
             if (fdlg.ShowDialog() == true)
             {
+                groupBoxProgressBar.Visibility = Visibility.Visible;
                 timer = new DispatcherTimer();
                 timer.Interval = new TimeSpan(0, 0, 0, 0, 18);
                 timer.Tick += timer_Tick;
@@ -135,7 +137,7 @@ namespace HouseDesign
         private void Import()
         {
             ProgressValue = 0.0;
-            ProgressMessage = "Convering House Plan to Image";
+            ProgressMessage = "Converting House Plan to Image";
 
             currentHousePlanName = System.IO.Path.GetFileNameWithoutExtension(fileName);
             currentHousePlan = new HousePlan(currentHousePlanName);
@@ -150,7 +152,7 @@ namespace HouseDesign
             List<Wall2D> walls = WallDetector.GetWalls(currentImage);
 
             ProgressValue = 99.58;
-            ProgressMessage = "Finallizing house plan";
+            ProgressMessage = "Finalizing house plan";
 
             int width = currentImage.Width;
             int height = currentImage.Height;

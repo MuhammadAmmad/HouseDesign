@@ -6,7 +6,7 @@
         xmlns:converter="clr-namespace:HouseDesign.Converters"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
         MouseWheel="Window_MouseWheel" KeyDown="Window_KeyDown"
-        MouseDown="Window_MouseDown"
+        MouseDown="Window_MouseDown" WindowState="Maximized" ResizeMode="NoResize"
         Name="window" Closed="window_Closed"
         MouseRightButtonDown="Window_MouseRightButtonDown" MouseDoubleClick="Window_MouseDoubleClick" 
         MouseUp="Window_MouseUp" MouseMove="Window_MouseMove" Icon="Assets/icon1b.png">

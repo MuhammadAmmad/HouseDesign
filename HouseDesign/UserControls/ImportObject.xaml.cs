@@ -77,6 +77,7 @@ namespace HouseDesign.UserControls
                 btnCancel.IsEnabled = false;
                 btnLoadObject.IsEnabled = false;
                 btnOK.IsEnabled = false;
+                listViewMaterials.IsEnabled = false;
                 
                 stackPanelTotalPrice.Visibility = Visibility.Visible;
             }
@@ -336,7 +337,7 @@ namespace HouseDesign.UserControls
         {
             int index = (sender as CustomizeMaterial).Index;
             Material oldMaterial = (sender as CustomizeMaterial).GetCurrentMaterial();
-            GenericMaterial genericMaterial = new GenericMaterial(materials, index);
+            GenericMaterial genericMaterial = new GenericMaterial(materials, index, false);
             genericMaterial.StatusUpdated += genericMaterial_StatusUpdated;
             genericMaterial.ShowDialog();
             Material currentMaterial = genericMaterial.GetCurrentMaterial();
@@ -354,7 +355,10 @@ namespace HouseDesign.UserControls
                 }
                 
             }
-            importedObject.Materials.Add(currentMaterial);
+
+            currentObject.SetMaterials(currentObjectMaterials);
+            //importedObject.Materials[
+            //importedObject.Materials.Add(currentMaterial);
             InitializeMaterials();
         }
 

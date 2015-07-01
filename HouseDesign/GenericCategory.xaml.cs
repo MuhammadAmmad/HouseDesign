@@ -36,15 +36,19 @@ namespace HouseDesign
         private Project.UnitOfMeasurement measurementUnit;
         private float realHeightScaleFactor;
         private float scaleFactor;
+        private bool addPermission;
         public GenericCategory(Category<FurnitureObject> category, List<Category<Material>> materials, float sceneHeight, 
             Decimal actualPrice, Decimal projectBudget, Project.UnitOfMeasurement measurementUnit)
         {
             InitializeComponent();
             this.category = category;
             this.materials = materials;
+            addPermission = true;
             selectedObjectMaterials = new List<WorldObjectMaterial>();
             TreeViewItem mainTreeViewItem = new TreeViewItem();
             mainTreeViewItem.IsExpanded = true;
+            this.measurementUnit = measurementUnit;
+            textBlockMeasurementUnit.Text = measurementUnit.ToString();
             InitializeScaleFactors();
             treeViewCategory.Items.Add(mainTreeViewItem);
             PopulateTreeView(category, mainTreeViewItem);
@@ -55,8 +59,7 @@ namespace HouseDesign
             currentTradeAllowance = Convert.ToDecimal(category.TradeAllowance);
             this.actualPrice = actualPrice;
             this.projectBudget = projectBudget;
-            this.measurementUnit = measurementUnit;
-            textBlockMeasurementUnit.Text = measurementUnit.ToString();
+            
         }
 
         private void InitializeScaleFactors()
@@ -217,6 +220,7 @@ namespace HouseDesign
             if (actualPrice + SelectedObject.Price > projectBudget)
             {
                 MessageBox.Show("The object can't be added! You are exceeding the budget!");
+                addPermission = false;
                 return;
             }
 
@@ -241,6 +245,10 @@ namespace HouseDesign
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
+            if(!addPermission)
+            {
+                SelectedObject = null;
+            }
             this.Close();
         }
 
@@ -266,7 +274,7 @@ namespace HouseDesign
         {
             int index = (sender as CustomizeMaterial).Index;
             Material oldMaterial = (sender as CustomizeMaterial).GetCurrentMaterial();
-            GenericMaterial genericMaterial = new GenericMaterial(materials, index);
+            GenericMaterial genericMaterial = new GenericMaterial(materials, index, true);
             genericMaterial.StatusUpdated += genericMaterial_StatusUpdated;
             genericMaterial.ShowDialog();
             Material currentMaterial = genericMaterial.GetCurrentMaterial();
@@ -412,6 +420,14 @@ namespace HouseDesign
         {
             textBoxChosenHeight.Text = "";
             stackPanelChosenHeight.Visibility = Visibility.Collapsed;
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            if (!addPermission)
+            {
+                SelectedObject = null;
+            }
         }
                 
     }

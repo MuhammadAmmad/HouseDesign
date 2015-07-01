@@ -33,6 +33,9 @@
             <Button Name="btnCreateProject" Click="btnCreateProject_Click" Content="Create Project" Margin="5" IsEnabled="False" Height="20" Width="90"></Button>
             <Button Name="btnCancel" Click="btnCancel_Click" Content="Cancel" Margin="5" Height="20" Width="60"></Button>
         </StackPanel>
-        <ProgressBar Maximum="100" Value="{Binding ElementName=window, Path=ProgressBarValue}"  Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Width="600" Name="progressBarImportHousePlan"></ProgressBar>
+        <GroupBox Name="groupBoxProgressBar" Visibility="Collapsed" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+            <ProgressBar Maximum="100" Value="{Binding ElementName=window, Path=ProgressBarValue}"  Margin="5" Width="600" Name="progressBarImportHousePlan"></ProgressBar>
+        </GroupBox>
+        
     </Grid>
 </Window>

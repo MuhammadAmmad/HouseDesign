@@ -291,7 +291,7 @@ namespace HouseDesign
                     else
                     {
                         Material currentMaterial = selectedTreeViewItem.Tag as Material;
-                        ImportMaterial importMaterial = new ImportMaterial("Import Material", currentMaterial, false, true);
+                        ImportMaterial importMaterial = new ImportMaterial("Import Material", currentMaterial, false, true, false);
                         importMaterial.StatusUpdated += importMaterial_StatusUpdated;
                         Grid grid = new Grid();
                         grid.Children.Add(importMaterial);
@@ -450,7 +450,7 @@ namespace HouseDesign
                 {
                     if (selectedItemType == LastSelectedItemType.CategoryMaterial)
                     {
-                        ImportMaterial importMaterial = new ImportMaterial("Import Material", null, false, false);
+                        ImportMaterial importMaterial = new ImportMaterial("Import Material", null, false, false, false);
                         importMaterial.StatusUpdated += importMaterial_StatusUpdated;
                         Grid grid = new Grid();
                         grid.Children.Add(importMaterial);
@@ -620,7 +620,7 @@ namespace HouseDesign
                 {
                     selectedItemType = LastSelectedItemType.Material;
                     Material material = selectedTreeViewItem.Tag as Material;
-                    ImportMaterial importMaterial = new ImportMaterial("Material", material, true, false);
+                    ImportMaterial importMaterial = new ImportMaterial("Material", material, true, false, false);
                     importMaterial.StatusUpdated += importMaterial_StatusUpdated;
                     Grid grid = new Grid();
                     grid.Children.Add(importMaterial);

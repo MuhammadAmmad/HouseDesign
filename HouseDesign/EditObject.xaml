@@ -37,20 +37,20 @@
                     </GroupBox>
                     <GroupBox Grid.Column="1" Name="groupBoxDimensions" Header="Dimensions"  Margin="5">
                         <StackPanel Orientation="Vertical">
-                            <StackPanel Orientation="Horizontal" Margin="5">
+                            <StackPanel Orientation="Horizontal">
                                 <Label Margin="5">Width:</Label>
-                                <TextBlock Name="textBlockWidth" Margin="5"></TextBlock>
-                                <TextBlock Name="textBlockDimensionWidth" Margin="5"></TextBlock>
+                                <TextBlock Name="textBlockWidth" Margin="5" VerticalAlignment="Center"></TextBlock>
+                                <TextBlock Name="textBlockDimensionWidth" Margin="5" VerticalAlignment="Center"></TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Margin="5">Height:</Label>
-                                <TextBlock Name="textBlockHeight" Margin="5"></TextBlock>
-                                <TextBlock Name="textBlockDimensionHeight" Margin="5"></TextBlock>
+                                <TextBlock Name="textBlockHeight" Margin="5" VerticalAlignment="Center"></TextBlock>
+                                <TextBlock Name="textBlockDimensionHeight" Margin="5" VerticalAlignment="Center"></TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Margin="5">Length:</Label>
-                                <TextBlock Name="textBlockLength" Margin="5"></TextBlock>
-                                <TextBlock Name="textBlockDimensionLength" Margin="5"></TextBlock>
+                                <TextBlock Name="textBlockLength" Margin="5" VerticalAlignment="Center"></TextBlock>
+                                <TextBlock Name="textBlockDimensionLength" Margin="5" VerticalAlignment="Center"></TextBlock>
                             </StackPanel>
                         </StackPanel>
                     </GroupBox>
