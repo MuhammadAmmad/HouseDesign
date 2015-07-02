@@ -46,7 +46,7 @@
        
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" >
             <Label Margin="5" FontSize="18" FontWeight="Bold">Total Price:</Label>
-            <TextBlock Name="textBlockTotalPrice" Margin="5" Width="100" FontSize="18" FontWeight="Bold" Height="30"></TextBlock>
+            <TextBlock Name="textBlockTotalPrice" Width="100" FontSize="18" FontWeight="Bold" Margin="5" VerticalAlignment="Center"></TextBlock>
             <ComboBox Name="comboBoxCurrencies" Margin="12" SelectionChanged="comboBoxCurrencies_SelectionChanged" SelectedValuePath="Content" Height="20" Width="80">
                 <ComboBoxItem Content="AED"></ComboBoxItem>
                 <ComboBoxItem Content="AUD"></ComboBoxItem>

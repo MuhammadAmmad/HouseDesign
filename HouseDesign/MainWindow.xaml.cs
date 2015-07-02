@@ -787,8 +787,16 @@ namespace HouseDesign
 
         private void menuItemReceipt_Click(object sender, RoutedEventArgs e)
         {
-            Receipt receipt = new Receipt(currentProject.Scene.GetSortedHouseObjects(), configuration, currentProject);
-            receipt.ShowDialog();
+            if(currentProject.IsEmpty==false)
+            {
+                Receipt receipt = new Receipt(currentProject.Scene.GetSortedHouseObjects(), configuration, currentProject);
+                receipt.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Create a new project or open an existing one!");
+            }
+            
         }
 
         private void menuItemAbout_Click(object sender, RoutedEventArgs e)

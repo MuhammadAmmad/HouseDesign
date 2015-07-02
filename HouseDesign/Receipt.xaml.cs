@@ -195,7 +195,7 @@ namespace HouseDesign
         {
             
             Decimal actualValue = CurrencyHelper.FromCurrencyToCurrency(lastCurrency, value, currentCurrency);
-            return String.Format("{0:0.000}", actualValue);
+            return String.Format("{0:0.0}", actualValue);
         }
 
         private void comboBoxCurrencies_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -224,7 +224,6 @@ namespace HouseDesign
         {
             this.Close();
         }
-
         private void InitializeComboBoxCurrentCurrency()
         {
 
@@ -255,7 +254,7 @@ namespace HouseDesign
                 iTextSharp.text.Paragraph title = new iTextSharp.text.Paragraph();
                 title.Alignment = Element.ALIGN_CENTER;
                 title.Font = FontFactory.GetFont("Times New Roman", 32, Font.UNDERLINE);
-                title.Add("RECEIPT");
+                title.Add("INVOICE");
                 doc.Add(title);
                 doc.Add(newLines);
                 doc.Add(newLines);
@@ -288,7 +287,7 @@ namespace HouseDesign
                 iTextSharp.text.Paragraph currencyParagraph = new iTextSharp.text.Paragraph();
                 currencyParagraph.Alignment = Element.ALIGN_LEFT;
                 currencyParagraph.Font = FontFactory.GetFont("Times New Roman", 18, iTextSharp.text.Font.UNDERLINE);
-                String currencyName=Enum.GetName(typeof(Currency.CurrencyName), configuration.CurrentCurrency.Name);
+                String currencyName=Enum.GetName(typeof(Currency.CurrencyName), CurrencyHelper.GetProjectCurrency().Name);
                 currencyParagraph.Add("CURRENCY:");
                 clientParagraph.Font = FontFactory.GetFont("Times New Roman", 18);
                 currencyParagraph.Add(" " + currencyName);                
